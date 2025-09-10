@@ -43,20 +43,19 @@ Level-Up Gamer es un e-commerce enfocado en la comunidad gamer chilena. Nació c
 ```
 LEVEL-UP_GAMER
 ┬
-├-> /assets
-|   ├-> /img # Contiene imagenes colo logos, etc.
-|   ├-> /json # Contiene archivos .json para simular base de datos.
-|   ├-> estilos.css # Diseño general para la página.
-|   └-> script.js # Código generico para el funcionamiento de la página.
-|
 ├-> /src
 |   ├-> /admin # Contiene todas las páginas necesarias para la sección de administradores
 |   |   ├-> /JS # Contiene los códigos necesarios para la sección de administradores.
 |   |   └-> home.html # Ejemplo de página.
 |   |
-|   └-> /tienda # Contiene todas las páginas necesarias para la sección de la tienda.
-|        ├-> /JS # Contiene los códigos necesarios para la sección de la tienda.
-|        └-> productos.html # Ejemplo de página.
+|   ├-> /tienda # Contiene todas las páginas necesarias para la sección de la tienda.
+|   |     ├-> /JS # Contiene los códigos necesarios para la sección de la tienda.
+|   |     └-> productos.html # Ejemplo de página.
+|   └-> /assets
+|        ├-> /img # Contiene imagenes colo logos, etc.
+|        ├-> /json # Contiene archivos .json para simular base de datos.
+|        ├-> estilos.css # Diseño general para la página.
+|        └-> script.js # Código generico para el funcionamiento de la página.
 |
 ├-> .gitignore
 ├-> index.html # Página de entrada al sitio web.
