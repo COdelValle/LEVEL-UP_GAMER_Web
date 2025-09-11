@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Level-Up Gamer</title>
+  <link rel="icon" type="image/png" href="src\assets\img\icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="src/assets/style.css">
+  
+  
+</head>
+<body onload="fadeInBody()" class="bg-black text-white">
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <a href="#" onclick="mostrarInicio()" class="flex items-center space-x-2">
+        <img src="src\assets\img\LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
+      </a>
+
+      <div class="flex items-center space-x-6">
+        <a href="#" onclick="mostrarInicio()" class="hover:text-[#39FF14]">Inicio</a>
+
+        <!-- 🔽 Catálogo con menú desplegable -->
+        <div class="relative">
+          <button id="btnCatalogo" class="hover:text-[#39FF14]">Catálogo ▼</button>
+          <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
+            <a href="sillas.html" class="block hover:text-[#39FF14]">Sillas Gamer</a>
+            <a href="mandos.html" class="block hover:text-[#39FF14]">Mandos</a>
+            <a href="videojuegos.html" class="block hover:text-[#39FF14]">Videojuegos</a>
+            <a href="mouse.html" class="block hover:text-[#39FF14]">Mouse</a>
+          </div>
+        </div>
+
+        <a href="#" onclick="mostrarRegistro()" class="hover:text-[#39FF14]">Registro</a>
+        <a href="src\login\login.html" class="hover:text-[#39FF14]" id="loginLink">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  
+
+  <!-- 🟢 HERO SECTION -->
+  <section id="inicio" class="hero min-h-screen flex flex-col justify-center items-center text-center px-6">
+    <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg">Level-Up Gamer</h1>
+    <p class="text-xl text-gray-300 mt-4">¡Desafía tus límites con Level-Up Gamer!</p>
+    <div class="mt-6 space-x-4">
+<!-- Botón de login -->
+<button id="btnLogin"
+        onclick="irConFade('src/login/login.html')"
+        class="px-6 py-3 bg-[#1E90FF] hover:bg-blue-700 rounded-lg font-bold">
+  Iniciar Sesión
+</button>
+
+<!-- Botón de registro -->
+<button id="btnRegistro"
+        onclick="irConFade('src/registro/registro.html')"
+        class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">Registrarse</button>
+      <!-- Botón solo visible para admin -->
+      <button id="btnEditarCatalogo"onclick="irConFade('catalogo-admin.html')"class="mt-4 px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black hidden">🛠️ Editar Catálogo</button>
+      <button id="btnLogout" class="mt-4 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold hidden">Cerrar Sesión</button>
+    </div>
+  </section>
+
+  <!-- 🎮 CATÁLOGO -->
+  <section id="catalogo" class="py-16 bg-gray-950">
+    <h2 class="text-4xl text-center text-[#1E90FF] mb-8">Catálogo Gamer</h2>
+    <!-- Carrusel -->
+    <div class="flex overflow-x-auto space-x-6 px-6 snap-x snap-mandatory">
+      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <img src="img/ps5.jpg" alt="PS5" class="rounded mb-2">
+        <h4 class="text-lg font-bold">PlayStation 5</h4>
+        <p class="text-gray-400">$549.990</p>
+        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+      </div>
+      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <img src="img/pcgamer.jpg" alt="PC Gamer" class="rounded mb-2">
+        <h4 class="text-lg font-bold">PC Gamer ASUS ROG Strix</h4>
+        <p class="text-gray-400">$1.299.990</p>
+        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+      </div>
+      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <img src="img/headset.jpg" alt="Headset HyperX" class="rounded mb-2">
+        <h4 class="text-lg font-bold">Auriculares HyperX Cloud II</h4>
+        <p class="text-gray-400">$79.990</p>
+        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+      </div>
+      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <img src="img/silla.jpg" alt="Silla Gamer" class="rounded mb-2">
+        <h4 class="text-lg font-bold">Silla Gamer Secretlab Titan</h4>
+        <p class="text-gray-400">$349.990</p>
+        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🟢 REGISTRO -->
+  <section id="registro" class="hero fade-out hidden min-h-screen flex flex-col justify-center items-center p-6">
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
+      <h2 class="text-3xl text-[#39FF14] mb-4 text-center">Registro</h2>
+      <input id="regUsuario" type="text" placeholder="Usuario" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+      <input id="regPassword" type="password" placeholder="Contraseña" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+      <button onclick="registrarUsuario()" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black">Crear Cuenta</button>
+    </div>
+  </section>
+
+  <!-- Catálogo extra solo para usuarios logueados -->
+  <section id="catalogoExtra" class="hidden">
+    <!-- contenido exclusivo para usuarios -->
+  </section>
+
+  <section id="adminPanel" class="hidden">
+    <!-- herramientas para admin -->
+  </section>
+
+  <script src="src\tienda\JS\index.js"></script>
+
+
+<footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+    
+    <!-- Quiénes somos -->
+    <div>
+      <h4 class="text-[#39FF14] text-lg font-bold mb-2">Quiénes Somos</h4>
+      <p class="text-sm text-gray-300">
+        En Level-Up Gamer nos apasiona el rendimiento, el estilo y la experiencia. Somos una tienda digital creada por gamers, para gamers. ¡Sube de nivel con nosotros!
+      </p>
+    </div>
+
+    <!-- Enlaces útiles -->
+    <div>
+      <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
+      <ul class="text-sm space-y-1">
+        <li><a href="#" class="hover:text-[#39FF14]">Términos y condiciones</a></li>
+        <li><a href="#" class="hover:text-[#39FF14]">Política de privacidad</a></li>
+        <li><a href="#" class="hover:text-[#39FF14]">Soporte técnico</a></li>
+      </ul>
+    </div>
+
+    <!-- Redes sociales -->
+<div>
+  <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
+  <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
+      <i class="fab fa-facebook-f"></i>
+      <span>Facebook</span>
+    </a>
+    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
+      <i class="fab fa-instagram"></i>
+      <span>Instagram</span>
+    </a>
+    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
+      <i class="fab fa-youtube"></i>
+      <span>YouTube</span>
+    </a>
+  </div>
+</div>
+
+  <!-- Línea final -->
+  <div class="text-center text-sm mt-8 text-gray-400">
+    &copy; 2025 Level-Up Gamer. Todos los derechos reservados.
+  </div>
+</footer>
+
+
+</body>
+</html>

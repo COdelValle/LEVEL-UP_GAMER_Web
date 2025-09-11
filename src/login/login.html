@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Level-Up Gamer</title>
+  <link rel="icon" href="../assets/img/icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body onload="fadeInBody()" class="bg-black text-white">
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar-deepblue w-full top-0 shadow-lg z-50" style="background:rgba(0,0,30,0.99)">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <a href="#" onclick="fadeOutAndRedirect('../../index.html')" class="flex items-center space-x-2">
+        <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
+      </a>
+      <div class="space-x-6">
+        <a href="../../index.html" class="hover:text-[#39FF14]">Inicio</a>
+        <a href="../../index.html#catalogo" class="hover:text-[#39FF14]">Catálogo</a>
+        <a href="../../index.html#registro" class="hover:text-[#39FF14]">Registro</a>
+        <a href="login.html" id="loginLink" class="hover:text-[#39FF14]">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🧠 LOGIN FORM -->
+  <section class="hero min-h-screen flex flex-col justify-center items-center p-6">
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
+      <h2 class="text-3xl text-[#1E90FF] mb-4 text-center">Login</h2>
+      <input id="loginUsuario" type="text" placeholder="Usuario" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+      <input id="loginPassword" type="password" placeholder="Contraseña" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+      <div id="loginMsg" class="hidden transition-opacity duration-300"></div>
+      <button onclick="iniciarSesion()" class="w-full bg-[#1E90FF] hover:bg-blue-700 py-2 rounded-lg font-bold">Entrar</button>
+    </div>
+  </section>
+
+  <!-- 🔧 JS -->
+  <script src="JS/login.js"></script>
+</body>
+</html>

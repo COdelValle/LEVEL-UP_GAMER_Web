@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - Level-Up Gamer</title>
+  <link rel="icon" type="image/png" href="../assets/img/icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body onload="fadeInBody()" class="bg-black text-white">
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <a href="#" onclick="irConFade('../index.html')" class="flex items-center space-x-2">
+        <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
+      </a>
+      <div class="space-x-6">
+        <a href="#" onclick="irConFade('../index.html')" class="hover:text-[#39FF14]">Inicio</a>
+        <a href="../index.html#catalogo" class="hover:text-[#39FF14]">Catálogo</a>
+        <a href="registro.html" class="hover:text-[#39FF14]">Registro</a>
+        <a href="../login/login.html" class="hover:text-[#39FF14]">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🟢 REGISTRO -->
+  <section class="hero min-h-screen flex items-center justify-center pt-32 px-4 fade-in">
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
+      <h2 class="text-3xl text-[#39FF14] mb-4 text-center">Registro</h2>
+      <form id="formRegistro" onsubmit="return validarFormulario()">
+        <input type="text" id="nombre" placeholder="Nombre completo" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
+        <p id="errorNombre" class="text-red-500 text-sm mb-3 hidden"></p>
+
+        <input type="text" id="rut" placeholder="RUT (ej: 12.345.678-9)" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
+        <p id="errorRut" class="text-red-500 text-sm mb-3 hidden"></p>
+
+        <input type="email" id="email" placeholder="Correo electrónico" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
+        <p id="errorEmail" class="text-red-500 text-sm mb-3 hidden"></p>
+
+        <input type="text" id="direccion" placeholder="Dirección" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
+        <p id="errorDireccion" class="text-red-500 text-sm mb-3 hidden"></p>
+
+        <button type="submit" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black">Crear Cuenta</button>
+        <button type="button"
+        onclick="irConFade('../../index.html')"
+        class="w-full mt-3 bg-gray-700 hover:bg-gray-800 py-2 rounded-lg font-bold text-white">  ← Volver al inicio</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 🔻 FOOTER -->
+  <footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Quiénes Somos</h4>
+        <p class="text-sm text-gray-300">
+          En Level-Up Gamer nos apasiona el rendimiento, el estilo y la experiencia. Somos una tienda digital creada por gamers, para gamers. ¡Sube de nivel con nosotros!
+        </p>
+      </div>
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-[#39FF14]">Términos y condiciones</a></li>
+          <li><a href="#" class="hover:text-[#39FF14]">Política de privacidad</a></li>
+          <li><a href="#" class="hover:text-[#39FF14]">Soporte técnico</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
+        <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center text-sm mt-8 text-gray-400">
+      &copy; 2025 Level-Up Gamer. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <!-- 🔧 JS -->
+  <script src="JS/registro.js"></script>
+</body>
+</html>

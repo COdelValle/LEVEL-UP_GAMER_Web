@@ -1,0 +1,46 @@
+
+    body { font-family: 'Roboto', sans-serif; background-color: black; color: white; opacity: 0; transition: opacity 0.6s ease;}
+    h1,h2,h3,h4 { font-family: 'Orbitron', sans-serif; }
+    .hero {
+    background: url('./img/BackgroundIndex1.jpg') center/cover no-repeat;
+
+    overflow: hidden;
+      position: relative;
+      transition: background 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 25, 70, 0.7);
+      z-index: 0;
+      transition: background 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    .hero > * {
+      position: relative;
+      z-index: 1;
+      transition: color 0.5s, background 0.5s;
+    }
+    .navbar-deepblue {
+      background: rgba(0, 0, 30, 0.99) !important;
+      transition: background 0.8s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Fade transitions for sections */
+    section {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    section.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    section.fade-in {
+      opacity: 1;
+      visibility: visible;
+    }
+ 

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Level-Up Gamer | Admin</title>
+  <link rel="icon" type="image/png" href="../assets/img/icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body onload="fadeInBody(); verificarAccesoAdmin()" class="bg-black text-white">
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <a href="#" onclick="fadeOutAndRedirect('../../index.html')" class="flex items-center space-x-2">
+        <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
+      </a>
+      <div class="flex items-center space-x-6">
+        <div class="relative">
+          <button id="btnCategorias" class="hover:text-[#39FF14]">Catálogo ▼</button>
+          <div id="menuCategorias" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
+            <a href="../../sillas.html" class="block hover:text-[#39FF14]">Sillas Gamer</a>
+            <a href="../../mandos.html" class="block hover:text-[#39FF14]">Mandos</a>
+            <a href="../../videojuegos.html" class="block hover:text-[#39FF14]">Videojuegos</a>
+            <a href="../../mouse.html" class="block hover:text-[#39FF14]">Mouse</a>
+          </div>
+        </div>
+        <button id="btnLogout" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg font-bold">Cerrar Sesión</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🧠 PANEL ADMIN -->
+  <section class="hero min-h-screen pt-32 px-6 fade-in text-center">
+    <h1 class="text-5xl font-extrabold text-[#39FF14] mb-6 drop-shadow-lg">Panel de Administración</h1>
+    <p class="text-lg text-gray-300 mb-8">Aquí puedes editar el catálogo y gestionar productos.</p>
+    <button id="btnMostrarCatalogo" class="bg-[#39FF14] text-black px-6 py-3 rounded-lg font-bold hover:bg-green-700">Mostrar Catálogo</button>
+    <div id="catalogoAdmin" class="mt-8 space-y-4 hidden">
+      <!-- Aquí se renderizan los productos -->
+    </div>
+  </section>
+
+  <!-- 🔻 FOOTER -->
+  <footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Quiénes Somos</h4>
+        <p class="text-sm text-gray-300">
+          En Level-Up Gamer nos apasiona el rendimiento, el estilo y la experiencia. Somos una tienda digital creada por gamers, para gamers. ¡Sube de nivel con nosotros!
+        </p>
+      </div>
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
+        <ul class="text-sm space-y-1">
+          <li><a href="#" class="hover:text-[#39FF14]">Términos y condiciones</a></li>
+          <li><a href="#" class="hover:text-[#39FF14]">Política de privacidad</a></li>
+          <li><a href="#" class="hover:text-[#39FF14]">Soporte técnico</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
+        <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center text-sm mt-8 text-gray-400">
+      &copy; 2025 Level-Up Gamer. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <!-- 🔧 JS -->
+  <script src="JS/admin.js"></script>
+</body>
+</html>
+
