@@ -1,0 +1,385 @@
+/* ====================================
+   LEVEL-UP GAMER - ESTILOS GENERALES
+   ==================================== */
+
+/* Importar fuentes de Google */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;500;700&display=swap');
+
+/* Variables CSS para colores */
+:root {
+  --color-negro: #000000;
+  --color-blanco: #FFFFFF;
+  --color-azul-electrico: #1E90FF;
+  --color-verde-neon: #39FF14;
+  --color-gris-claro: #D3D3D3;
+  --color-azul-oscuro: rgba(0, 0, 30, 0.99);
+  --color-overlay: rgba(10, 25, 70, 0.7);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos base del body */
+body { 
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--color-negro);
+  color: var(--color-blanco);
+  line-height: 1.6;
+}
+
+/* Tipografías */
+h1, h2, h3, h4, h5, h6 { 
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+}
+
+/* Texto secundario */
+.text-secondary {
+  color: var(--color-gris-claro);
+}
+
+/* ====================================
+   COMPONENTES DE NAVEGACIÓN
+   ==================================== */
+
+.navbar-deepblue {
+  background: var(--color-azul-oscuro) !important;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-deepblue.scrolled {
+  background: rgba(0, 0, 30, 0.95) !important;
+}
+
+.nav-link {
+  color: var(--color-gris-claro);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.nav-link:hover {
+  color: var(--color-azul-electrico);
+}
+
+.nav-link.active {
+  color: var(--color-azul-electrico);
+  font-weight: 500;
+}
+
+/* ====================================
+   SECCIÓN HERO
+   ==================================== */
+
+.hero {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.2) 0%, rgba(57, 255, 20, 0.1) 100%);
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay);
+  z-index: 0;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+  transition: color 0.5s, background 0.5s;
+}
+
+/* ====================================
+   BOTONES
+   ==================================== */
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-azul-electrico) 0%, var(--color-verde-neon) 100%);
+  color: var(--color-blanco);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(30, 144, 255, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-azul-electrico);
+  border: 2px solid var(--color-azul-electrico);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-secondary:hover {
+  background: var(--color-azul-electrico);
+  color: var(--color-blanco);
+}
+
+/* ====================================
+   TARJETAS
+   ==================================== */
+
+.card {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
+  border: 1px solid rgba(30, 144, 255, 0.3);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.card:hover {
+  border-color: var(--color-verde-neon);
+  box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
+  transform: translateY(-5px);
+}
+
+.blog-card {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
+  border: 1px solid rgba(30, 144, 255, 0.3);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.blog-card:hover {
+  border-color: var(--color-verde-neon);
+  box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
+  transform: translateY(-5px);
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  border-color: var(--color-azul-electrico);
+  box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+  transform: translateY(-5px);
+}
+
+/* ====================================
+   BADGES Y ETIQUETAS
+   ==================================== */
+
+.category-badge {
+  background: rgba(30, 144, 255, 0.2);
+  color: var(--color-azul-electrico);
+  border: 1px solid var(--color-azul-electrico);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.price-tag {
+  background: var(--color-verde-neon);
+  color: var(--color-negro);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* ====================================
+   FORMULARIOS
+   ==================================== */
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-blanco);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-azul-electrico);
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.2);
+}
+
+.form-input::placeholder {
+  color: var(--color-gris-claro);
+}
+
+/* ====================================
+   SECCIONES GENERALES
+   ==================================== */
+
+.section-bg-dark {
+  background: #111111;
+}
+
+.section-bg-darker {
+  background: #0a0a0a;
+}
+
+section {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s cubic-bezier(.4,0,.2,1), visibility 0.6s;
+}
+
+section.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+section.fading {
+  opacity: 1;
+}
+
+/* ====================================
+   GRADIENTES DE TEXTO
+   ==================================== */
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-azul-electrico) 0%, var(--color-verde-neon) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ====================================
+   UTILIDADES
+   ==================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-12 { margin-bottom: 3rem; }
+
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+
+.py-8 { padding: 2rem 0; }
+.py-12 { padding: 3rem 0; }
+.py-16 { padding: 4rem 0; }
+.py-20 { padding: 5rem 0; }
+
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 80vh;
+    padding-top: 2rem;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .nav-menu {
+    display: none;
+  }
+  
+  .nav-menu.active {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-azul-oscuro);
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ====================================
+   ANIMACIONES
+   ==================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}

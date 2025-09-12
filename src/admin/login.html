@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Level-Up Gamer</title>
+    
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/estilos.css" rel="stylesheet">
+    
+    <style>
+        .login-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.2) 0%, rgba(57, 255, 20, 0.1) 100%);
+            position: relative;
+        }
+        
+        .login-container::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--color-overlay);
+            z-index: 0;
+        }
+        
+        .login-card {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
+            border: 1px solid rgba(30, 144, 255, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+            max-width: 400px;
+            width: 100%;
+            margin: auto;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            color: var(--color-gris-claro);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .back-link a {
+            color: var(--color-azul-electrico);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link a:hover {
+            color: var(--color-verde-neon);
+        }
+        
+        .demo-credentials {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .demo-credentials h6 {
+            color: var(--color-azul-electrico);
+            margin-bottom: 0.5rem;
+        }
+        
+        .demo-credentials p {
+            margin: 0.25rem 0;
+            color: var(--color-gris-claro);
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff40;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: #ff4444;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .login-attempts {
+            font-size: 0.875rem;
+            color: var(--color-gris-claro);
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container d-flex align-items-center justify-content-center">
+        <div class="login-card">
+            <div class="login-header">
+                <span class="admin-icon">🔐</span>
+                <h3 class="gradient-text mb-2">Panel de Administración</h3>
+                <p class="text-secondary">Level-Up Gamer</p>
+            </div>
+            
+            <div id="error-message" class="error-message">
+                <!-- Los errores se mostrarán aquí -->
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Usuario</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input" 
+                        placeholder="Ingresa tu usuario"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="Ingresa tu contraseña"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <div class="d-flex align-items-center">
+                        <input type="checkbox" id="remember" name="remember" class="me-2">
+                        <label for="remember" class="form-label mb-0">Recordar sesión</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary login-btn" id="login-btn">
+                    <span class="loading-spinner" id="loading-spinner"></span>
+                    <span id="btn-text">🚀 Iniciar Sesión</span>
+                </button>
+                
+                <div class="login-attempts" id="login-attempts">
+                    <!-- Los intentos de login se mostrarán aquí -->
+                </div>
+            </form>
+            
+            <div class="demo-credentials">
+                <h6>🎮 Credenciales de Demo</h6>
+                <p><strong>Usuario:</strong> admin</p>
+                <p><strong>Contraseña:</strong> levelup2024</p>
+                <p class="text-muted mt-2">
+                    <small>* Estas son credenciales de demostración para testing</small>
+                </p>
+            </div>
+            
+            <div class="back-link">
+                <a href="../admin/home.html">
+                    ← Volver a la tienda
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/script.js"></script>
+    <script>
+        // ====================================
+        // LOGIN ADMIN - LEVEL-UP GAMER
+        // ====================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔐 Login Admin cargado');
+            
+            // Verificar si ya está logueado
+            checkExistingSession();
+            
+            // Configurar formulario
+            setupLoginForm();
+            
+            // Autocompletar credenciales demo en desarrollo
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'levelup2024';
+            }
+        });
+
+        // ====================================
+        // CONFIGURACIÓN DEL FORMULARIO
+        // ====================================
+
+        function setupLoginForm() {
+            const form = document.getElementById('login-form');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            
+            form.addEventListener('submit', handleLogin);
+            
+            // Limpiar errores al escribir
+            usernameInput.addEventListener('input', clearErrors);
+            passwordInput.addEventListener('input', clearErrors);
+            
+            // Enter para enviar formulario
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            });
+        }
+
+        // ====================================
+        // MANEJO DEL LOGIN
+        // ====================================
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Validación básica
+            if (!username || !password) {
+                showError('Por favor completa todos los campos.');
+                return;
+            }
+            
+            // Mostrar loading
+            showLoading(true);
+            clearErrors();
+            
+            // Simular verificación de credenciales
+            setTimeout(() => {
+                if (validateCredentials(username, password)) {
+                    loginSuccess(username, remember);
+                } else {
+                    loginFailed();
+                }
+                showLoading(false);
+            }, 1500);
+        }
+
+        function validateCredentials(username, password) {
+            // Credenciales válidas (en producción esto sería una API)
+            const validCredentials = [
+                { username: 'admin', password: 'levelup2024' },
+                { username: 'administrador', password: 'admin123' },
+                { username: 'levelup', password: 'gamer2024' }
+            ];
+            
+            return validCredentials.some(cred => 
+                cred.username === username && cred.password === password
+            );
+        }
+
+        function loginSuccess(username, remember) {
+            // Crear sesión
+            const sessionDuration = remember ? 7 * 24 * 60 * 60 * 1000 : 8 * 60 * 60 * 1000; // 7 días o 8 horas
+            const expiresAt = new Date().getTime() + sessionDuration;
+            
+            const adminSession = {
+                isAuthenticated: true,
+                username: username,
+                loginTime: new Date().toISOString(),
+                expiresAt: expiresAt,
+                remember: remember
+            };
+            
+            localStorage.setItem('adminSession', JSON.stringify(adminSession));
+            
+            // Limpiar intentos fallidos
+            localStorage.removeItem('loginAttempts');
+            
+            // Mostrar mensaje de éxito
+            showMessage('¡Login exitoso! Redirigiendo al panel de administración...', 'success');
+            
+            // Redirigir al dashboard
+            setTimeout(() => {
+                window.location.href = '../admin/home.html';
+            }, 1500);
+        }
+
+        function loginFailed() {
+            // Incrementar intentos fallidos
+            let attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            attempts++;
+            localStorage.setItem('loginAttempts', attempts.toString());
+            
+            // Mostrar error específico según intentos
+            if (attempts >= 3) {
+                showError('Demasiados intentos fallidos. Por favor verifica tus credenciales.');
+                
+                // Bloquear temporalmente (en producción sería más robusto)
+                setTimeout(() => {
+                    showError('Cuenta bloqueada temporalmente por seguridad.');
+                }, 100);
+            } else {
+                showError(`Credenciales incorrectas. Intentos restantes: ${3 - attempts}`);
+            }
+            
+            // Mostrar intentos
+            updateLoginAttempts(attempts);
+            
+            // Limpiar campos de contraseña
+            document.getElementById('password').value = '';
+            document.getElementById('password').focus();
+        }
+
+        // ====================================
+        // UTILIDADES DE UI
+        // ====================================
+
+        function showLoading(show) {
+            const spinner = document.getElementById('loading-spinner');
+            const btnText = document.getElementById('btn-text');
+            const btn = document.getElementById('login-btn');
+            
+            if (show) {
+                spinner.style.display = 'inline-block';
+                btnText.textContent = 'Verificando...';
+                btn.disabled = true;
+            } else {
+                spinner.style.display = 'none';
+                btnText.textContent = '🚀 Iniciar Sesión';
+                btn.disabled = false;
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearErrors() {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+        }
+
+        function updateLoginAttempts(attempts) {
+            const attemptsDiv = document.getElementById('login-attempts');
+            if (attempts > 0) {
+                attemptsDiv.textContent = `Intentos fallidos: ${attempts}/3`;
+                attemptsDiv.style.display = 'block';
+            }
+        }
+
+        // ====================================
+        // VERIFICACIÓN DE SESIÓN EXISTENTE
+        // ====================================
+
+        function checkExistingSession() {
+            const adminSession = JSON.parse(localStorage.getItem('adminSession'));
+            
+            if (adminSession && adminSession.isAuthenticated) {
+                const now = new Date().getTime();
+                
+                if (now < adminSession.expiresAt) {
+                    // Sesión válida, redirigir al dashboard
+                    showMessage('Sesión activa detectada. Redirigiendo...', 'info');
+                    setTimeout(() => {
+                        window.location.href = '../admin/home.html';
+                    }, 1000);
+                } else {
+                    // Sesión expirada, limpiar
+                    localStorage.removeItem('adminSession');
+                }
+            }
+            
+            // Mostrar intentos previos si existen
+            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            if (attempts > 0) {
+                updateLoginAttempts(attempts);
+            }
+        }
+
+        // ====================================
+        // SISTEMA DE MENSAJES
+        // ====================================
+
+        function showMessage(message, type = 'info') {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message message-${type}`;
+            messageEl.textContent = message;
+            
+            messageEl.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                color: white;
+                font-weight: 600;
+                z-index: 9999;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            switch(type) {
+                case 'success':
+                    messageEl.style.background = 'linear-gradient(135deg, #39FF14, #1E90FF)';
+                    break;
+                case 'error':
+                    messageEl.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+                    break;
+                default:
+                    messageEl.style.background = 'linear-gradient(135deg, #1E90FF, #39FF14)';
+            }
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                messageEl.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (document.body.contains(messageEl)) {
+                        document.body.removeChild(messageEl);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

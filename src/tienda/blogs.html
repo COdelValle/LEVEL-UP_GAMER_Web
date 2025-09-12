@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs - Level-Up Gamer</title>
+    <link rel="icon" type="image/png" href="../assets/img/icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/estilos.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar-deepblue fixed w-full z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-green-400 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">🎮</span>
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">Level-Up Gamer</h1>
+                </div>
+
+                <!-- Menu -->
+                <div class="hidden md:flex nav-menu">
+                    <a href="../../index.html" class="nav-link">Inicio</a>
+                    <a href="productos.html" class="nav-link">Productos</a>
+                    <a href="blogs.html" class="nav-link active">Blogs</a>
+                    <a href="nosotros.html" class="nav-link">Nosotros</a>
+                    <a href="contacto.html" class="nav-link">Contacto</a>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex items-center space-x-4">
+                    <button class="btn-primary">Iniciar Sesión</button>
+                    <div class="menu-toggle md:hidden">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección Hero -->
+    <section class="hero flex items-center pt-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 gradient-text">Blog Gamer</h1>
+            <p class="text-xl text-secondary mb-8 max-w-3xl mx-auto">
+                Las últimas noticias, reviews y guías del mundo gaming. 
+                Todo lo que necesitas saber para estar al día.
+            </p>
+            
+            <!-- Categorías -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <span class="category-badge">Noticias</span>
+                <span class="category-badge">Reviews</span>
+                <span class="category-badge">Guías</span>
+                <span class="category-badge">Tendencias</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Posts Destacados -->
+    <section class="py-20 section-bg-dark">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Posts Destacados</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Post Destacado 1 -->
+                <article class="blog-card">
+                    <div class="h-64 bg-gradient-to-br from-blue-600 to-purple-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <div class="text-center">
+                                <span class="text-6xl">🎮</span>
+                                <p class="text-white mt-2 font-semibold">Gaming Setup 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="category-badge">Guías</span>
+                            <span class="text-secondary text-sm">15 Enero 2025</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Cómo Armar el Setup Gamer Perfecto en 2025</h3>
+                        <p class="text-secondary mb-6">
+                            Descubre los componentes esenciales para crear tu estación de juego ideal, 
+                            desde el hardware hasta los periféricos que marcarán la diferencia.
+                        </p>
+                        <a href="blog1_1.html" class="btn-primary">Leer Más →</a>
+                    </div>
+                </article>
+
+                <!-- Post Destacado 2 -->
+                <article class="blog-card">
+                    <div class="h-64 bg-gradient-to-br from-green-600 to-blue-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <div class="text-center">
+                                <span class="text-6xl">🏆</span>
+                                <p class="text-white mt-2 font-semibold">Esports Chile</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="category-badge">Noticias</span>
+                            <span class="text-secondary text-sm">12 Enero 2025</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Los Esports en Chile: Crecimiento y Oportunidades</h3>
+                        <p class="text-secondary mb-6">
+                            Análisis del panorama actual de los deportes electrónicos en Chile, 
+                            torneos locales y cómo formar parte de esta creciente comunidad.
+                        </p>
+                        <a href="blog1_2.html" class="btn-primary">Leer Más →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Todos los Posts -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Todos los Posts</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8" id="posts-grid">
+                <!-- Post 1 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-purple-600 to-pink-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">🖱️</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Reviews</span>
+                            <span class="text-secondary text-sm">10 Enero</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Review: Los Mejores Mouse Gaming 2025</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            Comparativa completa de los mouse gaming más populares del mercado.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-red-600 to-orange-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">⚡</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Guías</span>
+                            <span class="text-secondary text-sm">8 Enero</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Optimiza tu PC para Gaming</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            Tips y trucos para mejorar el rendimiento de tu computador gamer.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Post 3 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-teal-600 to-blue-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">🎯</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Tendencias</span>
+                            <span class="text-secondary text-sm">5 Enero</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Tendencias Gaming 2025</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            Lo que viene en el mundo de los videojuegos este año.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Post 4 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-indigo-600 to-purple-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">🪑</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Reviews</span>
+                            <span class="text-secondary text-sm">3 Enero</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Sillas Gaming: Comodidad y Salud</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            La importancia de una buena silla para largas sesiones de gaming.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Post 5 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-yellow-600 to-red-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">🎪</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Noticias</span>
+                            <span class="text-secondary text-sm">1 Enero</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Eventos Gaming 2025 en Chile</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            Calendario de los principales eventos gaming del año en nuestro país.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Post 6 -->
+                <article class="blog-card">
+                    <div class="h-48 bg-gradient-to-br from-pink-600 to-purple-600 relative rounded-t-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-t-lg">
+                            <span class="text-4xl">🎨</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="category-badge">Guías</span>
+                            <span class="text-secondary text-sm">28 Dic</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Personaliza tu Setup con RGB</h3>
+                        <p class="text-secondary text-sm mb-4">
+                            Cómo crear un ambiente gaming único con iluminación RGB.
+                        </p>
+                        <a href="#" class="text-blue-400 hover:text-green-400 transition-colors font-semibold">
+                            Leer Más →
+                        </a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Botón Cargar Más -->
+            <div class="text-center mt-12">
+                <button class="btn-primary" id="load-more-btn">Cargar Más Posts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 section-bg-dark">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6 gradient-text">Suscríbete al Newsletter</h2>
+            <p class="text-secondary mb-8 max-w-2xl mx-auto">
+                Recibe las últimas noticias gaming, reviews exclusivas y ofertas especiales 
+                directamente en tu correo.
+            </p>
+            
+            <form id="newsletter-form" class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+                <input 
+                    type="email" 
+                    name="email"
+                    placeholder="Tu correo electrónico"
+                    class="form-input flex-1"
+                    required
+                >
+                <button type="submit" class="btn-primary px-8">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo y descripción -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-400 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold">🎮</span>
+                        </div>
+                        <h3 class="text-xl font-bold gradient-text">Level-Up Gamer</h3>
+                    </div>
+                    <p class="text-secondary">
+                        La tienda online líder para gamers en Chile.
+                    </p>
+                </div>
+
+                <!-- Enlaces Tienda -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Tienda</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="productos.html" class="hover:text-blue-400">Productos</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Ofertas</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Nuevos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Enlaces Comunidad -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Comunidad</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="blogs.html" class="hover:text-blue-400">Blog</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Eventos</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Discord</a></li>
+                    </ul>
+                </div>
+
+                <!-- Enlaces Soporte -->
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Soporte</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="contacto.html" class="hover:text-blue-400">Contacto</a></li>
+                        <li><a href="#" class="hover:text-blue-400">FAQ</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Envíos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-secondary">
+                    © 2025 Level-Up Gamer. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../assets/script.js"></script>
+    <script src="JS/blogs.js"></script>
+</body>
+</html>
