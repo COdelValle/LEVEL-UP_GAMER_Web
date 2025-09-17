@@ -1,46 +1,121 @@
+:root {
+  --primary-color: #0d6efd;
+  --bg-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  --text-gradient: linear-gradient(to right, #6dd5ed, #2193b0);
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --border-radius: 12px;
+  --font-main: 'Roboto', sans-serif;
+  --font-titles: 'Orbitron', sans-serif;
+}
 
-    body { font-family: 'Roboto', sans-serif; background-color: black; color: white; opacity: 0; transition: opacity 0.6s ease;}
-    h1,h2,h3,h4 { font-family: 'Orbitron', sans-serif; }
-    .hero {
-    background: url('./img/BackgroundIndex1.jpg') center/cover no-repeat;
+body {
+  font-family: var(--font-main);
+  background-color: black;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
 
-    overflow: hidden;
-      position: relative;
-      transition: background 0.8s cubic-bezier(.4,0,.2,1);
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 25, 70, 0.7);
-      z-index: 0;
-      transition: background 0.8s cubic-bezier(.4,0,.2,1);
-    }
-    .hero > * {
-      position: relative;
-      z-index: 1;
-      transition: color 0.5s, background 0.5s;
-    }
-    .navbar-deepblue {
-      background: rgba(0, 0, 30, 0.99) !important;
-      transition: background 0.8s cubic-bezier(.4,0,.2,1);
-    }
+h1, h2, h3, h4 {
+  font-family: var(--font-titles);
+}
 
-    /* Fade transitions for sections */
-    section {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
-    }
+.hero {
+  background: url('./img/BackgroundIndex1.jpg') center/cover no-repeat;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
 
-    section.fade-out {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 25, 70, 0.7);
+  z-index: 0;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
 
-    section.fade-in {
-      opacity: 1;
-      visibility: visible;
-    }
- 
+.hero > * {
+  position: relative;
+  z-index: 1;
+  transition: color 0.5s, background 0.5s;
+}
+
+.navbar-deepblue {
+  background: rgba(0, 0, 30, 0.99) !important;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+/* Fade transitions for sections */
+section {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+section.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+section.fade-in {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Estilos del login-card y componentes */
+.login-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  color: white;
+  font-family: var(--font-main);
+}
+
+.gradient-text {
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-titles);
+}
+
+.admin-icon {
+  font-size: 2rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #084298;
+}
+
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-family: var(--font-main);
+}
+
+.form-control::placeholder {
+  color: #ccc;
+}
+
+.alert {
+  font-size: 0.9rem;
+}
+
+a {
+  color: #6dd5ed;
+}
+
+a:hover {
+  color: #2193b0;
+}

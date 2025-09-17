@@ -5,18 +5,18 @@
   <title>Registro - Level-Up Gamer</title>
   <link rel="icon" type="image/png" href="../assets/img/icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/style.css">
+  
 </head>
-<body onload="fadeInBody()" class="bg-black text-white">
-
+<body onload="fadeInBody()" class="text-white font-['Roboto']">
+  <section class="hero min-h-screen flex flex-col">
   <!-- 🔝 NAVBAR -->
   <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
       <a href="#" onclick="irConFade('../index.html')" class="flex items-center space-x-2">
         <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
-        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
+        <span class="text-[#39FF14] text-2xl font-bold font-['Orbitron']">Level-Up Gamer</span>
       </a>
       <div class="space-x-6">
         <a href="#" onclick="irConFade('../index.html')" class="hover:text-[#39FF14]">Inicio</a>
@@ -28,62 +28,129 @@
   </nav>
 
   <!-- 🟢 REGISTRO -->
-  <section class="hero min-h-screen flex items-center justify-center pt-32 px-4 fade-in">
-    <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
-      <h2 class="text-3xl text-[#39FF14] mb-4 text-center">Registro</h2>
-      <form id="formRegistro" onsubmit="return validarFormulario()">
-        <input type="text" id="nombre" placeholder="Nombre completo" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
-        <p id="errorNombre" class="text-red-500 text-sm mb-3 hidden"></p>
-
-        <input type="text" id="rut" placeholder="RUT (ej: 12.345.678-9)" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
-        <p id="errorRut" class="text-red-500 text-sm mb-3 hidden"></p>
-
-        <input type="email" id="email" placeholder="Correo electrónico" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
-        <p id="errorEmail" class="text-red-500 text-sm mb-3 hidden"></p>
-
-        <input type="text" id="direccion" placeholder="Dirección" class="w-full p-2 rounded mb-1 bg-gray-800 text-white">
-        <p id="errorDireccion" class="text-red-500 text-sm mb-3 hidden"></p>
-
-        <button type="submit" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black">Crear Cuenta</button>
-        <button type="button"
-        onclick="irConFade('../../index.html')"
-        class="w-full mt-3 bg-gray-700 hover:bg-gray-800 py-2 rounded-lg font-bold text-white">  ← Volver al inicio</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- 🔻 FOOTER -->
-  <footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
-      <div>
-        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Quiénes Somos</h4>
-        <p class="text-sm text-gray-300">
-          En Level-Up Gamer nos apasiona el rendimiento, el estilo y la experiencia. Somos una tienda digital creada por gamers, para gamers. ¡Sube de nivel con nosotros!
-        </p>
+  <main class="flex-grow flex items-center justify-center pt-32 px-4 pb-24">
+    <section class="hero w-full max-w-md">
+      <div class="bg-gradient-to-br from-[#0a1f44] via-[#1c3d6e] to-[#2e6f5c] p-6 rounded-2xl shadow-2xl border border-[#39FF14]">
+        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6dd5ed] to-[#39FF14] text-center mb-6 font-['Orbitron']">Registro</h2>
+        <form id="formRegistro" class="space-y-4">
+  
+        <!-- Nombre -->
+        <div>
+          <label for="nombre" class="block mb-1 font-semibold text-sm">Nombre</label>
+          <input type="text" id="nombre" placeholder="Nombre" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+          <p id="errorNombre" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+  
+        <!-- Apellidos -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="apellidoPaterno" class="block mb-1 font-semibold text-sm">Apellido paterno</label>
+            <input type="text" id="apellidoPaterno" placeholder="Apellido paterno" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+            <p id="errorApellidoPaterno" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+          <div>
+            <label for="apellidoMaterno" class="block mb-1 font-semibold text-sm">Apellido materno</label>
+            <input type="text" id="apellidoMaterno" placeholder="Apellido materno" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+            <p id="errorApellidoMaterno" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+        </div>
+  
+        <!-- Correo -->
+        <div>
+          <label for="email" class="block mb-1 font-semibold text-sm">Correo electrónico</label>
+          <input type="email" id="email" placeholder="Correo electrónico" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+          <p id="errorEmail" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+  
+        <!-- Contraseñas -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="password" class="block mb-1 font-semibold text-sm">Contraseña</label>
+            <input type="password" id="password" placeholder="Contraseña" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+            <p id="errorPassword" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+          <div>
+            <label for="confirmPassword" class="block mb-1 font-semibold text-sm">Confirmar contraseña</label>
+            <input type="password" id="confirmPassword" placeholder="Confirmar contraseña" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+            <p id="errorConfirmPassword" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+        </div>
+  
+        <!-- Teléfono -->
+        <div>
+          <label for="telefono" class="block mb-1 font-semibold text-sm">Teléfono (opcional)</label>
+          <input type="text" id="telefono" placeholder="Teléfono" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+          <p id="errorTelefono" class="text-red-500 text-sm mt-1 hidden"></p>
+        </div>
+  
+        <!-- Región y Comuna -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="region" class="block mb-1 font-semibold text-sm">Región</label>
+            <select id="region" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+              <option value="Seleccione">Seleccione región</option>
+              <option value="Metropolitana">Región Metropolitana</option>
+              <option value="Valparaíso">Valparaíso</option>
+              <option value="Biobío">Biobío</option>
+            </select>
+            <p id="errorRegion" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+          <div>
+            <label for="comuna" class="block mb-1 font-semibold text-sm">Comuna</label>
+            <select id="comuna" class="w-full p-3 rounded bg-[#0f1e3a] text-white border border-[#39FF14]">
+              <option value="Seleccione">Seleccione comuna</option>
+              <option value="Puente Alto">Puente Alto</option>
+              <option value="La Florida">La Florida</option>
+              <option value="Maipú">Maipú</option>
+            </select>
+            <p id="errorComuna" class="text-red-500 text-sm mt-1 hidden"></p>
+          </div>
+        </div>
+  
+        <!-- Botones -->
+        <div class="space-y-3 pt-2">
+          <button type="submit" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black font-['Orbitron']">Crear Cuenta</button>
+          <button type="button" onclick="irConFade('../../index.html')" class="w-full bg-gray-700 hover:bg-gray-800 py-2 rounded-lg font-bold text-white font-['Roboto']">← Volver al inicio</button>
+          <button type="button" onclick="window.location.href='../login/login.html'" class="w-full bg-gray-700 hover:bg-gray-800 py-2 rounded-lg font-bold text-white font-['Roboto']">¿Ya tienes cuenta? Inicia sesión</button>
+        </form>
       </div>
-      <div>
-        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
-        <ul class="text-sm space-y-1">
-          <li><a href="#" class="hover:text-[#39FF14]">Términos y condiciones</a></li>
-          <li><a href="#" class="hover:text-[#39FF14]">Política de privacidad</a></li>
-          <li><a href="#" class="hover:text-[#39FF14]">Soporte técnico</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
-        <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
-          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
-          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-instagram"></i><span>Instagram</span></a>
-          <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+    </section>
+  </main>
+
+    <!-- 🔻 FOOTER -->
+    <footer class="bg-[#0a192e] text-white py-10 px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
+        <div>
+          <h4 class="text-[#39FF14] text-lg font-bold mb-2">Quiénes Somos</h4>
+          <p class="text-sm text-gray-300">
+            En Level-Up Gamer nos apasiona el entretenimiento, por eso te ofrecemos los mejores productos gamer del país, para que puedas vivir la mejor experiencia gamer, ¡nos encanta!
+          </p>
+        </div>
+        <div>
+          <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
+          <ul class="text-sm space-y-1">
+            <li><a href="#" class="hover:text-[#39FF14]">Ver términos y condiciones</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
+          <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+            <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
+            <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-twitter"></i><span>Twitter</span></a>
+            <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="text-center text-sm mt-8 text-gray-400">
-      &copy; 2025 Level-Up Gamer. Todos los derechos reservados.
-    </div>
-  </footer>
+      <div class="text-center text-sm mt-8 text-gray-400">
+        &copy; 2023 Level-Up Gamer. Todos los derechos reservados.
+      </div>
+    </footer>
+
+    
 
   <!-- 🔧 JS -->
   <script src="JS/registro.js"></script>
+
+
 </body>
 </html>
