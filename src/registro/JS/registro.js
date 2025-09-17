@@ -12,6 +12,18 @@ function irConFade(url) {
   }, 600);
 }
 
+function fadeInBody() {
+  document.body.classList.remove("opacity-0");
+  document.body.classList.add("opacity-100");
+}
+
+function irConFade(url) {
+  document.body.classList.add("opacity-0");
+  setTimeout(() => {
+    window.location.href = url;
+  }, 600);
+}
+
 function capitalizar(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }

@@ -1,147 +1,121 @@
-  function fadeInBody() {
-    setTimeout(() => {
-      document.body.style.opacity = "1";
-    }, 50);
+// 🔄 Transiciones visuales
+function fadeInBody() {
+  document.body.classList.remove("opacity-0");
+  document.body.classList.add("opacity-100");
+}
+
+function irConFade(url) {
+  document.body.classList.remove("opacity-100");
+  document.body.classList.add("opacity-0");
+  setTimeout(() => {
+    window.location.href = url;
+  }, 600);
+}
+
+// 🧭 Navegación entre secciones internas
+function mostrarInicio() {
+  ocultarTodo();
+  mostrarSeccion("inicio");
+}
+
+function mostrarRegistro() {
+  ocultarTodo();
+  mostrarSeccion("registro");
+}
+
+function mostrarSeccion(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.remove("hidden", "fade-out");
+    el.classList.add("fade-in");
+  }
+}
+
+function ocultarTodo() {
+  const secciones = ["inicio", "registro", "catalogoExtra", "adminPanel"];
+  secciones.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add("fade-out");
+      el.classList.remove("fade-in");
+      setTimeout(() => el.classList.add("hidden"), 500);
+    }
+  });
+}
+
+// 🛒 Menú desplegable catálogo
+const btnCatalogo = document.getElementById("btnCatalogo");
+const menuCatalogo = document.getElementById("menuCatalogo");
+
+btnCatalogo.addEventListener("click", () => {
+  menuCatalogo.classList.toggle("hidden");
+});
+
+document.addEventListener("click", (e) => {
+  if (!btnCatalogo.contains(e.target) && !menuCatalogo.contains(e.target)) {
+    menuCatalogo.classList.add("hidden");
+  }
+});
+
+// 🧠 Carrusel de productos destacados
+const carruselTrack = document.querySelector(".snap-x");
+const carruselItems = document.querySelectorAll(".snap-center");
+let carruselIndex = 0;
+
+function avanzarCarrusel() {
+  carruselIndex = (carruselIndex + 1) % carruselItems.length;
+  carruselTrack.scrollTo({
+    left: carruselItems[carruselIndex].offsetLeft,
+    behavior: "smooth"
+  });
+}
+
+setInterval(avanzarCarrusel, 5000); // cada 5 segundos
+
+// 🔐 Registro de usuario
+function registrarUsuario() {
+  const usuario = document.getElementById("regUsuario").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+
+  if (!usuario || !password) {
+    alert("Completa todos los campos");
+    return;
   }
 
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const existe = usuarios.find(u => u.email === usuario);
 
-  function irConFade(url) {
-      document.body.style.transition = "opacity 0.6s ease";
-      document.body.style.opacity = 0;
-      setTimeout(() => {
-        window.location.href = url;
-      }, 600);
+  if (existe) {
+    alert("Este usuario ya existe");
+    return;
+  }
+
+  usuarios.push({ email: usuario, password });
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  alert("Cuenta creada con éxito");
+  mostrarInicio();
+}
+
+// 🔐 Verificación de login
+function verificarLogin() {
+  const logueado = localStorage.getItem("logueado");
+  const rol = localStorage.getItem("rol");
+
+  const btnEditar = document.getElementById("btnEditarCatalogo");
+  const btnLogout = document.getElementById("btnLogout");
+
+  if (logueado === "true") {
+    btnLogout.classList.remove("hidden");
+    if (rol === "admin") {
+      btnEditar.classList.remove("hidden");
     }
-    // Fade helpers using .fading and .hidden classes
-    function fadeOut(section, callback) {
-      section.classList.remove("fade-in");
-      section.classList.add("fade-out");
-      setTimeout(() => {
-        if (callback) callback();
-      }, 600); // espera a que termine la transición
-    }
+  }
+}
 
-    function fadeIn(section) {
-      section.classList.remove("fade-out");
-      section.classList.add("fade-in");
-    }
+document.addEventListener("DOMContentLoaded", verificarLogin);
 
-    // Show Inicio and Catálogo together, or Registro alone
-    function mostrarSeccion(id) {
-      const inicio = document.getElementById("inicio");
-      const catalogo = document.getElementById("catalogo");
-      const registro = document.getElementById("registro");
-
-      if (id === "inicio") {
-        if (!registro.classList.contains("hidden")) {
-          fadeOut(registro, () => {
-            fadeIn(inicio);
-            fadeIn(catalogo);
-          });
-        } else {
-          fadeIn(inicio);
-          fadeIn(catalogo);
-        }
-      } else if (id === "registro") {
-        let toHide = [];
-        if (!inicio.classList.contains("hidden")) toHide.push(inicio);
-        if (!catalogo.classList.contains("hidden")) toHide.push(catalogo);
-
-        if (toHide.length > 0) {
-          let count = 0;
-          toHide.forEach(sec => {
-            fadeOut(sec, () => {
-              count++;
-              if (count === toHide.length) fadeIn(registro);
-            });
-          });
-        } else {
-          fadeIn(registro);
-        }
-      }
-    }
-
-    function mostrarInicio() { mostrarSeccion("inicio"); }
-    function mostrarRegistro() { mostrarSeccion("registro"); }
-
-    function registrarUsuario() {
-      let u = document.getElementById("regUsuario").value,
-          p = document.getElementById("regPassword").value;
-      if (!u || !p) return alert("Completa todos los campos");
-      let us = JSON.parse(localStorage.getItem("usuarios")) || [];
-      if (us.find(x => x.usuario === u)) return alert("Usuario ya existe");
-      us.push({ usuario: u, password: p });
-      localStorage.setItem("usuarios", JSON.stringify(us));
-      alert("Cuenta creada 🎉");
-    }
-
-    const loginMsg = localStorage.getItem("loginExitoso");
-      if (loginMsg) {
-        const div = document.createElement("div");
-        div.textContent = loginMsg;
-        div.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg z-50";
-        document.body.appendChild(div);
-        setTimeout(() => {
-          div.style.opacity = "0";
-          setTimeout(() => div.remove(), 600);
-        }, 3000);
-        localStorage.removeItem("loginExitoso");
-      }
-
-    // Initial state
-
-window.addEventListener("DOMContentLoaded", () => {
-  // Fade y navegación
-  fadeInBody();
-
-    const logueado = localStorage.getItem("logueado") === "true";
-    const rol = localStorage.getItem("rol");
-
-    const btnLogin = document.getElementById("btnLogin");
-    const btnRegistro = document.getElementById("btnRegistro");
-    const btnEditarCatalogo = document.getElementById("btnEditarCatalogo");
-    const btnLogout = document.getElementById("btnLogout");
-    const catalogoExtra = document.getElementById("catalogoExtra");
-    const adminPanel = document.getElementById("adminPanel");
-    const loginLink = document.getElementById("loginLink");
-    const btnCatalogo = document.getElementById("btnCatalogo");
-    const menuCatalogo = document.getElementById("menuCatalogo");
-
-    // Navbar dinámico
-    if (logueado) {
-        btnLogin?.classList.add("hidden");
-        btnRegistro?.classList.add("hidden");
-        
-        btnLogout?.classList.remove("hidden");
-        catalogoExtra?.classList.remove("hidden");
-        if (rol === "admin") adminPanel?.classList.remove("hidden");
-        btnEditarCatalogo?.classList.remove("hidden");
-        loginLink.textContent = "Mi cuenta";
-        loginLink.href = rol === "admin" ? "administrador.html" : "#";
-        loginLink.classList.add("font-bold", "text-[#39FF14]");
-    }
-
-    // Logout
-    btnLogout?.addEventListener("click", () => {
-        document.body.style.opacity = "0";
-        setTimeout(() => {
-        localStorage.clear();
-        window.location.href = "index.html";
-        }, 600);
-    });
-
-    // Catálogo desplegable
-    btnCatalogo?.addEventListener("click", () => {
-        menuCatalogo?.classList.toggle("hidden");
-    });
-
-    // Cierre del menú al hacer clic fuera
-    document.addEventListener("click", (e) => {
-        if (!menuCatalogo.contains(e.target) && !btnCatalogo.contains(e.target)) {
-        menuCatalogo.classList.add("hidden");
-        }
-    });
-
-    // Renderizado de productos (si aplica)
-
+// 🔓 Logout
+document.getElementById("btnLogout").addEventListener("click", () => {
+  localStorage.clear();
+  location.reload();
 });

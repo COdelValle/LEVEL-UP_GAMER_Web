@@ -20,53 +20,39 @@ document.addEventListener('DOMContentLoaded', function() {
 // AUTENTICACIÓN
 // ====================================
 
-// 🔄 Transición visual al cargar
-function fadeInBody() {
-  document.body.classList.remove("opacity-0");
-  document.body.classList.add("opacity-100");
+function checkAdminAuth() {
+    const adminSession = JSON.parse(localStorage.getItem('adminSession'));
+    
+    if (!adminSession || !adminSession.isAuthenticated) {
+        // Redirigir al login
+        window.location.href = '../admin/home.html';
+        return;
+    }
+    
+    // Verificar si la sesión ha expirado
+    const now = new Date().getTime();
+    if (now > adminSession.expiresAt) {
+        localStorage.removeItem('adminSession');
+        showMessage('Sesión expirada. Por favor inicia sesión nuevamente.', 'error');
+        setTimeout(() => {
+            window.location.href = '../login.html';
+        }, 2000);
+        return;
+    }
+    
+    // Mostrar nombre del admin
+    document.getElementById('admin-name').textContent = adminSession.username;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🎮 Panel Admin cargado");
-
-  fadeInBody();
-  validarSesionAdmin();
-  mostrarNombreAdmin();
-  configurarLogout();
-  // Puedes agregar más funciones aquí como cargarDashboard(), initCards(), etc.
-});
-
-// 🛡️ Validación de sesión
-function validarSesionAdmin() {
-  const rol = localStorage.getItem("rol");
-  const logueado = localStorage.getItem("logueado");
-
-  if (rol !== "admin" || logueado !== "true") {
-    window.location.href = "../login/login.html";
-  }
+function logout() {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+        localStorage.removeItem('adminSession');
+        showMessage('Sesión cerrada correctamente', 'success');
+        setTimeout(() => {
+            window.location.href = '../../index.html';
+        }, 1000);
+    }
 }
-
-// 👤 Mostrar nombre del admin
-function mostrarNombreAdmin() {
-  const nombre = localStorage.getItem("loginExitoso") || "Administrador";
-  const nombreElemento = document.getElementById("admin-name");
-  if (nombreElemento) nombreElemento.textContent = nombre;
-}
-
-// 🚪 Cerrar sesión
-function configurarLogout() {
-  const btnLogout = document.getElementById("logoutBtn");
-  if (btnLogout) {
-    btnLogout.addEventListener("click", () => {
-      if (confirm("¿Cerrar sesión?")) {
-        localStorage.clear();
-        window.location.href = "../../index.html";
-      }
-    });
-  }
-}
-
-
 
 // ====================================
 // NAVEGACIÓN

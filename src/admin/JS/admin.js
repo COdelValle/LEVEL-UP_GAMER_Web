@@ -77,3 +77,5 @@ function guardarPrecio(index) {
   const nuevoPrecio = input.value;
   alert(`Precio actualizado a $${nuevoPrecio}`);
 }
+
+

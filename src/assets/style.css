@@ -119,3 +119,55 @@ a {
 a:hover {
   color: #2193b0;
 }
+
+.snap-x {
+  scroll-behavior: smooth;
+}
+
+@keyframes scrollLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll-infinite {
+  display: flex;
+  animation: scrollLoop 40s linear infinite;
+}
+
+@keyframes gradientCycle {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.logo-gradient {
+  background: linear-gradient(270deg, #1E90FF, #39FF14);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientCycle 6s ease infinite;
+  font-weight: bold;
+}
+
+.admin-card {
+  background-color: #111827;
+  border: 1px solid #39FF14;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.admin-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  background: linear-gradient(90deg, #1E90FF, #39FF14);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}

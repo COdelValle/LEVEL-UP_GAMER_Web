@@ -3,28 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Level-Up Gamer</title>
-  <link rel="icon" type="image/png" href="src\assets\img\icon.png">
+  <link rel="icon" href="src/assets/img/icon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="src/assets/style.css">
-  
-  
 </head>
-<body onload="fadeInBody()" class="bg-black text-white">
+<body onload="fadeInBody()" class="bg-black text-white opacity-0">
 
   <!-- 🔝 NAVBAR -->
   <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
       <a href="#" onclick="mostrarInicio()" class="flex items-center space-x-2">
-        <img src="src\assets\img\LevelUpGamer.png" alt="Logo" class="h-10">
-        <span class="text-[#39FF14] text-2xl font-bold">Level-Up Gamer</span>
-      </a>
+        <img src="src/assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="logo-gradient text-2xl font-['Orbitron']">Level-Up Gamer</span>
 
+      </a>
       <div class="flex items-center space-x-6">
         <a href="#" onclick="mostrarInicio()" class="hover:text-[#39FF14]">Inicio</a>
-
-        <!-- 🔽 Catálogo con menú desplegable -->
         <div class="relative">
           <button id="btnCatalogo" class="hover:text-[#39FF14]">Catálogo ▼</button>
           <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
@@ -32,93 +28,277 @@
             <a href="mandos.html" class="block hover:text-[#39FF14]">Mandos</a>
             <a href="videojuegos.html" class="block hover:text-[#39FF14]">Videojuegos</a>
             <a href="mouse.html" class="block hover:text-[#39FF14]">Mouse</a>
+            <a href="teclados.html" class="block hover:text-[#39FF14]">Teclados</a>
+            <a href="monitores.html" class="block hover:text-[#39FF14]">Monitores</a>
           </div>
         </div>
-
+        <a href="blog.html" class="hover:text-[#39FF14]">Blog</a>
         <a href="#" onclick="mostrarRegistro()" class="hover:text-[#39FF14]">Registro</a>
-        <a href="src\login\login.html" class="hover:text-[#39FF14]" id="loginLink">Login</a>
+        <a href="src/login/login.html" class="hover:text-[#39FF14]" id="loginLink">Login</a>
       </div>
     </div>
   </nav>
 
-  
-
   <!-- 🟢 HERO SECTION -->
   <section id="inicio" class="hero min-h-screen flex flex-col justify-center items-center text-center px-6">
-    <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg">Level-Up Gamer</h1>
-    <p class="text-xl text-gray-300 mt-4">¡Desafía tus límites con Level-Up Gamer!</p>
-    <div class="mt-6 space-x-4">
-<!-- Botón de login -->
-<button id="btnLogin"
-        onclick="irConFade('src/login/login.html')"
-        class="px-6 py-3 bg-[#1E90FF] hover:bg-blue-700 rounded-lg font-bold">
-  Iniciar Sesión
-</button>
-
-<!-- Botón de registro -->
-<button id="btnRegistro"
-        onclick="irConFade('src/registro/registro.html')"
-        class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">Registrarse</button>
-      <!-- Botón solo visible para admin -->
-      <button id="btnEditarCatalogo"onclick="irConFade('catalogo-admin.html')"class="mt-4 px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black hidden">🛠️ Editar Catálogo</button>
-      <button id="btnLogout" class="mt-4 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold hidden">Cerrar Sesión</button>
+    <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg font-['Orbitron']">Level-Up Gamer</h1>
+    <p class="text-xl text-gray-300 mt-4 font-['Roboto']">¡Desafía tus límites con Level-Up Gamer!</p>
+    <div class="mt-6 space-y-3">
+      <button onclick="irConFade('src/login/login.html')" class="px-6 py-3 bg-[#1E90FF] hover:bg-blue-700 rounded-lg font-bold">Iniciar Sesión</button>
+      <button onclick="irConFade('src/registro/registro.html')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">Registrarse</button>
+      <button onclick="irConFade('blog.html')" class="px-6 py-3 bg-[#6dd5ed] hover:bg-[#2193b0] rounded-lg font-bold text-black">📰 Ir al Blog</button>
+      <button onclick="irConFade('#catalogo')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">🎮 Ver Catálogo</button>
+      <button onclick="irConFade('#ofertas')" class="px-6 py-3 bg-[#FF4500] hover:bg-red-600 rounded-lg font-bold text-white">🔥 Ofertas del Día</button>
+      <button id="btnEditarCatalogo" onclick="irConFade('catalogo-admin.html')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black hidden">🛠️ Editar Catálogo</button>
+      <button id="btnLogout" class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold hidden">Cerrar Sesión</button>
     </div>
   </section>
 
-  <!-- 🎮 CATÁLOGO -->
-  <section id="catalogo" class="py-16 bg-gray-950">
-    <h2 class="text-4xl text-center text-[#1E90FF] mb-8">Catálogo Gamer</h2>
-    <!-- Carrusel -->
-    <div class="flex overflow-x-auto space-x-6 px-6 snap-x snap-mandatory">
-      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
-        <img src="img/ps5.jpg" alt="PS5" class="rounded mb-2">
-        <h4 class="text-lg font-bold">PlayStation 5</h4>
-        <p class="text-gray-400">$549.990</p>
-        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+<!-- 🎮 PRODUCTOS DESTACADOS CON SCROLL INFINITO -->
+<section id="catalogo" class="py-16 bg-gray-950">
+  <h2 class="text-4xl text-center text-[#1E90FF] mb-8 font-['Orbitron']">Productos Destacados</h2>
+  <div class="overflow-x-hidden">
+    <div class="flex animate-scroll-infinite space-x-6 px-6">
+
+      <!-- 🔁 Bloque de productos (duplicado para bucle visual) -->
+      <div class="flex space-x-6">
+
+        <!-- Producto 1 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="src\assets\img\PlayStation5.png" alt="PS5" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">PlayStation 5</h4>
+          <p class="text-gray-400">$549.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 2 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="src/assets/img/SwitchLite.png" alt="Nintendo Switch Lite" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">Nintendo Switch Lite</h4>
+          <p class="text-gray-400">$349.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 3 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="src\assets\img\AsusRogStrix.png" alt="PC Gamer" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">ASUS ROG Strix</h4>
+          <p class="text-gray-400">$1.299.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 4 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="src\assets\img\HyperXCloud2.png" alt="Headset" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">HyperX Cloud II</h4>
+          <p class="text-gray-400">$79.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 5 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="src\assets\img\SecretLabTitan.png" alt="Silla Gamer" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">Secretlab Titan</h4>
+          <p class="text-gray-400">$349.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 6 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="img/monitor.jpg" alt="Monitor LG" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">LG UltraGear 144Hz</h4>
+          <p class="text-gray-400">$229.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 7 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="img/teclado.jpg" alt="Teclado RGB" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">Redragon Kumara</h4>
+          <p class="text-gray-400">$34.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 8 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="img/mouse.jpg" alt="Mouse Gamer" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">Logitech G502 Hero</h4>
+          <p class="text-gray-400">$29.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
+        <!-- Producto 9 -->
+        <div class="min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between">
+          <img src="img/laptop.jpg" alt="Laptop Gamer" class="w-full h-48 object-cover rounded mb-4">
+          <h4 class="text-lg font-bold">MSI Katana RTX 4060</h4>
+          <p class="text-gray-400">$999.990</p>
+          <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+        </div>
+
       </div>
-      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
-        <img src="img/pcgamer.jpg" alt="PC Gamer" class="rounded mb-2">
-        <h4 class="text-lg font-bold">PC Gamer ASUS ROG Strix</h4>
-        <p class="text-gray-400">$1.299.990</p>
-        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+
+      <!-- 🔁 Repetición para scroll infinito -->
+      <div class="flex space-x-6">
+        <!-- Copia exacta del bloque anterior -->
+        <!-- Puedes duplicar el bloque manualmente o con JS si prefieres -->
       </div>
-      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
-        <img src="img/headset.jpg" alt="Headset HyperX" class="rounded mb-2">
-        <h4 class="text-lg font-bold">Auriculares HyperX Cloud II</h4>
-        <p class="text-gray-400">$79.990</p>
-        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
-      </div>
-      <div class="snap-center min-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg">
-        <img src="img/silla.jpg" alt="Silla Gamer" class="rounded mb-2">
-        <h4 class="text-lg font-bold">Silla Gamer Secretlab Titan</h4>
-        <p class="text-gray-400">$349.990</p>
-        <button class="mt-2 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- 🎯 OFERTAS RECOMENDADAS -->
+<section id="ofertas" class="py-16 px-6 bg-[#0a192e]">
+  <h2 class="text-3xl text-center gradient-text mb-8">Ofertas Recomendadas</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+
+    <!-- Mouse Gamer -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/mouse.jpg" alt="Mouse Gamer" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">Logitech G502 Hero</h3>
+      <p class="text-gray-300 mb-2">Combo con alfombrilla gratis</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$39.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$29.990</span>
       </div>
     </div>
-  </section>
 
-  <!-- 🟢 REGISTRO -->
-  <section id="registro" class="hero fade-out hidden min-h-screen flex flex-col justify-center items-center p-6">
-    <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
-      <h2 class="text-3xl text-[#39FF14] mb-4 text-center">Registro</h2>
-      <input id="regUsuario" type="text" placeholder="Usuario" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
-      <input id="regPassword" type="password" placeholder="Contraseña" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
-      <button onclick="registrarUsuario()" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black">Crear Cuenta</button>
+    <!-- Monitor Gamer -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/monitor.jpg" alt="Monitor Gamer" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">LG UltraGear 144Hz</h3>
+      <p class="text-gray-300 mb-2">Full HD, 1ms, ideal para eSports</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$279.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$229.990</span>
+      </div>
     </div>
-  </section>
 
-  <!-- Catálogo extra solo para usuarios logueados -->
-  <section id="catalogoExtra" class="hidden">
-    <!-- contenido exclusivo para usuarios -->
-  </section>
+    <!-- Silla Gamer -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/silla.jpg" alt="Silla Gamer" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">Secretlab Titan Evo</h3>
+      <p class="text-gray-300 mb-2">Ergonomía y estilo pro</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$399.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$349.990</span>
+      </div>
+    </div>
 
-  <section id="adminPanel" class="hidden">
-    <!-- herramientas para admin -->
-  </section>
+    <!-- Laptop Gamer -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/laptop.jpg" alt="Laptop Gamer" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">MSI Katana RTX 4060</h3>
+      <p class="text-gray-300 mb-2">¡Oferta limitada!</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$1.199.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$999.990</span>
+      </div>
+    </div>
 
-  <script src="src\tienda\JS\index.js"></script>
+    <!-- Combo Teclado + Mouse -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/combo.jpg" alt="Combo Gamer" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">Combo Teclado + Mouse</h3>
+      <p class="text-gray-300 mb-2">Pack ideal para empezar</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$69.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$49.990</span>
+      </div>
+    </div>
+
+    <!-- Mando Xbox -->
+    <div class="bg-gray-900 p-6 rounded-xl shadow-lg text-center">
+      <img src="img/mando.jpg" alt="Mando Xbox" class="mx-auto h-32 mb-4">
+      <h3 class="text-xl font-bold">Xbox Wireless Controller</h3>
+      <p class="text-gray-300 mb-2">Compatible con PC y consola</p>
+      <div class="flex justify-center items-center space-x-2">
+        <span class="line-through text-gray-400">$69.990</span>
+        <span class="text-[#39FF14] font-bold text-lg">$59.990</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 
+
+<!-- 💬 TESTIMONIOS -->
+<section class="py-16 bg-gray-950">
+  <h2 class="text-3xl text-center gradient-text mb-8">Lo que dicen nuestros gamers</h2>
+  <div class="overflow-x-hidden max-w-7xl mx-auto">
+    <div class="flex animate-scroll-infinite space-x-6 px-6 w-max">
+
+      <!-- Testimonio 1 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“La mejor tienda gamer que he probado. Atención rápida y productos top.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @DarkWolf</p>
+      </div>
+
+      <!-- Testimonio 2 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“Compré mi PC aquí y llegó en 2 días. Rendimiento brutal.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @PixelRush</p>
+      </div>
+
+      <!-- Testimonio 3 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“El blog tiene reseñas buenísimas. Me ayudó a elegir mi headset.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @LunaByte</p>
+      </div>
+
+      <!-- Testimonio 4 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“Me encantan los combos gamer. Todo llegó impecable.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @NeoTrigger</p>
+      </div>
+
+      <!-- Testimonio 5 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“La atención al cliente es de otro nivel. Me ayudaron en minutos.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @VortexX</p>
+      </div>
+
+      <!-- Testimonio 6 -->
+      <div class="min-w-[300px] max-w-[300px] bg-gray-900 p-4 rounded-xl shadow-lg">
+        <p class="text-gray-300 italic">“Los descuentos son reales. Compré mi monitor 30% más barato.”</p>
+        <p class="mt-2 text-[#39FF14] font-bold">— @ShadowCore</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- 🟢 REGISTRO -->
+<section id="registro" class="hero fade-out hidden min-h-screen flex flex-col justify-center items-center p-6">
+  <div class="bg-gray-900 p-6 rounded-xl shadow-lg max-w-md w-full">
+    <h2 class="text-3xl text-[#39FF14] mb-4 text-center font-['Orbitron']">Registro</h2>
+    <input id="regUsuario" type="text" placeholder="Usuario" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+    <input id="regPassword" type="password" placeholder="Contraseña" class="w-full p-2 rounded mb-3 bg-gray-800 text-white">
+    <button onclick="registrarUsuario()" class="w-full bg-[#39FF14] hover:bg-green-700 py-2 rounded-lg font-bold text-black">Crear Cuenta</button>
+  </div>
+</section>
+
+<!-- 🔒 Áreas exclusivas -->
+<section id="catalogoExtra" class="hidden">
+  <!-- contenido exclusivo para usuarios -->
+</section>
+
+<section id="adminPanel" class="hidden">
+  <!-- herramientas para admin -->
+</section>
+
+<!-- 💬 BOTÓN FLOTANTE DE WHATSAPP -->
+<a href="https://wa.me/56912345678" target="_blank" class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg z-50">
+  💬 Soporte
+</a>
+
+<!-- 🔧 JS -->
+<script src="src/tienda/JS/index.js"></script>
+
+<!-- 🔻 FOOTER -->
 <footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">
   <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
     
@@ -132,32 +312,25 @@
 
     <!-- Enlaces útiles -->
     <div>
-      <h4 class="text-[#39FF14] text-lg font-bold mb-2">Referencias</h4>
+      <h4 class="text-[#39FF14] text-lg font-bold mb-2">Enlaces Útiles</h4>
       <ul class="text-sm space-y-1">
         <li><a href="#" class="hover:text-[#39FF14]">Términos y condiciones</a></li>
         <li><a href="#" class="hover:text-[#39FF14]">Política de privacidad</a></li>
+        <li><a href="blog.html" class="hover:text-[#39FF14]">Blog y Noticias</a></li>
         <li><a href="#" class="hover:text-[#39FF14]">Soporte técnico</a></li>
       </ul>
     </div>
 
     <!-- Redes sociales -->
-<div>
-  <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
-  <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
-    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
-      <i class="fab fa-facebook-f"></i>
-      <span>Facebook</span>
-    </a>
-    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
-      <i class="fab fa-instagram"></i>
-      <span>Instagram</span>
-    </a>
-    <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]">
-      <i class="fab fa-youtube"></i>
-      <span>YouTube</span>
-    </a>
+    <div>
+      <h4 class="text-[#39FF14] text-lg font-bold mb-2">Síguenos</h4>
+      <div class="flex flex-col sm:flex-row sm:justify-start items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+        <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-facebook-f"></i><span>Facebook</span></a>
+        <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+        <a href="#" class="flex items-center space-x-2 hover:text-[#39FF14]"><i class="fab fa-youtube"></i><span>YouTube</span></a>
+      </div>
+    </div>
   </div>
-</div>
 
   <!-- Línea final -->
   <div class="text-center text-sm mt-8 text-gray-400">
@@ -165,6 +338,6 @@
   </div>
 </footer>
 
-
 </body>
-</html>
+
+  
