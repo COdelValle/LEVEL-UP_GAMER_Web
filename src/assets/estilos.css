@@ -1,0 +1,171 @@
+:root {
+  --primary-color: #0d6efd;
+  --bg-gradient: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  --text-gradient: linear-gradient(to right, #6dd5ed, #2193b0);
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --border-radius: 12px;
+  --font-main: 'Roboto', sans-serif;
+  --font-titles: 'Orbitron', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: black;
+  color: white;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-titles);
+}
+
+.hero {
+  background: url('./img/BackgroundIndex1.jpg') center/cover no-repeat;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 25, 70, 0.7);
+  z-index: 0;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+  transition: color 0.5s, background 0.5s;
+}
+
+.navbar-deepblue {
+  background: rgba(0, 0, 30, 0.99) !important;
+  transition: background 0.8s cubic-bezier(.4,0,.2,1);
+}
+
+/* Fade transitions for sections */
+section {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+section.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+section.fade-in {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Estilos del login-card y componentes */
+.login-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  color: white;
+  font-family: var(--font-main);
+}
+
+.gradient-text {
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-titles);
+}
+
+.admin-icon {
+  font-size: 2rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #084298;
+}
+
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-family: var(--font-main);
+}
+
+.form-control::placeholder {
+  color: #ccc;
+}
+
+.alert {
+  font-size: 0.9rem;
+}
+
+a {
+  color: #6dd5ed;
+}
+
+a:hover {
+  color: #2193b0;
+}
+
+.snap-x {
+  scroll-behavior: smooth;
+}
+
+@keyframes scrollLoop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll-infinite {
+  display: flex;
+  animation: scrollLoop 40s linear infinite;
+}
+
+@keyframes gradientCycle {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.logo-gradient {
+  background: linear-gradient(270deg, #1E90FF, #39FF14);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientCycle 6s ease infinite;
+  font-weight: bold;
+}
+
+.admin-card {
+  background-color: #111827;
+  border: 1px solid #39FF14;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.admin-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  background: linear-gradient(90deg, #1E90FF, #39FF14);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}

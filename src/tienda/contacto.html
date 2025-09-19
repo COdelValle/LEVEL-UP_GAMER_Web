@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto - Level-Up Gamer</title>
+  <link rel="icon" href="src/assets/img/icon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./../assets/estilos.css">
+</head>
+<body onload="fadeInBody()" class="bg-black text-white">
+
+  <!-- 🔝 NAVBAR -->
+  <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+      <a href="index.html" class="flex items-center space-x-2">
+        <img src="src/assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+        <span class="logo-gradient text-2xl font-['Orbitron']">Level-Up Gamer</span>
+      </a>
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="hover:text-[#39FF14]">Inicio</a>
+        <a href="blog.html" class="hover:text-[#39FF14]">Blog</a>
+        <a href="contacto.html" class="text-[#39FF14] font-bold">Contacto</a>
+        <a href="src/login/login.html" class="hover:text-[#39FF14]">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🟢 HERO CONTACTO -->
+  <section class="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24">
+    <h1 class="text-5xl font-extrabold text-[#39FF14] drop-shadow-lg font-['Orbitron']">Contáctanos</h1>
+    <p class="text-lg text-gray-300 mt-4 font-['Roboto'] max-w-2xl">
+      ¿Tienes dudas, sugerencias o quieres colaborar con Level-Up Gamer? ¡Escríbenos y te responderemos pronto!
+    </p>
+  </section>
+
+  <!-- 📩 FORMULARIO -->
+  <section class="py-12 bg-gray-950 px-6">
+    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+      
+      <!-- Formulario -->
+      <div class="bg-gray-900 p-6 rounded-xl shadow-lg">
+        <h2 class="text-2xl text-[#1E90FF] mb-6 font-['Orbitron']">Envíanos un mensaje</h2>
+        <form id="form_contacto" class="space-y-4">
+            <label for="mensaje_nombre" class="block text-sm text-gray-300 font-semibold">Nombre completo</label>
+            <input id="mensaje_nombre" required type="text" placeholder="Ingrese su nombre completo" class="w-full p-3 rounded bg-gray-800 text-white focus:outline-none">
+            <label for="mensaje_email" class="block text-sm text-gray-300 font-semibold">Correo</label>
+            <input id="mensaje_email" required type="email" placeholder="Ingrese su correo" class="w-full p-3 rounded bg-gray-800 text-white focus:outline-none">
+            <label for="mensaje_texto" class="block text-sm text-gray-300 font-semibold">Mensaje</label>
+            <textarea id="mensaje_texto" required rows="5" placeholder="Escribe tu mensaje aquí..." class="w-full p-3 rounded bg-gray-800 text-white focus:outline-none resize-none"></textarea>
+            <button type="submit" class="w-full py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">Enviar</button>
+        </form>
+      </div>
+
+      <!-- Info de contacto -->
+      <div class="flex flex-col justify-center space-y-6">
+        <h2 class="text-2xl text-[#1E90FF] font-['Orbitron']">Información de contacto</h2>
+        <p class="text-gray-300"><i class="fa-solid fa-envelope text-[#39FF14] mr-2"></i> contacto@levelupgamer.cl</p>
+        <p class="text-gray-300"><i class="fa-solid fa-phone text-[#39FF14] mr-2"></i> +56 9 1234 5678</p>
+        <div class="flex space-x-4 mt-4">
+          <a href="#" class="hover:text-[#39FF14] text-2xl"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" class="hover:text-[#39FF14] text-2xl"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="hover:text-[#39FF14] text-2xl"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="hover:text-[#39FF14] text-2xl"><i class="fa-brands fa-twitch"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ⚫ FOOTER -->
+  <footer class="bg-[#0a192e] text-center py-6 mt-12">
+    <p class="text-gray-400 text-sm">© 2025 Level-Up Gamer. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="./../assets/script.js"></script>
+  <script src="JS/contacto.js"></script>
+</body>
+</html>

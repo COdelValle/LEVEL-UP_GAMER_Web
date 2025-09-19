@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usuarios - Level-Up Gamer Admin</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="../assets/estilos.css" rel="stylesheet">
+<style>
+    .admin-sidebar { background: linear-gradient(135deg, rgba(30,144,255,0.1), rgba(57,255,20,0.05)); border-right:1px solid rgba(30,144,255,0.3); min-height:100vh; }
+    .admin-nav-link { color: #ccc; text-decoration:none; padding:.75rem 1rem; display:block; border-radius:.5rem; margin-bottom:.5rem; transition:.3s; }
+    .admin-nav-link:hover { background: rgba(30,144,255,0.2); color:#1E90FF; }
+    .admin-nav-link.active { background: #1E90FF; color:white; }
+    .gradient-text { background: linear-gradient(90deg,#1E90FF,#39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family:'Orbitron',sans-serif; }
+    .main-content { padding: 2rem; }
+    .btn-new-user { margin-bottom: 1rem; }
+    .btn-group-table {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .btn-group-table .btn {
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* Columnas ocultas según resolución */
+    @media (max-width: 1286px) {
+        .d-hide-md { display: none !important; } /* Oculta columnas secundarias en pantallas medias */
+    }
+    @media (max-width: 767px) {
+        .d-hide-sm { display: none !important; } /* Oculta columnas secundarias en móviles */
+        .table td, .table th { font-size: 0.85rem; padding: 0.35rem; }
+    }
+
+    /* Tabla responsive */
+    .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+    }
+</style>
+</head>
+<body>
+
+<header class="admin-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="gradient-text mb-0">Level-Up Gamer - Admin Panel</h3>
+        <div>
+            <span class="text-secondary">Bienvenido, <span id="admin-name">Admin</span></span>
+            <button class="btn btn-secondary btn-sm" onclick="logout()">🚪 Cerrar Sesión</button>
+        </div>
+    </div>
+</header>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="admin-sidebar" style="width:250px;">
+        <div class="p-3">
+            <ul class="nav flex-column">
+                <li><a href="../home.html" class="admin-nav-link">📊 Dashboard</a></li>
+                <li><a href="#" class="admin-nav-link active">👥 Usuarios</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="gradient-text">Lista de Usuarios</h2>
+            <button class="btn btn-success btn-new-user" onclick="window.location.href='agregar_usuarios.html'">➕ Nuevo Usuario</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-striped table-responsive">
+                <thead>
+                    <tr>
+                        <th>RUN</th>
+                        <th>Nombre</th>
+                        <th class="d-hide-md d-hide-sm">Apellidos</th>
+                        <th class="d-hide-md d-hide-sm">Correo</th>
+                        <th class="d-hide-md d-hide-sm">Fecha Nac.</th>
+                        <th class="d-hide-md d-hide-sm">Tipo Usuario</th>
+                        <th class="d-hide-md d-hide-sm">Región</th>
+                        <th class="d-hide-md d-hide-sm">Comuna</th>
+                        <th class="d-hide-md d-hide-sm">Dirección</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table"></tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+<script src="JS/usuarios.js"></script>
+</body>
+</html>
