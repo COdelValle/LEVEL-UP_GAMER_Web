@@ -2,18 +2,20 @@
 // ADMIN HOME - LEVEL-UP GAMER
 // ====================================
 
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔧 Admin Panel cargado');
-    
-    // Verificar autenticación
-    checkAdminAuth();
-    
-    // Inicializar dashboard
-    initDashboard();
-    loadDashboardData();
-    
-    // Configurar navegación
+    // Proteger acceso solo admin
+    const rol = localStorage.getItem('rol');
+    const logueado = localStorage.getItem('logueado');
+    if (rol !== 'admin' || logueado !== 'true') {
+        window.location.href = '../login/login.html';
+        return;
+    }
+    mostrarNombreAdmin();
+    configurarLogout();
     setupNavigation();
+    showSection('dashboard');
+    loadDashboardData();
 });
 
 // ====================================
@@ -36,34 +38,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // Puedes agregar más funciones aquí como cargarDashboard(), initCards(), etc.
 });
 
-// 🛡️ Validación de sesión
-function validarSesionAdmin() {
-  const rol = localStorage.getItem("rol");
-  const logueado = localStorage.getItem("logueado");
 
-  if (rol !== "admin" || logueado !== "true") {
-    window.location.href = "../login/login.html";
-  }
-}
 
 // 👤 Mostrar nombre del admin
 function mostrarNombreAdmin() {
-  const nombre = localStorage.getItem("loginExitoso") || "Administrador";
-  const nombreElemento = document.getElementById("admin-name");
-  if (nombreElemento) nombreElemento.textContent = nombre;
+    const nombre = localStorage.getItem("loginExitoso") || "Administrador";
+    const nombreElemento = document.getElementById("admin-name");
+    if (nombreElemento) nombreElemento.textContent = nombre;
 }
 
 // 🚪 Cerrar sesión
 function configurarLogout() {
-  const btnLogout = document.getElementById("logoutBtn");
-  if (btnLogout) {
-    btnLogout.addEventListener("click", () => {
-      if (confirm("¿Cerrar sesión?")) {
-        localStorage.clear();
-        window.location.href = "../../index.html";
-      }
-    });
-  }
+    const btnLogout = document.getElementById("logoutBtn");
+    if (btnLogout) {
+        btnLogout.addEventListener("click", () => {
+            if (confirm("¿Cerrar sesión?")) {
+                localStorage.clear();
+                window.location.href = "../../index.html";
+            }
+        });
+    }
 }
 
 
@@ -73,34 +67,59 @@ function configurarLogout() {
 // ====================================
 
 function setupNavigation() {
-    // Manejar clicks en enlaces de navegación
     document.querySelectorAll('.admin-nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
-            if (this.getAttribute('onclick')) return; // Skip si tiene onclick
+            if (this.getAttribute('onclick')) {
+                // Si tiene onclick, dejar que lo maneje showSection
+                return;
+            }
             if (this.getAttribute('href').startsWith('http') || this.getAttribute('href').includes('.html')) return;
-            
             e.preventDefault();
         });
     });
 }
 
 function showSection(sectionName) {
-    // Ocultar todas las secciones
-    document.querySelectorAll('[id$="-section"]').forEach(section => {
-        section.style.display = 'none';
+    // Fade out la sección visible
+    const allSections = document.querySelectorAll('.admin-section');
+    let currentSection = null;
+    allSections.forEach(section => {
+        if (section.style.display !== 'none') {
+            currentSection = section;
+        }
     });
-    
-    // Mostrar la sección seleccionada
+    if (currentSection) {
+        currentSection.classList.remove('fade-in');
+        currentSection.classList.add('fade-out');
+        setTimeout(() => {
+            currentSection.style.display = 'none';
+            currentSection.classList.remove('fade-out');
+            // Mostrar la nueva sección
+            showTargetSection(sectionName);
+        }, 400);
+    } else {
+        showTargetSection(sectionName);
+    }
+}
+
+function showTargetSection(sectionName) {
     const targetSection = document.getElementById(sectionName + '-section');
     if (targetSection) {
         targetSection.style.display = 'block';
+        setTimeout(() => {
+            targetSection.classList.add('fade-in');
+        }, 10);
     }
-    
     // Actualizar navegación activa
     document.querySelectorAll('.admin-nav-link').forEach(link => {
         link.classList.remove('active');
+        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(sectionName)) {
+            link.classList.add('active');
+        }
+        if (sectionName === 'dashboard' && link.textContent.includes('Dashboard')) {
+            link.classList.add('active');
+        }
     });
-    
     // Cargar datos según la sección
     switch(sectionName) {
         case 'products':
@@ -112,8 +131,9 @@ function showSection(sectionName) {
         case 'users':
             loadUsersData();
             break;
+        case 'dashboard':
         default:
-            document.querySelector('.admin-nav-link').classList.add('active');
+            loadDashboardData();
     }
 }
 

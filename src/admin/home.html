@@ -11,73 +11,83 @@
     
     <style>
         .admin-sidebar {
-            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
-            border-right: 1px solid rgba(30, 144, 255, 0.3);
+            background: rgba(0, 0, 30, 0.99);
+            border-right: 1px solid #1E90FF33;
             min-height: 100vh;
         }
-        
         .admin-nav-link {
-            color: var(--color-gris-claro);
+            color: #6dd5ed;
             text-decoration: none;
             padding: 0.75rem 1rem;
             display: block;
             border-radius: 0.5rem;
             margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.01em;
             transition: all 0.3s ease;
         }
-        
         .admin-nav-link:hover {
-            background: rgba(30, 144, 255, 0.2);
-            color: var(--color-azul-electrico);
+            background: #1E90FF22;
+            color: #39FF14;
         }
-        
         .admin-nav-link.active {
-            background: var(--color-azul-electrico);
-            color: var(--color-blanco);
+            background: linear-gradient(90deg, #1E90FF 0%, #39FF14 100%);
+            color: #fff !important;
         }
-        
         .stats-card {
-            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
-            border: 1px solid rgba(30, 144, 255, 0.3);
+            background: linear-gradient(135deg, #181f2a 0%, #0a192e 100%);
+            border: 1.5px solid #39FF14;
             border-radius: 0.75rem;
             padding: 1.5rem;
             text-align: center;
+            box-shadow: 0 0 20px rgba(57,255,20,0.08);
             transition: all 0.3s ease;
         }
-        
         .stats-card:hover {
-            border-color: var(--color-verde-neon);
-            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
+            border-color: #1E90FF;
+            box-shadow: 0 10px 30px rgba(30,144,255,0.13);
             transform: translateY(-5px);
         }
-        
         .stats-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--color-azul-electrico);
+            color: #39FF14;
+            font-family: 'Orbitron', sans-serif;
         }
-        
         .main-content {
             padding: 2rem;
         }
-        
         .admin-header {
-            background: rgba(0, 0, 30, 0.95);
+            background: rgba(0, 0, 30, 0.99);
             padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(30, 144, 255, 0.3);
+            border-bottom: 1.5px solid #1E90FF33;
         }
-        
         .activity-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #181f2a;
+            border: 1px solid #1E90FF33;
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 0.5rem;
         }
-        
         .activity-time {
             font-size: 0.875rem;
-            color: var(--color-gris-claro);
+            color: #6dd5ed;
+        }
+        /* Fade transitions for admin sections */
+        .admin-section {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .admin-section.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .admin-section.fade-in {
+            opacity: 1;
+            visibility: visible;
         }
     </style>
 </head>
@@ -90,7 +100,7 @@
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="text-secondary">Bienvenido, <span id="admin-name">Admin</span></span>
-                <button class="btn btn-secondary btn-sm" onclick="logout()">
+                <button class="btn btn-secondary btn-sm" id="logoutBtn">
                     🚪 Cerrar Sesión
                 </button>
             </div>
@@ -103,7 +113,7 @@
             <div class="p-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="../home.html" class="admin-nav-link active">
+                        <a href="#" class="admin-nav-link active" onclick="showSection('dashboard')">
                             📊 Dashboard
                         </a>
                     </li>
@@ -128,7 +138,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../src/tienda/blogs.html" class="admin-nav-link">
+                        <a href="../../index.html" class="admin-nav-link">
                             🏠 Ir a la Tienda
                         </a>
                     </li>
@@ -139,7 +149,7 @@
         <!-- Main Content -->
         <main class="main-content flex-grow-1">
             <!-- Dashboard Section -->
-            <div id="dashboard-section">
+            <div id="dashboard-section" class="admin-section" style="display: block;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Dashboard General</h2>
@@ -237,7 +247,7 @@
             </div>
 
             <!-- Products Management Section -->
-            <div id="products-section" style="display: none;">
+            <div id="products-section" class="admin-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Productos</h2>
@@ -275,7 +285,7 @@
             </div>
 
             <!-- Orders Section -->
-            <div id="orders-section" style="display: none;">
+            <div id="orders-section" class="admin-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Pedidos</h2>
@@ -307,7 +317,7 @@
             </div>
 
             <!-- Users Section -->
-            <div id="users-section" style="display: none;">
+            <div id="users-section" class="admin-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Usuarios</h2>

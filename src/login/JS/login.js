@@ -67,14 +67,14 @@ function iniciarSesion() {
   const usuarioValido = us.find(x => x.email === u && x.password === p);
 
   if (usuarioValido) {
-    msg.innerHTML = `${iconSuccess}<span class="text-[#39FF14]">Bienvenido ${u}</span>`;
+    msg.innerHTML = `${iconSuccess}<span class=\"text-[#39FF14]\">Bienvenido ${u}</span>`;
     msg.className = "flex items-center justify-center gap-2 text-sm mt-2 mb-4 transition-opacity duration-300";
     localStorage.setItem("logueado", "true");
     localStorage.setItem("rol", "usuario");
     localStorage.setItem("loginExitoso", `Bienvenido ${u}`);
-    setTimeout(() => fadeOutAndRedirect("../../home.html"), 1500);
+    setTimeout(() => fadeOutAndRedirect("../../../index.html"), 1500);
   } else {
-    msg.innerHTML = `${iconError}<span class="text-red-500">Credenciales incorrectas</span>`;
+    msg.innerHTML = `${iconError}<span class=\"text-red-500\">Credenciales incorrectas</span>`;
     msg.className = "flex items-center justify-center gap-2 text-sm mt-2 mb-4 transition-opacity duration-300";
   }
 }

@@ -13,13 +13,18 @@
 
   <!-- 🔝 NAVBAR -->
   <nav class="navbar-deepblue fixed w-full top-0 shadow-lg z-50">
-    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-      <a href="#" onclick="mostrarInicio()" class="flex items-center space-x-2">
-        <img src="src/assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
-        <span class="logo-gradient text-2xl font-['Orbitron']">Level-Up Gamer</span>
-
-      </a>
-      <div class="flex items-center space-x-6">
+    <div class="max-w-7xl mx-auto px-4 flex items-center h-16">
+      <!-- Logo a la izquierda -->
+      <div class="flex items-center flex-shrink-0">
+        <a href="#" onclick="mostrarInicio()" class="flex items-center space-x-2">
+          <img src="src/assets/img/LevelUpGamer.png" alt="Logo" class="h-10">
+          <span class="logo-gradient text-2xl font-['Orbitron']">Level-Up Gamer</span>
+        </a>
+      </div>
+      <!-- Espaciador -->
+      <div class="flex-1"></div>
+      <!-- Links y carrito a la derecha -->
+      <div class="flex items-center space-x-6 mr-8">
         <a href="#" onclick="mostrarInicio()" class="hover:text-[#39FF14]">Inicio</a>
         <div class="relative">
           <button id="btnCatalogo" class="hover:text-[#39FF14]">Catálogo ▼</button>
@@ -35,30 +40,77 @@
         <a href="blog.html" class="hover:text-[#39FF14]">Blog</a>
         <a href="#" onclick="mostrarRegistro()" class="hover:text-[#39FF14]">Registro</a>
         <a href="src/login/login.html" class="hover:text-[#39FF14]" id="loginLink">Login</a>
+        <!-- Carrito de compras -->
+        <div class="relative">
+          <button id="cart-btn" class="text-white hover:text-blue-400 relative">
+            🛒 <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hidden">0</span>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- 🟢 HERO SECTION -->
   <section id="inicio" class="hero min-h-screen flex flex-col justify-center items-center text-center px-6">
-    <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg font-['Orbitron']">Level-Up Gamer</h1>
-    <p class="text-xl text-gray-300 mt-4 font-['Roboto']">¡Desafía tus límites con Level-Up Gamer!</p>
-    <div class="mt-6 space-y-3">
-      <button onclick="irConFade('src/login/login.html')" class="px-6 py-3 bg-[#1E90FF] hover:bg-blue-700 rounded-lg font-bold">Iniciar Sesión</button>
-      <button onclick="irConFade('src/registro/registro.html')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">Registrarse</button>
-      <button onclick="irConFade('blog.html')" class="px-6 py-3 bg-[#6dd5ed] hover:bg-[#2193b0] rounded-lg font-bold text-black">📰 Ir al Blog</button>
-      <button onclick="irConFade('#catalogo')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black">🎮 Ver Catálogo</button>
-      <button onclick="irConFade('#ofertas')" class="px-6 py-3 bg-[#FF4500] hover:bg-red-600 rounded-lg font-bold text-white">🔥 Ofertas del Día</button>
-      <button id="btnEditarCatalogo" onclick="irConFade('catalogo-admin.html')" class="px-6 py-3 bg-[#39FF14] hover:bg-green-700 rounded-lg font-bold text-black hidden">🛠️ Editar Catálogo</button>
-      <button id="btnLogout" class="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-bold hidden">Cerrar Sesión</button>
+  <div class="flex flex-col items-center w-full mb-8 pt-48">
+      <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg font-['Orbitron'] mb-2">Level-Up Gamer</h1>
+      <p class="text-xl text-gray-300 font-['Roboto']">¡Desafía tus límites con Level-Up Gamer!</p>
+      <div class="mt-6 mb-6 flex justify-center">
+        <!-- SVG animado de control gamer -->
+        <svg width="120" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="animate-bounce-slow">
+          <rect x="10" y="20" width="100" height="30" rx="15" fill="#181f2a" stroke="#39FF14" stroke-width="3"/>
+          <circle cx="35" cy="35" r="6" fill="#1E90FF"/>
+          <circle cx="85" cy="35" r="6" fill="#FF4500"/>
+          <rect x="55" y="32" width="10" height="6" rx="2" fill="#39FF14"/>
+          <rect x="30" y="28" width="3" height="12" rx="1.5" fill="#39FF14"/>
+          <rect x="87" y="28" width="3" height="12" rx="1.5" fill="#39FF14"/>
+          <circle cx="60" cy="45" r="2" fill="#fff"/>
+        </svg>
+      </div>
     </div>
+  <div class="w-full max-w-2xl mx-auto">
+    <div class="flex flex-col items-center gap-6">
+      <!-- 🔼 Botones principales arriba -->
+      <div class="flex flex-wrap justify-center gap-3">
+        <button onclick="irConFade('src/tienda/producto.html')" class="inicio-btn2 inicio-btn2-gradient px-3 py-2 text-sm rounded-md min-w-[150px]">
+          <i class="fas fa-gamepad mr-1"></i> Ver Catálogo
+        </button>
+        <button id="btnOfertas" class="inicio-btn2 bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-2 text-sm rounded-md min-w-[150px]">
+          <i class="fas fa-fire mr-1"></i> Ofertas del Día
+        </button>
+        <button onclick="irConFade('blog.html')" class="inicio-btn2 inicio-btn2-blue px-3 py-2 text-sm rounded-md min-w-[150px]">
+          <i class="fas fa-newspaper mr-1"></i> Blog Gamer
+        </button>
+      </div>
+
+      <!-- 🔽 Botones de sesión centrados abajo -->
+      <div class="flex justify-center gap-6 mt-6">
+        <button onclick="irConFade('src/login/login.html')" class="inicio-btn2 px-4 py-2 text-sm rounded-md min-w-[140px]">
+          <i class="fas fa-sign-in-alt mr-1"></i> Iniciar Sesión
+        </button>
+        <button onclick="irConFade('src/registro/registro.html')" class="inicio-btn2 inicio-btn2-green px-4 py-2 text-sm rounded-md min-w-[140px]">
+          <i class="fas fa-user-plus mr-1"></i> Registrarse
+        </button>
+      </div>
+
+      <!-- 🔒 Botones ocultos para admin -->
+      <div class="flex flex-wrap justify-center gap-3 mt-6">
+        <button id="btnEditarCatalogo" onclick="irConFade('catalogo-admin.html')" class="inicio-btn2 inicio-btn2-green hidden px-3 py-2 text-sm rounded-md min-w-[140px]">
+          <i class="fas fa-tools mr-1"></i> Editar Catálogo
+        </button>
+        <button id="btnLogout" class="inicio-btn2 inicio-btn2-red hidden px-3 py-2 text-sm rounded-md min-w-[140px]">
+          <i class="fas fa-sign-out-alt mr-1"></i> Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </div>
   </section>
 
 <!-- 🎮 PRODUCTOS DESTACADOS CON SCROLL INFINITO -->
 <section id="catalogo" class="py-16 bg-gray-950">
   <h2 class="text-4xl text-center text-[#1E90FF] mb-8 font-['Orbitron']">Productos Destacados</h2>
-  <div class="overflow-x-hidden">
-    <div class="flex animate-scroll-infinite space-x-6 px-6">
+  <div class="overflow-x-auto w-full">
+    <div class="flex animate-scroll-infinite space-x-6 w-full max-w-full justify-center items-center">
 
       <!-- 🔁 Bloque de productos (duplicado para bucle visual) -->
       <div class="flex space-x-6">
@@ -162,6 +214,7 @@
         <span class="line-through text-gray-400">$39.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$29.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
     <!-- Monitor Gamer -->
@@ -173,6 +226,7 @@
         <span class="line-through text-gray-400">$279.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$229.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
     <!-- Silla Gamer -->
@@ -184,6 +238,7 @@
         <span class="line-through text-gray-400">$399.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$349.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
     <!-- Laptop Gamer -->
@@ -195,6 +250,7 @@
         <span class="line-through text-gray-400">$1.199.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$999.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
     <!-- Combo Teclado + Mouse -->
@@ -206,6 +262,7 @@
         <span class="line-through text-gray-400">$69.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$49.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
     <!-- Mando Xbox -->
@@ -217,6 +274,7 @@
         <span class="line-through text-gray-400">$69.990</span>
         <span class="text-[#39FF14] font-bold text-lg">$59.990</span>
       </div>
+      <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg">Comprar</button>
     </div>
 
   </div>
@@ -296,6 +354,7 @@
 </a>
 
 <!-- 🔧 JS -->
+<script src="src/assets/script.js"></script>
 <script src="src/tienda/JS/index.js"></script>
 
 <!-- 🔻 FOOTER -->

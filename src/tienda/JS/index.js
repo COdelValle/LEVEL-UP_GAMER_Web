@@ -97,25 +97,63 @@ function registrarUsuario() {
 }
 
 // 🔐 Verificación de login
+
 function verificarLogin() {
   const logueado = localStorage.getItem("logueado");
   const rol = localStorage.getItem("rol");
 
+  // Botones
+  const btnLogin = document.querySelector(".inicio-btn2 i.fa-sign-in-alt")?.parentElement;
+  const btnRegistro = document.querySelector(".inicio-btn2 i.fa-user-plus")?.parentElement;
+  const btnBlog = document.querySelector(".inicio-btn2 i.fa-newspaper")?.parentElement;
+  const btnCatalogo = document.querySelector(".inicio-btn2 i.fa-gamepad")?.parentElement;
+  const btnOfertas = document.getElementById("btnOfertas");
   const btnEditar = document.getElementById("btnEditarCatalogo");
   const btnLogout = document.getElementById("btnLogout");
 
+  // Mostrar todos por defecto
+  [btnLogin, btnRegistro, btnBlog, btnCatalogo, btnOfertas, btnEditar, btnLogout].forEach(btn => {
+    if (btn) btn.classList.remove("hidden");
+  });
+
   if (logueado === "true") {
-    btnLogout.classList.remove("hidden");
+    // Ocultar login y registro
+    if (btnLogin) btnLogin.classList.add("hidden");
+    if (btnRegistro) btnRegistro.classList.add("hidden");
+    // Mostrar logout
+    if (btnLogout) btnLogout.classList.remove("hidden");
+    // Mostrar solo editar catálogo si es admin
     if (rol === "admin") {
-      btnEditar.classList.remove("hidden");
+      if (btnEditar) btnEditar.classList.remove("hidden");
+    } else {
+      if (btnEditar) btnEditar.classList.add("hidden");
     }
+  } else {
+    // Si no está logueado, ocultar logout y editar catálogo
+    if (btnLogout) btnLogout.classList.add("hidden");
+    if (btnEditar) btnEditar.classList.add("hidden");
   }
 }
 
 document.addEventListener("DOMContentLoaded", verificarLogin);
 
 // 🔓 Logout
+
 document.getElementById("btnLogout").addEventListener("click", () => {
-  localStorage.clear();
-  location.reload();
+  // Mensaje visual de logout
+  let msg = document.createElement('div');
+  msg.className = 'logout-message';
+  msg.textContent = 'Sesión cerrada correctamente. ¡Hasta pronto!';
+  document.body.appendChild(msg);
+  setTimeout(() => msg.classList.add('show'), 50);
+
+  // Fade out body y logout tras 2s
+  setTimeout(() => {
+    document.body.classList.remove("opacity-100");
+    document.body.classList.add("opacity-0");
+    setTimeout(() => {
+      localStorage.clear();
+      location.reload();
+    }, 600);
+  }, 2000);
 });
