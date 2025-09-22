@@ -1,3 +1,30 @@
+// Fade-in del body al cargar la página (antes estaba inline en index.html)
+function fadeInBody() {
+	document.body.classList.remove("opacity-0");
+	document.body.classList.add("opacity-100");
+}
+
+// Ejecutar fadeInBody al cargar la página
+window.addEventListener('load', fadeInBody);
+// Muestra detalles del producto (placeholder)
+function verDetallesProducto(id) {
+	alert('Ver detalles del producto ID: ' + id);
+}
+// Permite agregar productos al carrito desde el index (carrusel y ofertas)
+function addToCartIndex(product) {
+	// Obtener carrito de localStorage o inicializar
+	let cart = JSON.parse(localStorage.getItem('cart')) || [];
+	// Buscar si el producto ya está en el carrito
+	const existing = cart.find(item => item.id === product.id);
+	if (existing) {
+		existing.quantity += 1;
+	} else {
+		cart.push({ ...product, quantity: 1 });
+	}
+	localStorage.setItem('cart', JSON.stringify(cart));
+	updateCartCounter();
+	showToast('Producto agregado al carrito');
+}
 // Modal de carrito para index.html (estilo producto.html)
 document.addEventListener('DOMContentLoaded', function() {
 	const cartBtn = document.getElementById('cart-btn');
@@ -178,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function actualizarNavbarUsuario() {
 		const logueado = localStorage.getItem('logueado');
 		const rol = localStorage.getItem('rol');
-		if (logueado === 'true' && rol === 'usuario') {
+		if (logueado === 'true' && (rol === 'usuario' || rol === 'admin')) {
 			if (registroLink) registroLink.style.display = 'none';
 			if (loginLink) loginLink.style.display = 'none';
 			if (perfilLink) perfilLink.style.display = '';

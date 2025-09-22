@@ -1,46 +1,151 @@
+/* Forzar Orbitron en todos los elementos con font-titles (navbar/títulos) */
+.font-titles {
+  font-family: 'Orbitron', sans-serif !important;
+}
+/* --- BLOGS: Tarjetas de post y mejoras visuales --- */
+.blog-card {
+  background: linear-gradient(120deg, #181f2a 70%, #203a43 100%), url('./img/BackgroundIndex1.jpg') center/cover no-repeat !important;
+  background-blend-mode: multiply, lighten;
+  border: 2.5px solid #1E90FF;
+  border-radius: 1.1rem !important;
+  box-shadow: 0 0 18px 0 rgba(30,144,255,0.10), 0 0 0 1.5px #39FF1433 !important;
+  color: #fff !important;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.blog-card:hover {
+  border-color: #39FF14;
+  box-shadow: 0 0 24px 0 #39FF1440, 0 0 0 2px #1E90FF33 !important;
+  transform: translateY(-4px) scale(1.015);
+}
+
+/* Barra de búsqueda del blog */
+.blog-search-bar {
+  background: rgba(24,31,42,0.92);
+  border-radius: 0.9rem;
+  border: 2px solid #1E90FF;
+  box-shadow: 0 2px 12px 0 rgba(30,144,255,0.10);
+  padding: 0.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 420px;
+  margin: 0 auto 2.2rem auto;
+}
+.blog-search-bar input[type="text"] {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1.08rem;
+  flex: 1;
+  font-family: var(--font-main);
+}
+.blog-search-bar input[type="text"]::placeholder {
+  color: #b3c6e0;
+  opacity: 1;
+}
+.blog-search-bar button {
+  background: #1E90FF;
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 1rem;
+  transition: background 0.18s;
+}
+.blog-search-bar button:hover {
+  background: #39FF14;
+  color: #181f2a;
+}
+
+/* Badges de categorías del blog */
+.blog-category-badge {
+  display: inline-block;
+  background: rgba(24,31,42,0.92);
+  color: #b3c6e0;
+  font-family: var(--font-main);
+  font-size: 0.98rem;
+  font-weight: 600;
+  border-radius: 0.7rem;
+  padding: 0.32em 1.1em;
+  margin: 0 0.18em 0.18em 0;
+  box-shadow: 0 2px 8px 0 rgba(30,144,255,0.10);
+  border: 2px solid #1E90FF;
+  letter-spacing: 0.01em;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.blog-category-badge:hover {
+  background: rgba(57,255,20,0.10);
+  color: #39FF14;
+  border: 2px solid #39FF14;
+}
+/* --- FIN BLOGS --- */
+/* --- PRODUCTO.HTML: Ajustes migrados desde inline y <style> --- */
+.mt-14 {
+  margin-top: 3.5rem !important;
+}
+
+#search-input.backdrop-blur-\[4px\],
+#category-dropdown.backdrop-blur-\[4px\],
+#sort-select.backdrop-blur-\[4px\],
+#price-filter.backdrop-blur-\[4px\] {
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Ajuste de padding y ancho para el select de categorías */
+#category-dropdown.custom-select {
+  padding-right: 2.5rem !important;
+  width: 210px !important;
+}
 .custom-select,
 select.custom-select,
 select.custom-select option {
   text-align: center !important;
 }
 /* Selects personalizados para que el dropdown no tenga fondo blanco */
-.custom-select {
-  background-color: rgba(24,31,42,0.95) !important;
-  color: #fff !important;
-}
-.custom-select:focus {
-  outline: none !important;
-  border-width: 2px !important;
-  border-style: solid !important;
-  border-image: linear-gradient(90deg, #39cfff 0%, #1E90FF 100%) 1 !important;
-  box-shadow: 0 0 0 2px #39cfff66;
-}
-/* Mejora para opciones de select en navegadores modernos */
-select.custom-select option {
-  background-color: #181f2a !important;
-  color: #fff !important;
-}
-select.custom-select optgroup {
-  background-color: #181f2a !important;
-  color: #fff !important;
-}
-.inicio-btn-grid2 {
+/* Barra de búsqueda blog y producto: borde azul, coherente con el resto */
+.blog-search-bar, .product-search-bar {
+  background: rgba(24,31,42,0.92);
+  border-radius: 0.9rem;
+  border: 2px solid #1E90FF;
+  box-shadow: 0 2px 12px 0 rgba(30,144,255,0.10);
+  padding: 0.5rem 1.2rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-.btn-cart {
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 540px;
+  width: 100%;
+  margin: 0 auto 2.2rem auto;
+}
+/* Eliminar borde y outline azul del input de búsqueda, incluso en focus */
+.blog-search-bar input[type="text"], .product-search-bar input[type="text"] {
   background: transparent;
+  border: none;
+  outline: none;
   color: #fff;
-  border: 2px solid #2196f3;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  font-size: 1.08rem;
+  flex: 1;
   font-family: var(--font-main);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.10);
+}
+}
+.blog-search-bar input[type="text"]::placeholder, .product-search-bar input[type="text"]::placeholder {
+  color: #b3c6e0;
+  opacity: 1;
+}
+.blog-search-bar button, .product-search-bar button {
+  background: #1E90FF;
+  color: #fff;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 1rem;
+  transition: background 0.18s;
+}
+.blog-search-bar button:hover, .product-search-bar button:hover {
+  background: #39FF14;
+  color: #181f2a;
 }
 }
 .btn-cart:hover {

@@ -1,3 +1,5 @@
+// Ejecutar fadeInBody al cargar la página
+window.addEventListener('load', fadeInBody);
 // 🔄 Transiciones visuales
 function fadeInBody() {
   document.body.classList.remove("opacity-0");
