@@ -699,7 +699,7 @@ a:hover {
 }
 
 /* Borde azul para barra de búsqueda y selects de filtros en tienda */
-#search-input,
+
 #category-dropdown,
 #sort-select,
 #price-filter {
@@ -715,14 +715,14 @@ a:hover {
 }
 
 /* Borde degradado azul-celeste para barra de búsqueda y filtros */
-#search-input,
+
 #category-dropdown,
 #sort-select,
 #price-filter {
   border-width: 2px !important;
   border-style: solid !important;
   border-image: linear-gradient(90deg, #1E90FF 0%, #39cfff 100%) 1 !important;
-  box-shadow: 0 0 0 1.5px #1E90FF33;
+  box-shadow: 0 2 1 0.0px #1E90FF33;
   background-clip: padding-box;
 }
 #search-input:focus,
