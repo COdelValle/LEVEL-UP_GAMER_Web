@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Gamer ASUS ROG Strix - Level-Up Gamer</title>
+    <link rel="icon" type="image/png" href="../assets/img/icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/estilos.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar-deepblue fixed w-full z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-green-400 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">🎮</span>
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">Level-Up Gamer</h1>
+                </div>
+
+                <!-- Menu -->
+                <div class="hidden md:flex nav-menu">
+                    <a href="../../index.html" class="nav-link">Inicio</a>
+                    <a href="productos.html" class="nav-link active">Productos</a>
+                    <a href="blogs.html" class="nav-link">Blogs</a>
+                    <a href="nosotros.html" class="nav-link">Nosotros</a>
+                    <a href="contacto.html" class="nav-link">Contacto</a>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="cart-btn" class="text-white hover:text-blue-400 relative">
+                            🛒 <span id="cart-counter" class="cart-counter hidden">0</span>
+                        </button>
+                    </div>
+                    <button class="btn-primary">Iniciar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <section class="pt-24 pb-8 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <nav class="text-secondary">
+                <a href="../../index.html" class="hover:text-blue-400">Inicio</a>
+                <span class="mx-2">/</span>
+                <a href="productos.html" class="hover:text-blue-400">Productos</a>
+                <span class="mx-2">/</span>
+                <span class="hover:text-blue-400">PC Gamers</span>
+                <span class="mx-2">/</span>
+                <span class="text-white">ASUS ROG Strix</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Detalle del Producto -->
+    <section class="py-12 fade-section admin-table-bg" id="product-detail-section">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 mb-16 fade-section">
+                <!-- Galería de Imágenes -->
+                <div class="admin-card fade-section" style="min-height: 400px;">
+                    <!-- Imagen principal -->
+                    <div class="mb-6">
+                        <div id="main-image" class="h-96 rounded-lg flex items-center justify-center text-8xl relative overflow-hidden admin-table-bg">
+                            <!-- Imagen y badges se cargan por JS -->
+                        </div>
+                    </div>
+                    <!-- Thumbnails -->
+                    <div class="flex gap-4 product-thumbnails"></div>
+                </div>
+
+                <!-- Información del Producto -->
+                <div class="admin-card fade-section" style="min-height: 400px;">
+                    <h1 id="product-title" class="text-4xl font-bold mb-4 gradient-text"></h1>
+                    
+                    <!-- Precio -->
+                    <div class="mb-6" id="product-discount" style="display:none;">
+                        <span id="original-price" class="text-gray-500 line-through text-xl"></span>
+                        <span id="discount-percentage" class="ml-2 text-red-400 font-bold"></span>
+                    </div>
+                    <div class="text-4xl font-bold gradient-text mb-2" id="product-price"></div>
+
+                    <!-- Descripción corta -->
+                    <p class="text-secondary text-lg mb-6" id="product-description"></p>
+
+                    <!-- Especificaciones principales -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-3">Especificaciones Principales:</h3>
+                        <div id="product-specs" class="grid md:grid-cols-2 gap-4"></div>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="mb-6 p-4 bg-orange-500 bg-opacity-20 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-orange-400">⚠️</span>
+                            <span id="stock-info" class="text-white font-semibold"></span>
+                        </div>
+                        <p class="text-secondary text-sm mt-1">Este producto está en alta demanda</p>
+                    </div>
+
+                    <!-- Opciones -->
+                    <!-- Opciones -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-3">Opciones disponibles:</h3>
+                        <div id="product-options"></div>
+                    </div>
+
+                    <!-- Cantidad -->
+                    <div class="mb-6">
+                        <label class="block text-secondary mb-2">Cantidad:</label>
+                        <div class="flex items-center space-x-4">
+                            <button id="decrease-qty" class="btn-secondary px-4 py-2">-</button>
+                            <input id="quantity" type="number" value="1" min="1" class="px-4 py-2 bg-gray-800 rounded text-center min-w-16" style="width:60px;" />
+                            <button id="increase-qty" class="btn-secondary px-4 py-2">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="space-y-4 mb-6">
+                        <button id="add-to-cart-btn" class="w-full btn-primary text-lg py-4">
+                            Agregar al Carrito
+                        </button>
+                        <button id="buy-now-btn" class="w-full btn-secondary text-lg py-4">
+                            Comprar Ahora
+                        </button>
+                    </div>
+
+                    <!-- Beneficios -->
+                    <ul id="product-features" class="grid md:grid-cols-2 gap-4 text-sm"></ul>
+                </div>
+            </div>
+
+            <!-- Tabs de información -->
+            <div class="mb-16">
+                <div class="flex border-b border-gray-700 mb-6">
+                    <button class="tab-btn active px-6 py-3 border-b-2 border-blue-500 text-blue-400" data-tab="specs">
+                        Especificaciones
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-gray-400 hover:text-blue-400" data-tab="description">
+                        Descripción
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-gray-400 hover:text-blue-400" data-tab="reviews">
+                        Reviews (12)
+                    </button>
+                    <button class="tab-btn px-6 py-3 text-gray-400 hover:text-blue-400" data-tab="warranty">
+                        Garantía
+                    </button>
+                </div>
+
+                <!-- Contenido de tabs -->
+                <div id="tab-content">
+                    <!-- Especificaciones -->
+                    <div id="specs" class="tab-content">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 text-blue-400">Procesador y Rendimiento</h3>
+                                <div class="space-y-2 text-secondary">
+                                    <div class="flex justify-between">
+                                        <span>Procesador:</span>
+                                        <span>AMD Ryzen 7 7700X</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Cores/Threads:</span>
+                                        <span>8C/16T</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Frecuencia:</span>
+                                        <span>4.5GHz - 5.4GHz</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Cache:</span>
+                                        <span>32MB L3</span>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold mb-4 mt-6 text-green-400">Gráficos</h3>
+                                <div class="space-y-2 text-secondary">
+                                    <div class="flex justify-between">
+                                        <span>GPU:</span>
+                                        <span>NVIDIA RTX 4070</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>VRAM:</span>
+                                        <span>12GB GDDR6X</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Ray Tracing:</span>
+                                        <span>RT Cores 3ra Gen</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>DLSS:</span>
+                                        <span>3.0 Compatible</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-bold mb-4 text-purple-400">Memoria y Almacenamiento</h3>
+                                <div class="space-y-2 text-secondary">
+                                    <div class="flex justify-between">
+                                        <span>RAM:</span>
+                                        <span>32GB DDR5-5200</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Slots:</span>
+                                        <span>4x DIMM</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>SSD Principal:</span>
+                                        <span>1TB NVMe Gen4</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Velocidad:</span>
+                                        <span>7.000 MB/s</span>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-xl font-bold mb-4 mt-6 text-yellow-400">Conectividad</h3>
+                                <div class="space-y-2 text-secondary">
+                                    <div class="flex justify-between">
+                                        <span>USB:</span>
+                                        <span>8x USB 3.2, 2x USB-C</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Video:</span>
+                                        <span>HDMI 2.1, 3x DP 1.4a</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Red:</span>
+                                        <span>Ethernet Gigabit</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>WiFi:</span>
+                                        <span>WiFi 6E + Bluetooth 5.2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div id="description" class="tab-content hidden">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-2xl font-bold mb-4 gradient-text">PC Gaming de Alto Rendimiento</h3>
+                            
+                            <p class="text-secondary text-lg mb-6">
+                                El ASUS ROG Strix representa la perfecta combinación entre potencia bruta y diseño elegante. 
+                                Diseñado específicamente para gamers y creadores de contenido que no aceptan compromisos.
+                            </p>
+                            
+                            <h4 class="text-xl font-bold mb-3 text-blue-400">🎮 Rendimiento Gaming Excepcional</h4>
+                            <p class="text-secondary mb-4">
+                                Con el AMD Ryzen 7 7700X y la RTX 4070, este sistema entrega framerates consistentes en 4K 
+                                y domina completamente el gaming 1440p. Ray Tracing y DLSS 3.0 te permiten disfrutar los 
+                                juegos más modernos con la máxima calidad visual.
+                            </p>
+                            
+                            <h4 class="text-xl font-bold mb-3 text-green-400">⚡ Velocidad Sin Límites</h4>
+                            <p class="text-secondary mb-4">
+                                Los 32GB de RAM DDR5 y el SSD NVMe Gen4 de 1TB garantizan tiempos de carga instantáneos 
+                                y multitasking fluido. Perfecto para streaming mientras juegas o ejecutar múltiples 
+                                aplicaciones demandantes.
+                            </p>
+                            
+                            <h4 class="text-xl font-bold mb-3 text-purple-400">🎨 Para Creadores</h4>
+                            <p class="text-secondary mb-4">
+                                No solo gaming: este sistema es ideal para edición de video 4K, renderizado 3D, 
+                                desarrollo de juegos y cualquier tarea creativa que requiera máximo rendimiento.
+                            </p>
+                            
+                            <h4 class="text-xl font-bold mb-3 text-red-400">🔧 Calidad ASUS ROG</h4>
+                            <p class="text-secondary mb-4">
+                                Construido con componentes premium y la garantía de calidad ROG. Sistema de 
+                                refrigeración avanzado, iluminación RGB personalizable y software Armoury Crate 
+                                para control total del sistema.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div id="reviews" class="tab-content hidden">
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <div class="text-3xl font-bold gradient-text mr-4">4.8</div>
+                                <div>
+                                    <div class="text-yellow-400 text-xl mb-1">⭐⭐⭐⭐⭐</div>
+                                    <p class="text-secondary">Basado en 12 reviews</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Review 1 -->
+                            <div class="card">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                        CG
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="font-bold">Carlos Gamer</h4>
+                                            <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                                        </div>
+                                        <p class="text-secondary text-sm mb-2">Hace 2 días</p>
+                                        <p class="text-secondary">
+                                            "Increíble PC! Corre todo en ultra sin problemas. El RTX 4070 es una bestia 
+                                            para 1440p gaming. Recomendado 100%."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Review 2 -->
+                            <div class="card">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold">
+                                        ML
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="font-bold">Maria López</h4>
+                                            <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                                        </div>
+                                        <p class="text-secondary text-sm mb-2">Hace 5 días</p>
+                                        <p class="text-secondary">
+                                            "Perfecto para streaming y gaming simultáneo. Los 32GB de RAM hacen la diferencia. 
+                                            Excelente servicio de Level-Up también."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Review 3 -->
+                            <div class="card">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                                        JR
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <h4 class="font-bold">Javier Rivera</h4>
+                                            <span class="text-yellow-400">⭐⭐⭐⭐</span>
+                                        </div>
+                                        <p class="text-secondary text-sm mb-2">Hace 1 semana</p>
+                                        <p class="text-secondary">
+                                            "Muy buen PC, solo le faltaría un SSD adicional para almacenamiento extra. 
+                                            El rendimiento es excelente."
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de review -->
+                        <div class="mt-8 p-6 bg-gray-800 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4">¿Tienes este producto? ¡Déjanos tu review!</h3>
+                            <form id="review-form">
+                                <div class="mb-4">
+                                    <label class="block text-secondary mb-2">Calificación:</label>
+                                    <div class="flex space-x-2">
+                                        <button type="button" class="star-btn text-2xl text-gray-400 hover:text-yellow-400" data-rating="1">⭐</button>
+                                        <button type="button" class="star-btn text-2xl text-gray-400 hover:text-yellow-400" data-rating="2">⭐</button>
+                                        <button type="button" class="star-btn text-2xl text-gray-400 hover:text-yellow-400" data-rating="3">⭐</button>
+                                        <button type="button" class="star-btn text-2xl text-gray-400 hover:text-yellow-400" data-rating="4">⭐</button>
+                                        <button type="button" class="star-btn text-2xl text-gray-400 hover:text-yellow-400" data-rating="5">⭐</button>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <textarea 
+                                        class="form-input h-24" 
+                                        placeholder="Cuéntanos tu experiencia con este producto..."
+                                        required
+                                    ></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary">Enviar Review</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Garantía -->
+                    <div id="warranty" class="tab-content hidden">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-blue-400">🛡️ Cobertura de Garantía</h3>
+                                
+                                <div class="space-y-4">
+                                    <div class="p-4 bg-green-500 bg-opacity-20 rounded-lg">
+                                        <h4 class="font-bold text-green-400 mb-2">✅ Garantía Standard (2 años)</h4>
+                                        <ul class="text-secondary text-sm space-y-1">
+                                            <li>• Defectos de fabricación</li>
+                                            <li>• Fallas de hardware</li>
+                                            <li>• Reemplazo de componentes</li>
+                                            <li>• Servicio técnico gratuito</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="p-4 bg-blue-500 bg-opacity-20 rounded-lg">
+                                        <h4 class="font-bold text-blue-400 mb-2">⭐ Garantía Extendida (+$50.000)</h4>
+                                        <ul class="text-secondary text-sm space-y-1">
+                                            <li>• 3 años de cobertura total</li>
+                                            <li>• Daños accidentales incluidos</li>
+                                            <li>• Reemplazo express 24-48h</li>
+                                            <li>• Soporte premium</li>
+                                            <li>• Mantenimiento preventivo</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-2xl font-bold mb-4 text-green-400">🔧 Servicios Incluidos</h3>
+                                
+                                <div class="space-y-4 text-secondary">
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-blue-400 text-xl">📦</span>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Instalación Gratuita</h4>
+                                            <p class="text-sm">Configuramos tu PC completo en tu hogar sin costo adicional.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-green-400 text-xl">💬</span>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Soporte 24/7</h4>
+                                            <p class="text-sm">WhatsApp, Discord y teléfono siempre disponibles.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-purple-400 text-xl">🔄</span>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Actualizaciones</h4>
+                                            <p class="text-sm">Drivers, Windows y software siempre al día.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3">
+                                        <span class="text-yellow-400 text-xl">🚚</span>
+                                        <div>
+                                            <h4 class="font-bold mb-1">Servicio a Domicilio</h4>
+                                            <p class="text-sm">Retiro y entrega sin costo en Santiago.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contacto garantía -->
+                                <div class="mt-6 p-4 bg-gray-800 rounded-lg">
+                                    <h4 class="font-bold mb-2">📞 Contacto Garantía</h4>
+                                    <div class="text-secondary text-sm space-y-1">
+                                        <p>Email: garantia@levelupgamer.cl</p>
+                                        <p>WhatsApp: +56 9 1234 5678</p>
+                                        <p>Horario: Lun-Dom 8AM-10PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Relacionados -->
+    <section class="py-20 section-bg-dark fade-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Productos Relacionados</h2>
+            <div id="related-products" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-400 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold">🎮</span>
+                        </div>
+                        <h3 class="text-xl font-bold gradient-text">Level-Up Gamer</h3>
+                    </div>
+                    <p class="text-secondary">
+                        La tienda online líder para gamers en Chile.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Tienda</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="productos.html" class="hover:text-blue-400">Productos</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Ofertas</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Nuevos</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Comunidad</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="blogs.html" class="hover:text-blue-400">Blog</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Eventos</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Discord</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Soporte</h4>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="contacto.html" class="hover:text-blue-400">Contacto</a></li>
+                        <li><a href="#" class="hover:text-blue-400">FAQ</a></li>
+                        <li><a href="#" class="hover:text-blue-400">Envíos</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-secondary">
+                    © 2025 Level-Up Gamer. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../assets/script.js"></script>
+    <script src="JS/detalle-productos.js"></script>
+
+    <!-- Estilos eliminados: ahora todo está en style.css -->
+</body>
+</html>
