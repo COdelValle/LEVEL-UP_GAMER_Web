@@ -7,16 +7,16 @@
 :root {
   --color-negro: #000000;
   --color-blanco: #FFFFFF;
-  --color-azul-electrico: #1E90FF;
-  --color-verde-neon: #39FF14;
+  --color-azul-electrico: #1E90FF;   /* Azul eléctrico principal */
+  --color-azul-claro: #39cfff;       /* Azul celeste para degradados */
+  --color-azul-oscuro: #0a192f;      /* Fondo oscuro */
   --color-gris-claro: #D3D3D3;
-  --color-azul-oscuro: rgba(0, 0, 30, 0.99);
   --color-overlay: rgba(10, 25, 70, 0.7);
-  
-  /* Variables de tipografía */
+
   --font-principal: 'Roboto', sans-serif;
   --font-encabezados: 'Orbitron', sans-serif;
 }
+
 
 /* Reset básico */
 * {
@@ -210,6 +210,27 @@ a:hover {
 }
 
 /* ==================================== BOTONES ==================================== */
+/* Botón con borde azul */
+.btn-outline {
+  background: transparent;                 /* Fondo transparente */
+  border: 2px solid #1E90FF;               /* Borde azul eléctrico */
+  color: #1E90FF;                          /* Texto azul */
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover: relleno azul */
+.btn-outline:hover {
+  background: #1E90FF;                     /* Fondo azul */
+  color: #fff;                             /* Texto blanco */
+  box-shadow: 0 0 10px rgba(30,144,255,0.5);
+  transform: translateY(-2px);
+}
+
+
 
 .btn-primary {
   background: linear-gradient(135deg, var(--color-azul-electrico) 0%, var(--color-verde-neon) 100%);
@@ -583,12 +604,9 @@ section.fading {
 /* ==================================== GRADIENTES DE TEXTO ==================================== */
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-azul-electrico) 0%, var(--color-verde-neon) 100%);
-  background-clip: text;
+  background: linear-gradient(90deg, var(--color-azul-electrico), var(--color-azul-claro));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: gradientMove 3s ease infinite;
 }
 
 @keyframes gradientMove {

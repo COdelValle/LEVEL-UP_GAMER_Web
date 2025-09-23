@@ -8,6 +8,7 @@
     <!-- Google Fonts: Orbitron y Roboto igual que index -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
     <!-- CSS -->
+    <link rel="stylesheet" href="../assets/estilos.css">
     <link rel="stylesheet" href="../assets/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -54,11 +55,12 @@
 
     <!-- Hero Section -->
     <section class="hero flex items-center pt-20 fade-section">
-        <div class="container mx-auto px-4 flex flex-col items-center justify-center text-center" style="margin-top: 3.5rem;">
+        <div class="container mx-auto px-4 flex flex-col items-center justify-center text-center" style="margin-top: 3.5rem; margin-bottom: 6rem;">
             <h1 class="text-5xl md:text-6xl font-bold mb-6 gradient-text font-titles mt-14">Productos Gaming</h1>
             <p class="text-xl text-secondary mb-8 max-w-3xl mx-auto font-main">
                 Descubre el catálogo más completo de productos gaming en Chile.<br>
                 Desde PC gamers hasta periféricos de alto rendimiento.
+                
             </p>
             <!-- Barra de búsqueda -->
             <form class="product-search-bar mb-8" autocomplete="off" onsubmit="return false;">
@@ -74,48 +76,51 @@
         </div>
     </section>
 
-    <!-- Filtros y Categorías -->
-    <section class="py-12 fade-section">
-        <div class="container mx-auto px-4">
-            <!-- Filtros alineados en una sola fila, con labels y selects en línea -->
-            <div class="flex flex-wrap justify-center items-center gap-6 mb-8">
-                <div class="flex items-center gap-2 min-w-[220px]">
-                    <label for="category-dropdown" class="text-secondary text-sm font-main whitespace-nowrap">Categoría:</label>
-                    <select id="category-dropdown" class="py-3 pl-5 pr-8 rounded-xl bg-white/10 border-2 border-[#39FF14] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39FF14] font-main text-base shadow-md transition custom-select w-[180px]" style="backdrop-filter: blur(4px);">
-                        <option value="todos">Todas las categorías</option>
-                        <option value="pc-gamers">PC Gamers</option>
-                        <option value="perifericos">Periféricos</option>
-                        <option value="consolas">Consolas</option>
-                        <option value="sillas">Sillas Gaming</option>
-                        <option value="accesorios">Accesorios</option>
-                    </select>
-                </div>
-                <div class="flex items-center gap-2 min-w-[220px]">
-                    <label class="text-secondary text-sm font-main whitespace-nowrap">Ordenar por:</label>
-                    <select id="sort-select" class="py-3 pl-5 pr-8 rounded-xl bg-white/10 border-2 border-[#39FF14] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39FF14] font-main text-base shadow-md transition custom-select w-[180px]" style="backdrop-filter: blur(4px);">
-                        <option value="featured">Destacados</option>
-                        <option value="price-low">Precio: Menor a Mayor</option>
-                        <option value="price-high">Precio: Mayor a Menor</option>
-                        <option value="name">Nombre A-Z</option>
-                        <option value="newest">Más Nuevos</option>
-                    </select>
-                </div>
-                <div class="flex items-center gap-2 min-w-[220px]">
-                    <label class="text-secondary text-sm font-main whitespace-nowrap">Rango de precio:</label>
-                    <select id="price-filter" class="py-3 pl-5 pr-8 rounded-xl bg-white/10 border-2 border-[#39FF14] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39FF14] font-main text-base shadow-md transition custom-select w-[180px]" style="backdrop-filter: blur(4px);">
-                        <option value="all">Todos</option>
-                        <option value="0-100000">Hasta $100.000</option>
-                        <option value="100000-500000">$100.000 - $500.000</option>
-                        <option value="500000-1000000">$500.000 - $1.000.000</option>
-                        <option value="1000000-up">Más de $1.000.000</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Filtros y Categorías -->
+<section class="py-12 bg-gray-900">
+  <div class="container mx-auto px-4">
+    <!-- Categorías -->
+    <div class="mb-8">
+      <h3 class="text-xl font-bold mb-4 text-center">Filtrar por Categoría</h3>
+      <div class="flex flex-wrap justify-center gap-3" id="category-filters">
+        <button class="category-filter active" data-category="todos">Todos</button>
+        <button class="category-filter" data-category="pc-gamers">PC Gamers</button>
+        <button class="category-filter" data-category="perifericos">Periféricos</button>
+        <button class="category-filter" data-category="consolas">Consolas</button>
+        <button class="category-filter" data-category="sillas">Sillas Gaming</button>
+        <button class="category-filter" data-category="accesorios">Accesorios</button>
+      </div>
+    </div>
+
+    <!-- Filtros de precio y orden -->
+    <div class="flex flex-wrap justify-center gap-4 mb-8">
+      <div class="flex items-center space-x-2">
+        <label class="text-secondary text-sm">Ordenar por:</label>
+        <select id="sort-select" class="form-input text-sm py-2">
+          <option value="featured">Destacados</option>
+          <option value="price-low">Precio: Menor a Mayor</option>
+          <option value="price-high">Precio: Mayor a Menor</option>
+          <option value="name">Nombre A-Z</option>
+          <option value="newest">Más Nuevos</option>
+        </select>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <label class="text-secondary text-sm">Rango de precio:</label>
+        <select id="price-filter" class="form-input text-sm py-2">
+          <option value="all">Todos</option>
+          <option value="0-100000">Hasta $100.000</option>
+          <option value="100000-500000">$100.000 - $500.000</option>
+          <option value="500000-1000000">$500.000 - $1.000.000</option>
+          <option value="1000000-up">Más de $1.000.000</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- Grid de Productos -->
-    <section class="py-20 fade-section">
+    <section class="products-section fade-section">
         <div class="container mx-auto px-4">
             <!-- Loading -->
             <div id="loading" class="text-center py-12 hidden">

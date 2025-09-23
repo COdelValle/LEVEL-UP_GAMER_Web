@@ -2,20 +2,72 @@
 // VER USUARIO - LEVEL-UP GAMER ADMIN
 // ====================================
 
+let usuariosData = null;
+let currentUser = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('👁️ Vista de usuario cargada');
     
     // Verificar autenticación
     checkAdminAuth();
     
-    // Cargar datos del usuario
-    loadUserData();
+    // Cargar datos del usuario desde JSON
+    loadDataFromJSON();
+});
+
+// ====================================
+// CARGA DE DATOS DESDE JSON
+// ====================================
+
+async function loadDataFromJSON() {
+    try {
+        // Cargar el archivo JSON desde assets
+        const response = await fetch('../assets/usuarios.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        usuariosData = data.usuarios;
+        
+        console.log('Datos de usuarios cargados');
+        
+        // Cargar datos del usuario específico
+        loadUserData();
+        loadUserStats();
+        loadUserActivity();
+        loadUserOrders();
+        
+    } catch (error) {
+        console.error('Error al cargar datos desde JSON:', error);
+        showMessage('Error al cargar los datos de usuarios', 'error');
+        
+        // Fallback: usar datos de ejemplo
+        loadFallbackData();
+    }
+}
+
+function loadFallbackData() {
+    usuariosData = [
+        {
+            run: '19011022-K',
+            nombre: 'Catalina',
+            apellidos: 'Ormeño Pérez',
+            correo: 'catalina.ormeño@duoc.cl',
+            fechaNacimiento: '1998-05-12',
+            tipoUsuario: 'Cliente',
+            region: 'Región Metropolitana',
+            comuna: 'Santiago',
+            direccion: 'Av. Libertador Bernardo O\'Higgins 1234, Santiago'
+        }
+    ];
     
-    // Cargar estadísticas y actividad
+    loadUserData();
     loadUserStats();
     loadUserActivity();
     loadUserOrders();
-});
+}
 
 // ====================================
 // AUTENTICACIÓN
@@ -64,9 +116,9 @@ function logout() {
 function loadUserData() {
     // Obtener RUN desde URL
     const urlParams = new URLSearchParams(window.location.search);
-    const run = urlParams.get('run');
+    const runParam = urlParams.get('run');
     
-    if (!run) {
+    if (!runParam) {
         showMessage('No se especificó un usuario válido', 'error');
         setTimeout(() => {
             window.location.href = 'usuarios.html';
@@ -74,55 +126,19 @@ function loadUserData() {
         return;
     }
     
-    // Base de datos simulada de usuarios
-    const usersDatabase = {
-        '12345678-9': {
-            nombre: 'Juan Carlos Pérez García',
-            run: '12.345.678-9',
-            correo: 'juan.perez@email.com',
-            fechaNac: '15 de marzo, 1990',
-            tipo: 'Premium',
-            region: 'Metropolitana',
-            comuna: 'Santiago',
-            direccion: 'Av. Libertador Bernardo O\'Higgins 123, Departamento 45',
-            fechaRegistro: '15 de marzo, 2023',
-            estado: 'Activo',
-            telefono: '+56 9 1234 5678',
-            ultimaActividad: '2024-01-15'
-        },
-        '98765432-1': {
-            nombre: 'María Fernanda González López',
-            run: '98.765.432-1',
-            correo: 'maria.gonzalez@email.com',
-            fechaNac: '22 de julio, 1985',
-            tipo: 'Básico',
-            region: 'Valparaíso',
-            comuna: 'Viña del Mar',
-            direccion: 'Calle Los Pinos 456, Casa 12',
-            fechaRegistro: '8 de enero, 2024',
-            estado: 'Activo',
-            telefono: '+56 9 8765 4321',
-            ultimaActividad: '2024-01-10'
-        },
-        '11222333-4': {
-            nombre: 'Carlos Eduardo Rodríguez Silva',
-            run: '11.222.333-4',
-            correo: 'carlos.rodriguez@email.com',
-            fechaNac: '8 de diciembre, 1992',
-            tipo: 'Premium',
-            region: 'Biobío',
-            comuna: 'Concepción',
-            direccion: 'Pasaje Central 789, Block A',
-            fechaRegistro: '22 de noviembre, 2023',
-            estado: 'Activo',
-            telefono: '+56 9 1122 3344',
-            ultimaActividad: '2024-01-12'
-        }
-    };
-
-    const userData = usersDatabase[run];
+    if (!usuariosData) {
+        showMessage('Datos de usuarios no disponibles', 'error');
+        return;
+    }
     
-    if (!userData) {
+    // Buscar usuario por RUN (limpiando formato)
+    currentUser = usuariosData.find(user => {
+        const cleanUserRun = user.run.replace(/[.-]/g, '');
+        const cleanParamRun = runParam.replace(/[.-]/g, '');
+        return cleanUserRun === cleanParamRun;
+    });
+    
+    if (!currentUser) {
         showMessage('Usuario no encontrado', 'error');
         setTimeout(() => {
             window.location.href = 'usuarios.html';
@@ -131,26 +147,44 @@ function loadUserData() {
     }
 
     // Llenar los campos con los datos del usuario
-    fillUserData(userData);
+    fillUserData(currentUser);
 }
 
 function fillUserData(userData) {
     // Información principal
-    document.getElementById('nombre-usuario').textContent = userData.nombre;
-    document.getElementById('run-usuario').textContent = userData.run;
+    document.getElementById('nombre-usuario').textContent = `${userData.nombre} ${userData.apellidos}`;
+    document.getElementById('run-usuario').textContent = formatRun(userData.run);
     document.getElementById('correo-usuario').textContent = userData.correo;
-    document.getElementById('fecha-usuario').textContent = userData.fechaNac;
+    
+    // Formatear fecha de nacimiento
+    const fechaNac = userData.fechaNacimiento ? formatDate(userData.fechaNacimiento) : 'No especificada';
+    document.getElementById('fecha-usuario').textContent = fechaNac;
+    
     document.getElementById('region-usuario').textContent = userData.region;
     document.getElementById('comuna-usuario').textContent = userData.comuna;
     document.getElementById('direccion-usuario').textContent = userData.direccion;
-    document.getElementById('fecha-registro').textContent = userData.fechaRegistro;
+    
+    // Simular fecha de registro (ya que no está en el JSON)
+    const fechaRegistro = new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1);
+    document.getElementById('fecha-registro').textContent = formatDate(fechaRegistro.toISOString());
     
     // Tipo de usuario con estilo apropiado
     const tipoElement = document.getElementById('tipo-usuario');
-    tipoElement.textContent = userData.tipo;
-    if (userData.tipo === 'Básico') {
-        tipoElement.style.background = '#39FF14';
-        tipoElement.style.color = 'black';
+    tipoElement.textContent = userData.tipoUsuario;
+    
+    // Aplicar clase CSS según el tipo de usuario
+    switch(userData.tipoUsuario) {
+        case 'Administrador':
+            tipoElement.className = 'category-badge type-premium';
+            break;
+        case 'Vendedor':
+            tipoElement.className = 'category-badge type-premium';
+            break;
+        case 'Cliente':
+            tipoElement.className = 'category-badge type-basic';
+            break;
+        default:
+            tipoElement.className = 'category-badge';
     }
 }
 
@@ -159,39 +193,44 @@ function fillUserData(userData) {
 // ====================================
 
 function loadUserStats() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const run = urlParams.get('run');
+    if (!currentUser) return;
     
-    // Simulación de estadísticas basadas en el usuario
-    const statsDatabase = {
-        '12345678-9': {
-            pedidos: 15,
-            totalGastado: '$850.000',
-            satisfaccion: '98%'
-        },
-        '98765432-1': {
-            pedidos: 3,
-            totalGastado: '$125.000',
-            satisfaccion: '95%'
-        },
-        '11222333-4': {
-            pedidos: 8,
-            totalGastado: '$450.000',
-            satisfaccion: '96%'
-        }
-    };
-
-    const userStats = statsDatabase[run] || {
+    // Simular estadísticas basadas en el tipo de usuario
+    let stats = {
         pedidos: 0,
         totalGastado: '$0',
         satisfaccion: '0%'
     };
+    
+    switch(currentUser.tipoUsuario) {
+        case 'Cliente':
+            stats = {
+                pedidos: Math.floor(Math.random() * 20) + 1,
+                totalGastado: `$${(Math.floor(Math.random() * 500000) + 50000).toLocaleString('es-CL')}`,
+                satisfaccion: `${Math.floor(Math.random() * 20) + 80}%`
+            };
+            break;
+        case 'Administrador':
+            stats = {
+                pedidos: Math.floor(Math.random() * 10) + 5,
+                totalGastado: `$${(Math.floor(Math.random() * 300000) + 100000).toLocaleString('es-CL')}`,
+                satisfaccion: `${Math.floor(Math.random() * 10) + 90}%`
+            };
+            break;
+        case 'Vendedor':
+            stats = {
+                pedidos: Math.floor(Math.random() * 15) + 3,
+                totalGastado: `$${(Math.floor(Math.random() * 400000) + 75000).toLocaleString('es-CL')}`,
+                satisfaccion: `${Math.floor(Math.random() * 15) + 85}%`
+            };
+            break;
+    }
 
     // Actualizar estadísticas con animación
     setTimeout(() => {
-        animateCounter('stat-pedidos', userStats.pedidos);
-        document.getElementById('stat-gastado').textContent = userStats.totalGastado;
-        document.getElementById('stat-satisfaccion').textContent = userStats.satisfaccion;
+        animateCounter('stat-pedidos', parseInt(stats.pedidos));
+        document.getElementById('stat-gastado').textContent = stats.totalGastado;
+        document.getElementById('stat-satisfaccion').textContent = stats.satisfaccion;
     }, 500);
 }
 
@@ -200,7 +239,7 @@ function animateCounter(elementId, targetValue) {
     if (!element) return;
     
     let currentValue = 0;
-    const increment = targetValue / 20;
+    const increment = Math.ceil(targetValue / 20);
     const timer = setInterval(() => {
         currentValue += increment;
         if (currentValue >= targetValue) {
@@ -216,66 +255,22 @@ function animateCounter(elementId, targetValue) {
 // ====================================
 
 function loadUserActivity() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const run = urlParams.get('run');
+    if (!currentUser) return;
     
-    const activitiesDatabase = {
-        '12345678-9': [
-            {
-                action: 'Compra realizada',
-                description: 'PC Gamer ASUS ROG',
-                time: 'Hace 2 días'
-            },
-            {
-                action: 'Perfil actualizado',
-                description: 'Cambió dirección',
-                time: 'Hace 1 semana'
-            },
-            {
-                action: 'Reseña publicada',
-                description: '⭐⭐⭐⭐⭐ Mouse Logitech',
-                time: 'Hace 2 semanas'
-            }
-        ],
-        '98765432-1': [
-            {
-                action: 'Registro completado',
-                description: 'Cuenta verificada',
-                time: 'Hace 5 días'
-            },
-            {
-                action: 'Primera compra',
-                description: 'Teclado Gaming',
-                time: 'Hace 3 días'
-            }
-        ],
-        '11222333-4': [
-            {
-                action: 'Upgrade a Premium',
-                description: 'Suscripción activada',
-                time: 'Hace 1 día'
-            },
-            {
-                action: 'Compra realizada',
-                description: 'Silla Gaming',
-                time: 'Hace 3 días'
-            }
-        ]
-    };
+    // Generar actividad basada en el usuario actual
+    const activities = generateUserActivities(currentUser);
 
-    const userActivities = activitiesDatabase[run] || [];
-    
     const activityContainer = document.getElementById('user-activity-list');
     if (!activityContainer) return;
 
     activityContainer.innerHTML = '';
 
-    if (userActivities.length === 0) {
-        activityContainer.innerHTML = '<div class="activity-item">No hay actividad reciente</div>';
+    if (activities.length === 0) {
+        activityContainer.innerHTML = '<div class="activity-item"><div class="text-secondary">No hay actividad reciente</div></div>';
         return;
     }
 
-    userActivities.forEach(activity => {
+    activities.forEach(activity => {
         const activityItem = document.createElement('div');
         activityItem.className = 'activity-item';
         activityItem.innerHTML = `
@@ -289,63 +284,88 @@ function loadUserActivity() {
     });
 }
 
+function generateUserActivities(user) {
+    const activities = [];
+    
+    switch(user.tipoUsuario) {
+        case 'Cliente':
+            activities.push(
+                {
+                    action: 'Compra realizada',
+                    description: 'Producto gaming adquirido',
+                    time: 'Hace 2 días'
+                },
+                {
+                    action: 'Perfil actualizado',
+                    description: 'Información de contacto modificada',
+                    time: 'Hace 1 semana'
+                },
+                {
+                    action: 'Reseña publicada',
+                    description: '★★★★★ Producto excelente',
+                    time: 'Hace 2 semanas'
+                }
+            );
+            break;
+        case 'Administrador':
+            activities.push(
+                {
+                    action: 'Sesión iniciada',
+                    description: 'Acceso al panel administrativo',
+                    time: 'Hace 1 hora'
+                },
+                {
+                    action: 'Usuario gestionado',
+                    description: 'Modificación de permisos',
+                    time: 'Hace 3 horas'
+                },
+                {
+                    action: 'Producto agregado',
+                    description: 'Nuevo item en catálogo',
+                    time: 'Hace 1 día'
+                }
+            );
+            break;
+        case 'Vendedor':
+            activities.push(
+                {
+                    action: 'Venta procesada',
+                    description: 'Pedido #12345 completado',
+                    time: 'Hace 3 horas'
+                },
+                {
+                    action: 'Inventario actualizado',
+                    description: 'Stock de productos modificado',
+                    time: 'Hace 6 horas'
+                },
+                {
+                    action: 'Cliente atendido',
+                    description: 'Consulta técnica resuelta',
+                    time: 'Hace 1 día'
+                }
+            );
+            break;
+    }
+    
+    return activities;
+}
+
 // ====================================
 // HISTORIAL DE PEDIDOS
 // ====================================
 
 function loadUserOrders() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const run = urlParams.get('run');
+    if (!currentUser) return;
     
-    const ordersDatabase = {
-        '12345678-9': [
-            {
-                id: '#ORD-2024-001',
-                fecha: '15/01/2024',
-                productos: 'PC Gamer ASUS ROG, Mouse Logitech',
-                total: '$1.299.990',
-                estado: 'Entregado',
-                estadoClass: 'success'
-            },
-            {
-                id: '#ORD-2024-002',
-                fecha: '05/01/2024',
-                productos: 'Silla Gaming',
-                total: '$289.990',
-                estado: 'En Proceso',
-                estadoClass: 'primary'
-            }
-        ],
-        '98765432-1': [
-            {
-                id: '#ORD-2024-003',
-                fecha: '12/01/2024',
-                productos: 'Teclado Gaming RGB',
-                total: '$89.990',
-                estado: 'Entregado',
-                estadoClass: 'success'
-            }
-        ],
-        '11222333-4': [
-            {
-                id: '#ORD-2024-004',
-                fecha: '18/01/2024',
-                productos: 'Silla Gaming Pro',
-                total: '$399.990',
-                estado: 'Enviado',
-                estadoClass: 'warning'
-            }
-        ]
-    };
-
-    const userOrders = ordersDatabase[run] || [];
+    // Generar pedidos simulados basados en el usuario
+    const orders = generateUserOrders(currentUser);
     
     const ordersTableBody = document.getElementById('orders-table-body');
     if (!ordersTableBody) return;
 
     ordersTableBody.innerHTML = '';
 
-    if (userOrders.length === 0) {
+    if (orders.length === 0) {
         ordersTableBody.innerHTML = `
             <tr>
                 <td colspan="6" class="text-center text-secondary">
@@ -356,19 +376,18 @@ function loadUserOrders() {
         return;
     }
 
-    userOrders.forEach(order => {
+    orders.forEach(order => {
         const row = document.createElement('tr');
         
-        const estadoBadgeStyle = order.estadoClass === 'success' ? 'background: #39FF14; color: black;' : 
-                                order.estadoClass === 'warning' ? 'background: #ffaa00; color: black;' : '';
+        const estadoBadgeClass = getEstadoPedidoBadgeClass(order.estado);
         
         row.innerHTML = `
             <td>${order.id}</td>
             <td>${order.fecha}</td>
-            <td>${order.productos}</td>
+            <td class="d-hide-sm">${order.productos}</td>
             <td>${order.total}</td>
             <td>
-                <span class="category-badge" style="${estadoBadgeStyle}">
+                <span class="category-badge ${estadoBadgeClass}">
                     ${order.estado}
                 </span>
             </td>
@@ -383,18 +402,106 @@ function loadUserOrders() {
     });
 }
 
+function generateUserOrders(user) {
+    const orders = [];
+    const numOrders = Math.floor(Math.random() * 5) + 1;
+    
+    const productos = [
+        'PC Gamer ASUS ROG',
+        'Mouse Logitech G502',
+        'Teclado Gaming RGB',
+        'Silla Gaming Pro',
+        'Monitor 24" Gaming',
+        'Auriculares HyperX'
+    ];
+    
+    const estados = ['Entregado', 'En Proceso', 'Enviado', 'Pendiente'];
+    
+    for (let i = 0; i < numOrders; i++) {
+        const randomDate = new Date();
+        randomDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 90));
+        
+        const producto = productos[Math.floor(Math.random() * productos.length)];
+        const estado = estados[Math.floor(Math.random() * estados.length)];
+        const total = Math.floor(Math.random() * 500000) + 50000;
+        
+        orders.push({
+            id: `#ORD-2024-${String(i + 1).padStart(3, '0')}`,
+            fecha: formatDate(randomDate.toISOString().split('T')[0]),
+            productos: producto,
+            total: `${total.toLocaleString('es-CL')}`,
+            estado: estado
+        });
+    }
+    
+    return orders.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+}
+
+function getEstadoPedidoBadgeClass(estado) {
+    switch(estado) {
+        case 'Entregado':
+            return 'type-basic'; // Verde
+        case 'En Proceso':
+            return 'type-premium'; // Azul
+        case 'Enviado':
+            return 'status-active'; // Verde
+        case 'Pendiente':
+            return 'status-inactive'; // Rojo
+        default:
+            return 'category-badge';
+    }
+}
+
 // ====================================
 // FUNCIONES DE NAVEGACIÓN
 // ====================================
 
 function editUser() {
     const urlParams = new URLSearchParams(window.location.search);
-    const run = urlParams.get('run') || '12345678-9';
-    window.location.href = `editar_usuario.html?run=${run}`;
+    const run = urlParams.get('run');
+    if (run) {
+        window.location.href = `editar_usuario.html?run=${run}`;
+    }
 }
 
 function viewOrderDetails(orderId) {
     window.location.href = `ver_pedido.html?id=${orderId}`;
+}
+
+// ====================================
+// FUNCIONES AUXILIARES
+// ====================================
+
+function formatRun(run) {
+    // Si el RUN ya tiene formato, devolverlo tal como está
+    if (run.includes('.') && run.includes('-')) {
+        return run;
+    }
+    
+    // Formatear RUN: 12345678-9 -> 12.345.678-9
+    const cleanRun = run.replace(/[.-]/g, '');
+    if (cleanRun.length >= 8) {
+        const numbers = cleanRun.slice(0, -1);
+        const dv = cleanRun.slice(-1);
+        
+        // Agregar puntos cada 3 dígitos desde la derecha
+        const formattedNumbers = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return `${formattedNumbers}-${dv}`;
+    }
+    return run;
+}
+
+function formatDate(dateString) {
+    if (!dateString) return 'No especificada';
+    
+    const date = new Date(dateString);
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    
+    return date.toLocaleDateString('es-CL', options);
 }
 
 // ====================================

@@ -780,3 +780,9 @@ a:hover {
 .navbar-deepblue .logo-gradient, .navbar-deepblue .logo {
   font-family: var(--font-titles) !important;
 }
+
+.products-section {
+  background-color: #0a192e; /* azul oscuro */
+  padding: 5rem 0; /* igual que py-20 */
+}
+

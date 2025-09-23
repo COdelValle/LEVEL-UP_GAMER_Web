@@ -2,7 +2,6 @@
 // ADMIN HOME - LEVEL-UP GAMER
 // ====================================
 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Proteger acceso solo admin
     const rol = localStorage.getItem('rol');
@@ -22,32 +21,29 @@ document.addEventListener('DOMContentLoaded', function() {
 // AUTENTICACIÓN
 // ====================================
 
-// 🔄 Transición visual al cargar
+// Transición visual al cargar
 function fadeInBody() {
   document.body.classList.remove("opacity-0");
   document.body.classList.add("opacity-100");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🎮 Panel Admin cargado");
+  console.log("Panel Admin cargado");
 
   fadeInBody();
   validarSesionAdmin();
   mostrarNombreAdmin();
   configurarLogout();
-  // Puedes agregar más funciones aquí como cargarDashboard(), initCards(), etc.
 });
 
-
-
-// 👤 Mostrar nombre del admin
+// Mostrar nombre del admin
 function mostrarNombreAdmin() {
     const nombre = localStorage.getItem("loginExitoso") || "Administrador";
     const nombreElemento = document.getElementById("admin-name");
     if (nombreElemento) nombreElemento.textContent = nombre;
 }
 
-// 🚪 Cerrar sesión
+// Cerrar sesión
 function configurarLogout() {
     const btnLogout = document.getElementById("logoutBtn");
     if (btnLogout) {
@@ -60,8 +56,6 @@ function configurarLogout() {
     }
 }
 
-
-
 // ====================================
 // NAVEGACIÓN
 // ====================================
@@ -70,7 +64,6 @@ function setupNavigation() {
     document.querySelectorAll('.admin-nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             if (this.getAttribute('onclick')) {
-                // Si tiene onclick, dejar que lo maneje showSection
                 return;
             }
             if (this.getAttribute('href').startsWith('http') || this.getAttribute('href').includes('.html')) return;
@@ -94,7 +87,6 @@ function showSection(sectionName) {
         setTimeout(() => {
             currentSection.style.display = 'none';
             currentSection.classList.remove('fade-out');
-            // Mostrar la nueva sección
             showTargetSection(sectionName);
         }, 400);
     } else {
@@ -141,13 +133,8 @@ function showTargetSection(sectionName) {
 // DASHBOARD
 // ====================================
 
-function initDashboard() {
-    // Configurar eventos del dashboard
-    loadRecentActivity();
-}
-
 function loadDashboardData() {
-    // Simular carga de datos del dashboard
+    // Datos más realistas y compactos
     const stats = {
         products: 42,
         orders: 156,
@@ -163,12 +150,15 @@ function loadDashboardData() {
     
     // Cargar productos más vendidos
     loadTopProducts();
+    loadRecentActivity();
 }
 
 function animateCounter(elementId, finalValue) {
     const element = document.getElementById(elementId);
+    if (!element) return;
+    
     let current = 0;
-    const increment = finalValue / 50; // 50 pasos para la animación
+    const increment = finalValue / 30; // Menos pasos para animación más rápida
     
     const timer = setInterval(() => {
         current += increment;
@@ -177,13 +167,18 @@ function animateCounter(elementId, finalValue) {
             clearInterval(timer);
         }
         element.textContent = Math.floor(current);
-    }, 30);
+    }, 40);
 }
 
 function animateCounterMoney(elementId, finalValue) {
     const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    // Añadir clase para styling especial de dinero
+    element.classList.add('money');
+    
     let current = 0;
-    const increment = finalValue / 50;
+    const increment = finalValue / 30;
     
     const timer = setInterval(() => {
         current += increment;
@@ -191,8 +186,8 @@ function animateCounterMoney(elementId, finalValue) {
             current = finalValue;
             clearInterval(timer);
         }
-        element.textContent = formatPrice(Math.floor(current));
-    }, 30);
+        element.textContent = formatPriceCompact(Math.floor(current));
+    }, 40);
 }
 
 function loadRecentActivity() {
@@ -203,23 +198,25 @@ function loadRecentActivity() {
             icon: '🛒'
         },
         {
-            action: 'Producto agregado: PlayStation 5',
+            action: 'Producto agregado',
             time: 'Hace 1 hora',
             icon: '📦'
         },
         {
-            action: 'Usuario registrado: gamer123',
+            action: 'Usuario registrado',
             time: 'Hace 2 horas',
             icon: '👤'
         },
         {
-            action: 'Pedido #998 completado',
+            action: 'Pedido completado',
             time: 'Hace 3 horas',
             icon: '✅'
         }
     ];
     
     const container = document.getElementById('recent-activity');
+    if (!container) return;
+    
     container.innerHTML = activities.map(activity => `
         <div class="activity-item">
             <div class="d-flex align-items-center">
@@ -270,6 +267,8 @@ function loadTopProducts() {
     ];
     
     const tbody = document.getElementById('top-products-table');
+    if (!tbody) return;
+    
     tbody.innerHTML = products.map(product => `
         <tr>
             <td>${product.name}</td>
@@ -341,6 +340,8 @@ function loadProductsData() {
     ];
     
     const tbody = document.getElementById('products-table');
+    if (!tbody) return;
+    
     tbody.innerHTML = products.map(product => `
         <tr>
             <td>#${product.id}</td>
@@ -409,6 +410,8 @@ function loadOrdersData() {
     ];
     
     const tbody = document.getElementById('orders-table');
+    if (!tbody) return;
+    
     tbody.innerHTML = orders.map(order => `
         <tr>
             <td>#${order.id}</td>
@@ -479,6 +482,8 @@ function loadUsersData() {
     ];
     
     const tbody = document.getElementById('users-table');
+    if (!tbody) return;
+    
     tbody.innerHTML = users.map(user => `
         <tr>
             <td>#${user.id}</td>
@@ -511,21 +516,17 @@ function loadUsersData() {
 
 function editProduct(id) {
     showMessage(`Editando producto #${id}`, 'info');
-    // Aquí iría la lógica para editar el producto
-    // Por ahora solo mostramos un mensaje
 }
 
 function viewProduct(id) {
     showMessage(`Viendo detalles del producto #${id}`, 'info');
-    // Aquí iría la lógica para ver el producto
 }
 
 function deleteProduct(id) {
     if (confirm(`¿Estás seguro de eliminar el producto #${id}?`)) {
         showMessage(`Producto #${id} eliminado correctamente`, 'success');
-        // Aquí iría la lógica para eliminar el producto
         setTimeout(() => {
-            loadProductsData(); // Recargar datos
+            loadProductsData();
         }, 1000);
     }
 }
@@ -536,16 +537,14 @@ function deleteProduct(id) {
 
 function viewOrder(id) {
     showMessage(`Viendo detalles del pedido #${id}`, 'info');
-    // Aquí iría la lógica para ver detalles del pedido
 }
 
 function updateOrderStatus(id) {
     const newStatus = prompt('Nuevo estado del pedido:', 'Enviado');
     if (newStatus) {
         showMessage(`Estado del pedido #${id} actualizado a: ${newStatus}`, 'success');
-        // Aquí iría la lógica para actualizar el estado
         setTimeout(() => {
-            loadOrdersData(); // Recargar datos
+            loadOrdersData();
         }, 1000);
     }
 }
@@ -556,20 +555,17 @@ function updateOrderStatus(id) {
 
 function viewUser(id) {
     showMessage(`Viendo detalles del usuario #${id}`, 'info');
-    // Aquí iría la lógica para ver el usuario
 }
 
 function editUser(id) {
     showMessage(`Editando usuario #${id}`, 'info');
-    // Aquí iría la lógica para editar el usuario
 }
 
 function toggleUserStatus(id) {
     if (confirm(`¿Cambiar el estado del usuario #${id}?`)) {
         showMessage(`Estado del usuario #${id} actualizado correctamente`, 'success');
-        // Aquí iría la lógica para cambiar el estado
         setTimeout(() => {
-            loadUsersData(); // Recargar datos
+            loadUsersData();
         }, 1000);
     }
 }
@@ -595,14 +591,23 @@ function formatPrice(price) {
     }).format(price);
 }
 
+// Nueva función para formatear precios de manera más compacta
+function formatPriceCompact(price) {
+    if (price >= 1000000) {
+        return `$${(price / 1000000).toFixed(1)}M`;
+    } else if (price >= 1000) {
+        return `$${(price / 1000).toFixed(0)}K`;
+    } else {
+        return `$${price}`;
+    }
+}
+
 function generateReport() {
     showMessage('Generando reporte...', 'info');
     
-    // Simular generación de reporte
     setTimeout(() => {
         showMessage('Reporte generado correctamente', 'success');
         
-        // Crear y descargar un archivo de ejemplo
         const reportData = {
             fecha: new Date().toLocaleDateString('es-CL'),
             productos: 42,
@@ -655,12 +660,10 @@ function downloadReport(content, filename) {
 // ====================================
 
 function showMessage(message, type = 'info') {
-    // Crear elemento de mensaje
     const messageEl = document.createElement('div');
     messageEl.className = `message message-${type}`;
     messageEl.textContent = message;
     
-    // Estilos del mensaje
     messageEl.style.cssText = `
         position: fixed;
         top: 20px;
@@ -675,7 +678,6 @@ function showMessage(message, type = 'info') {
         max-width: 300px;
     `;
     
-    // Colores según tipo
     switch(type) {
         case 'success':
             messageEl.style.background = 'linear-gradient(135deg, #39FF14, #1E90FF)';
@@ -690,15 +692,12 @@ function showMessage(message, type = 'info') {
             messageEl.style.background = 'linear-gradient(135deg, #1E90FF, #39FF14)';
     }
     
-    // Añadir al DOM
     document.body.appendChild(messageEl);
     
-    // Animar entrada
     setTimeout(() => {
         messageEl.style.transform = 'translateX(0)';
     }, 100);
     
-    // Remover después de 3 segundos
     setTimeout(() => {
         messageEl.style.transform = 'translateX(100%)';
         setTimeout(() => {
