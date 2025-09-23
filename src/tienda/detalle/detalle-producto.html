@@ -61,157 +61,79 @@
     </section>
 
     <!-- Detalle del Producto -->
-    <section class="py-12">
+    <section class="py-12 fade-section admin-table-bg" id="product-detail-section">
         <div class="container mx-auto px-4">
-            <div class="grid lg:grid-cols-2 gap-12 mb-16">
+            <div class="grid lg:grid-cols-2 gap-12 mb-16 fade-section">
                 <!-- Galería de Imágenes -->
-                <div>
+                <div class="admin-card fade-section" style="min-height: 400px;">
                     <!-- Imagen principal -->
                     <div class="mb-6">
-                        <div id="main-image" class="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-green-600 rounded-lg flex items-center justify-center text-8xl relative overflow-hidden">
-                            🖥️
-                            <!-- Badges -->
-                            <div class="absolute top-4 left-4 space-y-2">
-                                <span class="px-3 py-1 bg-green-500 text-white text-sm rounded font-semibold">NUEVO</span>
-                                <span class="px-3 py-1 bg-yellow-500 text-black text-sm rounded font-semibold">DESTACADO</span>
-                                <span class="px-3 py-1 bg-red-500 text-white text-sm rounded font-semibold">-13% OFF</span>
-                            </div>
+                        <div id="main-image" class="h-96 rounded-lg flex items-center justify-center text-8xl relative overflow-hidden admin-table-bg">
+                            <!-- Imagen y badges se cargan por JS -->
                         </div>
                     </div>
-                    
                     <!-- Thumbnails -->
-                    <div class="flex gap-4">
-                        <button class="thumbnail active w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded flex items-center justify-center text-2xl">
-                            🖥️
-                        </button>
-                        <button class="thumbnail w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded flex items-center justify-center text-2xl">
-                            ⚡
-                        </button>
-                        <button class="thumbnail w-20 h-20 bg-gradient-to-br from-green-600 to-blue-600 rounded flex items-center justify-center text-2xl">
-                            🎮
-                        </button>
-                        <button class="thumbnail w-20 h-20 bg-gradient-to-br from-red-600 to-orange-600 rounded flex items-center justify-center text-2xl">
-                            🔧
-                        </button>
-                    </div>
+                    <div class="flex gap-4 product-thumbnails"></div>
                 </div>
 
                 <!-- Información del Producto -->
-                <div>
-                    <h1 class="text-4xl font-bold mb-4 gradient-text">PC Gamer ASUS ROG Strix</h1>
+                <div class="admin-card fade-section" style="min-height: 400px;">
+                    <h1 id="product-title" class="text-4xl font-bold mb-4 gradient-text"></h1>
                     
                     <!-- Precio -->
-                    <div class="mb-6">
-                        <span class="text-gray-500 line-through text-xl">$1.499.990</span>
-                        <div class="text-4xl font-bold gradient-text mb-2">$1.299.990</div>
-                        <p class="text-green-400 font-semibold">¡Ahorra $200.000!</p>
+                    <div class="mb-6" id="product-discount" style="display:none;">
+                        <span id="original-price" class="text-gray-500 line-through text-xl"></span>
+                        <span id="discount-percentage" class="ml-2 text-red-400 font-bold"></span>
                     </div>
+                    <div class="text-4xl font-bold gradient-text mb-2" id="product-price"></div>
 
                     <!-- Descripción corta -->
-                    <p class="text-secondary text-lg mb-6">
-                        Potente PC Gaming de alta gama equipado con los mejores componentes para gaming 4K y streaming profesional. 
-                        Perfecto para jugadores exigentes y creadores de contenido.
-                    </p>
+                    <p class="text-secondary text-lg mb-6" id="product-description"></p>
 
                     <!-- Especificaciones principales -->
                     <div class="mb-6">
                         <h3 class="text-xl font-bold mb-3">Especificaciones Principales:</h3>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-blue-400">🧠</span>
-                                <span class="text-secondary">AMD Ryzen 7 7700X</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-green-400">🎨</span>
-                                <span class="text-secondary">RTX 4070 12GB</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-purple-400">💾</span>
-                                <span class="text-secondary">32GB DDR5</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-yellow-400">💿</span>
-                                <span class="text-secondary">1TB NVMe SSD</span>
-                            </div>
-                        </div>
+                        <div id="product-specs" class="grid md:grid-cols-2 gap-4"></div>
                     </div>
 
                     <!-- Stock -->
                     <div class="mb-6 p-4 bg-orange-500 bg-opacity-20 rounded-lg">
                         <div class="flex items-center space-x-2">
                             <span class="text-orange-400">⚠️</span>
-                            <span class="text-white font-semibold">¡Últimas 5 unidades disponibles!</span>
+                            <span id="stock-info" class="text-white font-semibold"></span>
                         </div>
                         <p class="text-secondary text-sm mt-1">Este producto está en alta demanda</p>
                     </div>
 
                     <!-- Opciones -->
+                    <!-- Opciones -->
                     <div class="mb-6">
                         <h3 class="text-lg font-bold mb-3">Opciones disponibles:</h3>
-                        
-                        <!-- Color/Variante -->
-                        <div class="mb-4">
-                            <label class="block text-secondary mb-2">Variante:</label>
-                            <div class="flex gap-2">
-                                <button class="variant-btn active px-4 py-2 border-2 border-blue-500 rounded text-blue-400 bg-blue-500 bg-opacity-20">ROG Strix</button>
-                                <button class="variant-btn px-4 py-2 border-2 border-gray-600 rounded text-gray-400 hover:border-blue-500 hover:text-blue-400">TUF Gaming</button>
-                                <button class="variant-btn px-4 py-2 border-2 border-gray-600 rounded text-gray-400 hover:border-blue-500 hover:text-blue-400">Prime</button>
-                            </div>
-                        </div>
-
-                        <!-- Garantía -->
-                        <div class="mb-4">
-                            <label class="block text-secondary mb-2">Garantía:</label>
-                            <div class="flex gap-2">
-                                <button class="warranty-btn active px-4 py-2 border-2 border-green-500 rounded text-green-400 bg-green-500 bg-opacity-20">
-                                    3 años (+$50.000)
-                                </button>
-                                <button class="warranty-btn px-4 py-2 border-2 border-gray-600 rounded text-gray-400 hover:border-green-500 hover:text-green-400">
-                                    2 años (Incluida)
-                                </button>
-                            </div>
-                        </div>
+                        <div id="product-options"></div>
                     </div>
 
                     <!-- Cantidad -->
                     <div class="mb-6">
                         <label class="block text-secondary mb-2">Cantidad:</label>
                         <div class="flex items-center space-x-4">
-                            <button onclick="changeQuantity(-1)" class="btn-secondary px-4 py-2">-</button>
-                            <span id="quantity" class="px-4 py-2 bg-gray-800 rounded text-center min-w-16">1</span>
-                            <button onclick="changeQuantity(1)" class="btn-secondary px-4 py-2">+</button>
+                            <button id="decrease-qty" class="btn-secondary px-4 py-2">-</button>
+                            <input id="quantity" type="number" value="1" min="1" class="px-4 py-2 bg-gray-800 rounded text-center min-w-16" style="width:60px;" />
+                            <button id="increase-qty" class="btn-secondary px-4 py-2">+</button>
                         </div>
                     </div>
 
                     <!-- Botones de acción -->
                     <div class="space-y-4 mb-6">
-                        <button onclick="addToCart()" class="w-full btn-primary text-lg py-4">
-                            Agregar al Carrito - $1.299.990 🛒
+                        <button id="add-to-cart-btn" class="w-full btn-primary text-lg py-4">
+                            Agregar al Carrito
                         </button>
-                        <button onclick="buyNow()" class="w-full btn-secondary text-lg py-4">
-                            Comprar Ahora 💳
+                        <button id="buy-now-btn" class="w-full btn-secondary text-lg py-4">
+                            Comprar Ahora
                         </button>
                     </div>
 
                     <!-- Beneficios -->
-                    <div class="grid md:grid-cols-2 gap-4 text-sm">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-400">✅</span>
-                            <span class="text-secondary">Envío gratis a todo Chile</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-400">✅</span>
-                            <span class="text-secondary">Garantía extendida</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-400">✅</span>
-                            <span class="text-secondary">Soporte técnico 24/7</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-green-400">✅</span>
-                            <span class="text-secondary">Instalación incluida</span>
-                        </div>
-                    </div>
+                    <ul id="product-features" class="grid md:grid-cols-2 gap-4 text-sm"></ul>
                 </div>
             </div>
 
@@ -547,63 +469,10 @@
     </section>
 
     <!-- Productos Relacionados -->
-    <section class="py-20 section-bg-dark">
+    <section class="py-20 section-bg-dark fade-section">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Productos Relacionados</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Producto relacionado 1 -->
-                <div class="product-card">
-                    <div class="h-48 bg-gradient-to-br from-green-600 to-blue-600 flex items-center justify-center text-4xl">
-                        💻
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold mb-2">PC Gamer HP OMEN 45L</h3>
-                        <div class="text-xl font-bold gradient-text mb-2">$899.990</div>
-                        <p class="text-secondary text-sm mb-4">PC Gaming intermedio con RTX 4060</p>
-                        <button class="w-full btn-secondary text-sm">Ver Detalles</button>
-                    </div>
-                </div>
-
-                <!-- Producto relacionado 2 -->
-                <div class="product-card">
-                    <div class="h-48 bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-4xl">
-                        🖱️
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold mb-2">Mouse Logitech G Pro X</h3>
-                        <div class="text-xl font-bold gradient-text mb-2">$149.990</div>
-                        <p class="text-secondary text-sm mb-4">Mouse gaming profesional</p>
-                        <button class="w-full btn-secondary text-sm">Ver Detalles</button>
-                    </div>
-                </div>
-
-                <!-- Producto relacionado 3 -->
-                <div class="product-card">
-                    <div class="h-48 bg-gradient-to-br from-red-600 to-orange-600 flex items-center justify-center text-4xl">
-                        📺
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold mb-2">Monitor ASUS TUF 27"</h3>
-                        <div class="text-xl font-bold gradient-text mb-2">$349.990</div>
-                        <p class="text-secondary text-sm mb-4">Monitor gaming 1440p 165Hz</p>
-                        <button class="w-full btn-secondary text-sm">Ver Detalles</button>
-                    </div>
-                </div>
-
-                <!-- Producto relacionado 4 -->
-                <div class="product-card">
-                    <div class="h-48 bg-gradient-to-br from-teal-600 to-blue-600 flex items-center justify-center text-4xl">
-                        ⌨️
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold mb-2">Teclado Razer BlackWidow</h3>
-                        <div class="text-xl font-bold gradient-text mb-2">$179.990</div>
-                        <p class="text-secondary text-sm mb-4">Teclado mecánico RGB</p>
-                        <button class="w-full btn-secondary text-sm">Ver Detalles</button>
-                    </div>
-                </div>
-            </div>
+            <div id="related-products" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
     </section>
 
@@ -663,22 +532,6 @@
     <script src="../../assets/script.js"></script>
     <script src="JS/detalle-productos.js"></script>
 
-    <style>
-        .thumbnail {
-            @apply border-2 border-transparent transition-all duration-300;
-        }
-        .thumbnail.active {
-            @apply border-blue-500;
-        }
-        .variant-btn.active, .warranty-btn.active {
-            @apply border-blue-500 text-blue-400 bg-blue-500 bg-opacity-20;
-        }
-        .tab-btn.active {
-            @apply border-b-2 border-blue-500 text-blue-400;
-        }
-        .cart-counter {
-            @apply absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center;
-        }
-    </style>
+    <!-- Estilos eliminados: ahora todo está en style.css -->
 </body>
 </html>

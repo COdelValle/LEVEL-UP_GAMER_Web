@@ -1,3 +1,35 @@
+// Fade-in del body al cargar la página (antes estaba inline en producto.html)
+function fadeInBody() {
+    document.body.classList.remove("opacity-0");
+    document.body.classList.add("opacity-100");
+}
+
+// Ejecutar fadeInBody al cargar la página
+window.addEventListener('load', fadeInBody);
+// Utilidad debounce para evitar múltiples llamadas rápidas
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+// Utilidad showMessage para mostrar mensajes flotantes
+function showMessage(text, type = 'info') {
+    const msg = document.createElement('div');
+    msg.textContent = text;
+    let bg = 'bg-blue-600';
+    if (type === 'success') bg = 'bg-green-600';
+    if (type === 'error') bg = 'bg-red-600';
+    if (type === 'warning') bg = 'bg-yellow-500 text-black';
+    msg.className = `fixed top-20 left-1/2 transform -translate-x-1/2 ${bg} text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in`;
+    document.body.appendChild(msg);
+    setTimeout(() => {
+        msg.classList.add('fade-out');
+        setTimeout(() => msg.remove(), 400);
+    }, 2200);
+}
 // ====================================
 // PRODUCTOS.JS - Funcionalidad para la página de productos
 // ====================================
@@ -221,42 +253,36 @@ function renderProducts() {
 
 function createProductCard(product) {
     const card = document.createElement('div');
-    card.className = 'product-card';
+    card.className = 'product-card border-2 border-blue-500 rounded-2xl shadow-lg bg-[#181f2a]';
     
     const hasDiscount = product.originalPrice && product.originalPrice > product.price;
     const discountPercent = hasDiscount ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
     
     card.innerHTML = `
-        <div class="relative">
+        <div class="relative h-full flex flex-col">
             <!-- Imagen del producto -->
             <div class="h-48 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-6xl relative">
                 ${product.image}
-                
                 <!-- Badges -->
                 <div class="absolute top-2 left-2 space-y-1">
                     ${product.isNew ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded">NUEVO</span>' : ''}
                     ${product.featured ? '<span class="px-2 py-1 bg-yellow-500 text-black text-xs rounded">DESTACADO</span>' : ''}
                     ${hasDiscount ? `<span class="px-2 py-1 bg-red-500 text-white text-xs rounded">-${discountPercent}%</span>` : ''}
                 </div>
-                
                 <!-- Stock bajo -->
                 ${product.stock <= 5 ? '<div class="absolute top-2 right-2"><span class="px-2 py-1 bg-orange-500 text-white text-xs rounded">¡Últimos!</span></div>' : ''}
             </div>
-            
             <!-- Contenido -->
-            <div class="p-4">
+            <div class="p-4 flex flex-col flex-1">
                 <h3 class="text-lg font-bold mb-2 text-white hover:text-blue-400 cursor-pointer" onclick="openProductModal(${product.id})">
                     ${product.name}
                 </h3>
-                
                 <p class="text-secondary text-sm mb-3 line-clamp-2">${product.description}</p>
-                
                 <!-- Precio -->
                 <div class="mb-4">
                     ${hasDiscount ? `<span class="text-gray-500 line-through text-sm">$${formatPrice(product.originalPrice)}</span>` : ''}
                     <div class="text-2xl font-bold gradient-text">$${formatPrice(product.price)}</div>
                 </div>
-                
                 <!-- Stock -->
                 <div class="mb-4">
                     <span class="text-secondary text-sm">Stock: </span>
@@ -264,20 +290,20 @@ function createProductCard(product) {
                         ${product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}
                     </span>
                 </div>
-                
                 <!-- Botones -->
-                <div class="space-y-2">
+                <div class="flex flex-col items-center gap-2 mt-auto">
                     <button 
                         onclick="addToCart(${product.id})"
-                        class="w-full btn-primary ${product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                        class="btn-primary rounded-2xl border border-[#39FF14] bg-[#181f2a] text-white font-bold py-3 px-8 min-w-[200px] max-w-full transition-all duration-150 hover:bg-[#232b3a] hover:text-[#39FF14] hover:border-[#1E90FF] ${product.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}"
+                        style="border-width:1.5px;"
                         ${product.stock === 0 ? 'disabled' : ''}
                     >
                         ${product.stock === 0 ? 'Agotado' : 'Agregar al Carrito 🛒'}
                     </button>
-                    
                     <button 
                         onclick="openProductModal(${product.id})"
-                        class="w-full btn-secondary"
+                        class="rounded-2xl border border-[#39FF14] bg-transparent text-[#39FF14] font-bold py-3 px-8 min-w-[200px] max-w-full transition-all duration-150 hover:bg-[#232b3a] hover:text-white hover:border-[#1E90FF] btn-secondary"
+                        style="border-width:1.5px;"
                     >
                         Ver Detalles
                     </button>
@@ -728,14 +754,17 @@ setTimeout(checkUrlProduct, 500);
 
 // Simulador de notificaciones push
 function initNotifications() {
-    // Simular notificación de stock bajo
-    setTimeout(() => {
-        const lowStockProducts = allProducts.filter(p => p.stock <= 5 && p.stock > 0);
-        if (lowStockProducts.length > 0) {
-            const product = lowStockProducts[Math.floor(Math.random() * lowStockProducts.length)];
-            showMessage(`⚠️ Stock bajo: ${product.name} (${product.stock} restantes)`, 'warning');
-        }
-    }, 5000);
+    // Solo admins reciben notificación de stock bajo
+    const rol = localStorage.getItem('rol');
+    if (rol === 'admin') {
+        setTimeout(() => {
+            const lowStockProducts = allProducts.filter(p => p.stock <= 5 && p.stock > 0);
+            if (lowStockProducts.length > 0) {
+                const product = lowStockProducts[Math.floor(Math.random() * lowStockProducts.length)];
+                showMessage(`⚠️ Stock bajo: ${product.name} (${product.stock} restantes)`, 'warning');
+            }
+        }, 5000);
+    }
 }
 
 // Inicializar notificaciones

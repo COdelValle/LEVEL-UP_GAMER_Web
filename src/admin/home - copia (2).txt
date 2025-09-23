@@ -7,87 +7,77 @@
     
     <!-- CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/styles-2.css" rel="stylesheet">
+    <link href="../assets/style.css" rel="stylesheet">
     
     <style>
         .admin-sidebar {
-            background: rgba(0, 0, 30, 0.99);
-            border-right: 1px solid #1E90FF33;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
+            border-right: 1px solid rgba(30, 144, 255, 0.3);
             min-height: 100vh;
         }
+        
         .admin-nav-link {
-            color: #6dd5ed;
+            color: var(--color-gris-claro);
             text-decoration: none;
             padding: 0.75rem 1rem;
             display: block;
             border-radius: 0.5rem;
             margin-bottom: 0.5rem;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.01em;
             transition: all 0.3s ease;
         }
+        
         .admin-nav-link:hover {
-            background: #1E90FF22;
-            color: #39FF14;
+            background: rgba(30, 144, 255, 0.2);
+            color: var(--color-azul-electrico);
         }
+        
         .admin-nav-link.active {
-            background: linear-gradient(90deg, #1E90FF 0%, #39FF14 100%);
-            color: #fff !important;
+            background: var(--color-azul-electrico);
+            color: var(--color-blanco);
         }
+        
         .stats-card {
-            background: linear-gradient(135deg, #181f2a 0%, #0a192e 100%);
-            border: 1.5px solid #39FF14;
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.1) 0%, rgba(57, 255, 20, 0.05) 100%);
+            border: 1px solid rgba(30, 144, 255, 0.3);
             border-radius: 0.75rem;
             padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 0 20px rgba(57,255,20,0.08);
             transition: all 0.3s ease;
         }
+        
         .stats-card:hover {
-            border-color: #1E90FF;
-            box-shadow: 0 10px 30px rgba(30,144,255,0.13);
+            border-color: var(--color-verde-neon);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
             transform: translateY(-5px);
         }
+        
         .stats-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #39FF14;
-            font-family: 'Orbitron', sans-serif;
+            color: var(--color-azul-electrico);
         }
+        
         .main-content {
             padding: 2rem;
         }
+        
         .admin-header {
-            background: rgba(0, 0, 30, 0.99);
+            background: rgba(0, 0, 30, 0.95);
             padding: 1rem 2rem;
-            border-bottom: 1.5px solid #1E90FF33;
+            border-bottom: 1px solid rgba(30, 144, 255, 0.3);
         }
+        
         .activity-item {
-            background: #181f2a;
-            border: 1px solid #1E90FF33;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 0.5rem;
             padding: 1rem;
             margin-bottom: 0.5rem;
         }
+        
         .activity-time {
             font-size: 0.875rem;
-            color: #6dd5ed;
-        }
-        /* Fade transitions for admin sections */
-        .admin-section {
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-        .admin-section.fade-out {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .admin-section.fade-in {
-            opacity: 1;
-            visibility: visible;
+            color: var(--color-gris-claro);
         }
     </style>
 </head>
@@ -96,15 +86,11 @@
     <header class="admin-header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <a href="../../index.html" class="flex items-center space-x-2" style="text-decoration:none;">
-                    <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10" style="height:2.5rem;">
-                    <span class="logo-gradient text-2xl font-extrabold font-titles">Level-Up Gamer</span>
-                    <span class="text-secondary font-main text-lg align-middle ml-2">- Admin Panel</span>
-                </a>
+                <h3 class="gradient-text mb-0">Level-Up Gamer - Admin Panel</h3>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="text-secondary">Bienvenido, <span id="admin-name">Admin</span></span>
-                <button class="btn btn-secondary btn-sm" id="logoutBtn">
+                <button class="btn btn-secondary btn-sm" onclick="logout()">
                     🚪 Cerrar Sesión
                 </button>
             </div>
@@ -113,16 +99,16 @@
 
     <div class="d-flex">
         <!-- Sidebar -->
-        <nav class="admin-sidebar" style="width: 260px;">
+        <nav class="admin-sidebar" style="width: 250px;">
             <div class="p-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="#" class="admin-nav-link active" onclick="showSection('dashboard')">
+                        <a href="../home.html" class="admin-nav-link active">
                             📊 Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="nuevo_producto.html" class="admin-nav-link">
+                        <a href="nuevo-producto.html" class="admin-nav-link">
                             ➕ Nuevo Producto
                         </a>
                     </li>
@@ -137,12 +123,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="usuarios.html" class="admin-nav-link" onclick="showSection('users')">
+                        <a href="#" class="admin-nav-link" onclick="showSection('users')">
                             👥 Usuarios
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../../index.html" class="admin-nav-link">
+                        <a href="../src/tienda/blogs.html" class="admin-nav-link">
                             🏠 Ir a la Tienda
                         </a>
                     </li>
@@ -153,7 +139,7 @@
         <!-- Main Content -->
         <main class="main-content flex-grow-1">
             <!-- Dashboard Section -->
-            <div id="dashboard-section" class="admin-section" style="display: block;">
+            <div id="dashboard-section">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Dashboard General</h2>
@@ -196,7 +182,7 @@
                             <div class="card-body">
                                 <h5 class="gradient-text mb-3">Acciones Rápidas</h5>
                                 <div class="d-grid gap-2">
-                                    <a href="nuevo_producto.html" class="btn btn-primary">
+                                    <a href="nuevo-producto.html" class="btn btn-primary">
                                         ➕ Agregar Nuevo Producto
                                     </a>
                                     <button class="btn btn-secondary" onclick="showSection('orders')">
@@ -251,13 +237,13 @@
             </div>
 
             <!-- Products Management Section -->
-            <div id="products-section" class="admin-section" style="display: none;">
+            <div id="products-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Productos</h2>
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="text-secondary">Administra todos los productos de tu tienda</p>
-                            <a href="nuevo_producto.html" class="btn btn-primary">
+                            <a href="nuevo-producto.html" class="btn btn-primary">
                                 ➕ Nuevo Producto
                             </a>
                         </div>
@@ -289,7 +275,7 @@
             </div>
 
             <!-- Orders Section -->
-            <div id="orders-section" class="admin-section" style="display: none;">
+            <div id="orders-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Pedidos</h2>
@@ -321,7 +307,7 @@
             </div>
 
             <!-- Users Section -->
-            <div id="users-section" class="admin-section" style="display: none;">
+            <div id="users-section" style="display: none;">
                 <div class="row mb-4">
                     <div class="col-12">
                         <h2 class="gradient-text mb-3">Gestión de Usuarios</h2>

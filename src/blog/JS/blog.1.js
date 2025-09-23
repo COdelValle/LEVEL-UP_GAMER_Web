@@ -1,3 +1,11 @@
+// Fade-in del body al cargar la página (antes estaba inline en blogs.html)
+function fadeInBody() {
+    document.body.classList.remove("opacity-0");
+    document.body.classList.add("opacity-100");
+}
+
+// Ejecutar fadeInBody al cargar la página
+window.addEventListener('load', fadeInBody);
 // ====================================
 // BLOGS.JS - Funcionalidad específica para la página de blogs
 // ====================================

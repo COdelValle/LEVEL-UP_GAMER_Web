@@ -2,124 +2,91 @@
 // ADMIN HOME - LEVEL-UP GAMER
 // ====================================
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Proteger acceso solo admin
-    const rol = localStorage.getItem('rol');
-    const logueado = localStorage.getItem('logueado');
-    if (rol !== 'admin' || logueado !== 'true') {
-        window.location.href = '../login/login.html';
-        return;
-    }
-    mostrarNombreAdmin();
-    configurarLogout();
-    setupNavigation();
-    showSection('dashboard');
+    console.log('🔧 Admin Panel cargado');
+    
+    // Verificar autenticación
+    checkAdminAuth();
+    
+    // Inicializar dashboard
+    initDashboard();
     loadDashboardData();
+    
+    // Configurar navegación
+    setupNavigation();
 });
 
 // ====================================
 // AUTENTICACIÓN
 // ====================================
 
-// 🔄 Transición visual al cargar
-function fadeInBody() {
-  document.body.classList.remove("opacity-0");
-  document.body.classList.add("opacity-100");
+function checkAdminAuth() {
+    const adminSession = JSON.parse(localStorage.getItem('adminSession'));
+    
+    if (!adminSession || !adminSession.isAuthenticated) {
+        // Redirigir al login
+        window.location.href = '../admin/home.html';
+        return;
+    }
+    
+    // Verificar si la sesión ha expirado
+    const now = new Date().getTime();
+    if (now > adminSession.expiresAt) {
+        localStorage.removeItem('adminSession');
+        showMessage('Sesión expirada. Por favor inicia sesión nuevamente.', 'error');
+        setTimeout(() => {
+            window.location.href = '../login.html';
+        }, 2000);
+        return;
+    }
+    
+    // Mostrar nombre del admin
+    document.getElementById('admin-name').textContent = adminSession.username;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🎮 Panel Admin cargado");
-
-  fadeInBody();
-  validarSesionAdmin();
-  mostrarNombreAdmin();
-  configurarLogout();
-  // Puedes agregar más funciones aquí como cargarDashboard(), initCards(), etc.
-});
-
-
-
-// 👤 Mostrar nombre del admin
-function mostrarNombreAdmin() {
-    const nombre = localStorage.getItem("loginExitoso") || "Administrador";
-    const nombreElemento = document.getElementById("admin-name");
-    if (nombreElemento) nombreElemento.textContent = nombre;
-}
-
-// 🚪 Cerrar sesión
-function configurarLogout() {
-    const btnLogout = document.getElementById("logoutBtn");
-    if (btnLogout) {
-        btnLogout.addEventListener("click", () => {
-            if (confirm("¿Cerrar sesión?")) {
-                localStorage.clear();
-                window.location.href = "../../index.html";
-            }
-        });
+function logout() {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+        localStorage.removeItem('adminSession');
+        showMessage('Sesión cerrada correctamente', 'success');
+        setTimeout(() => {
+            window.location.href = '../../index.html';
+        }, 1000);
     }
 }
-
-
 
 // ====================================
 // NAVEGACIÓN
 // ====================================
 
 function setupNavigation() {
+    // Manejar clicks en enlaces de navegación
     document.querySelectorAll('.admin-nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
-            if (this.getAttribute('onclick')) {
-                // Si tiene onclick, dejar que lo maneje showSection
-                return;
-            }
+            if (this.getAttribute('onclick')) return; // Skip si tiene onclick
             if (this.getAttribute('href').startsWith('http') || this.getAttribute('href').includes('.html')) return;
+            
             e.preventDefault();
         });
     });
 }
 
 function showSection(sectionName) {
-    // Fade out la sección visible
-    const allSections = document.querySelectorAll('.admin-section');
-    let currentSection = null;
-    allSections.forEach(section => {
-        if (section.style.display !== 'none') {
-            currentSection = section;
-        }
+    // Ocultar todas las secciones
+    document.querySelectorAll('[id$="-section"]').forEach(section => {
+        section.style.display = 'none';
     });
-    if (currentSection) {
-        currentSection.classList.remove('fade-in');
-        currentSection.classList.add('fade-out');
-        setTimeout(() => {
-            currentSection.style.display = 'none';
-            currentSection.classList.remove('fade-out');
-            // Mostrar la nueva sección
-            showTargetSection(sectionName);
-        }, 400);
-    } else {
-        showTargetSection(sectionName);
-    }
-}
-
-function showTargetSection(sectionName) {
+    
+    // Mostrar la sección seleccionada
     const targetSection = document.getElementById(sectionName + '-section');
     if (targetSection) {
         targetSection.style.display = 'block';
-        setTimeout(() => {
-            targetSection.classList.add('fade-in');
-        }, 10);
     }
+    
     // Actualizar navegación activa
     document.querySelectorAll('.admin-nav-link').forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(sectionName)) {
-            link.classList.add('active');
-        }
-        if (sectionName === 'dashboard' && link.textContent.includes('Dashboard')) {
-            link.classList.add('active');
-        }
     });
+    
     // Cargar datos según la sección
     switch(sectionName) {
         case 'products':
@@ -131,9 +98,8 @@ function showTargetSection(sectionName) {
         case 'users':
             loadUsersData();
             break;
-        case 'dashboard':
         default:
-            loadDashboardData();
+            document.querySelector('.admin-nav-link').classList.add('active');
     }
 }
 
