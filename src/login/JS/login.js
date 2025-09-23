@@ -57,10 +57,15 @@ function iniciarSesion() {
     localStorage.setItem("logueado", "true");
     localStorage.setItem("rol", "admin");
 
+    // ✅ Sesión completa para módulos del admin
+    localStorage.setItem("adminSession", JSON.stringify({
+      isAuthenticated: true,
+      username: u,
+      expiresAt: new Date().getTime() + 3600000
+    }));
+
     // ✅ Redirección actualizada al panel correcto
     setTimeout(() => fadeOutAndRedirect("../admin/home.html"), 1500);
-
-
     return;
   }
 

@@ -129,7 +129,7 @@ select.custom-select option {
   flex: 1;
   font-family: var(--font-main);
 }
-}
+
 .blog-search-bar input[type="text"]::placeholder, .product-search-bar input[type="text"]::placeholder {
   color: #b3c6e0;
   opacity: 1;
@@ -147,7 +147,7 @@ select.custom-select option {
   background: #39FF14;
   color: #181f2a;
 }
-}
+
 .btn-cart:hover {
   border-color: #2196f3;
   color: #2196f3;
@@ -780,3 +780,9 @@ a:hover {
 .navbar-deepblue .logo-gradient, .navbar-deepblue .logo {
   font-family: var(--font-titles) !important;
 }
+
+.products-section {
+  background-color: #0a192e; /* azul oscuro */
+  padding: 5rem 0; /* igual que py-20 */
+}
+
