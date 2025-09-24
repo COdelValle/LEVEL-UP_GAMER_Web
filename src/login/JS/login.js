@@ -83,9 +83,11 @@ function iniciarSesion() {
     localStorage.setItem("logueado", "true");
     localStorage.setItem("rol", "usuario");
     localStorage.setItem("loginExitoso", `Bienvenido ${u}`);
-    setTimeout(() => fadeOutAndRedirect("../../../index.html"), 1500);
+    // Guardar el usuario completo para el perfil
+    localStorage.setItem("usuarioLogeado", JSON.stringify(usuarioValido));
+  setTimeout(() => fadeOutAndRedirect("../../index.html"), 1500);
   } else {
-    msg.innerHTML = `${iconError}<span class=\"text-red-500\">Credenciales incorrectas</span>`;
+    msg.innerHTML = `${iconError}<span class=\"text-red-500\">Credenciales incorrectos</span>`;
     msg.className = "flex items-center justify-center gap-2 text-sm mt-2 mb-4 transition-opacity duration-300";
   }
 }

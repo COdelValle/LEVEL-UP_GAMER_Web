@@ -21,29 +21,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadDataFromJSON() {
     try {
-        // Cargar el archivo JSON desde assets
-        const response = await fetch('../assets/usuarios.json');
-        
+        // Cargar el archivo JSON real desde assets/json
+        const response = await fetch('../assets/json/bd_usuarios.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
         const data = await response.json();
-        
         usuariosData = data.usuarios;
         regionesData = data.regiones;
-        
         console.log('Datos cargados:', usuariosData.length, 'usuarios');
-        
         // Cargar datos iniciales
         loadUsersData();
         loadUserStats();
         loadUserActivity();
-        
     } catch (error) {
         console.error('Error al cargar datos desde JSON:', error);
         showMessage('Error al cargar los datos de usuarios. Usando datos de ejemplo.', 'warning');
-        
         // Fallback: usar datos de ejemplo si no se puede cargar el JSON
         loadFallbackData();
     }

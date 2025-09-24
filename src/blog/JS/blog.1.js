@@ -20,6 +20,15 @@ function verificarLoginNavbar() {
     const btnVerPerfil = document.getElementById("btnVerPerfil");
     const btnLogout = document.getElementById("btnLogout");
 
+    // Asegura que el botón "Ver perfil" siempre apunte a perfilUsuario.html
+    if (btnVerPerfil) {
+        btnVerPerfil.setAttribute("href", "../../src/usuario/perfilUsuario.html");
+        btnVerPerfil.addEventListener("click", function(e) {
+            e.preventDefault();
+            window.location.href = "../../src/usuario/perfilUsuario.html";
+        });
+    }
+
     // Mostrar todos por defecto
     if (btnLogin) btnLogin.classList.remove("hidden");
     if (btnRegistro) btnRegistro.classList.remove("hidden");

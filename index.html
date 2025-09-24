@@ -26,7 +26,7 @@
       <!-- Links y carrito a la derecha -->
       <div class="flex items-center space-x-6 mr-8">
   <a href="index.html" onclick="mostrarInicio()" class="hover:text-[#39FF14]">Inicio</a>
-  <a href="#" id="btnVerPerfil" class="hover:text-[#39FF14] hidden"><i class="fas fa-user-circle mr-1"></i>Ver perfil</a>
+  <a href="src/usuario/perfilUsuario.html" id="btnVerPerfil" class="hover:text-[#39FF14] hidden"><i class="fas fa-user-circle mr-1"></i>Ver perfil</a>
         <div class="relative">
           <button id="btnCatalogo" class="hover:text-[#39FF14]">Catálogo ▼</button>
           <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
@@ -41,13 +41,8 @@
         <a href="src/blog/blogs.html" class="hover:text-[#39FF14]">Blog</a>
         <a href="#" onclick="irConFade('src/registro/registro.html')" class="hover:text-[#39FF14]">Registro</a>
         <a href="#" onclick="irConFade('src/login/login.html')" class="hover:text-[#39FF14]">Login</a>
+  <a href="src/admin/home.html" id="btnPanelAdmin" class="hover:text-[#39FF14] hidden">Panel de Admin</a>
 
-        <!-- Carrito de compras -->
-        <div class="relative">
-          <button id="cart-btn" class="text-white hover:text-blue-400 relative">
-            🛒 <span id="cart-counter" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center hidden">0</span>
-          </button>
-        </div>
       </div>
     </div>
   </nav>
@@ -378,82 +373,6 @@
 
 <!-- 🔧 JS -->
 <script src="src/assets/script.js"></script>
-  <script>
-    // Unificada: Actualiza visibilidad de botones de sesión según estado
-    function actualizarBotonesSesionIndex() {
-      const btnPerfil = document.getElementById("btnVerPerfil");
-      const btnEditar = document.getElementById("btnEditarCatalogo");
-      const btnLogout = document.getElementById("btnLogout");
-      const btnLogin = document.querySelector(".inicio-btn2 i.fa-sign-in-alt")?.parentElement;
-      const btnRegistro = document.querySelector(".inicio-btn2 i.fa-user-plus")?.parentElement;
-      const logueado = localStorage.getItem("logueado");
-      const rol = localStorage.getItem("rol");
-      // Ocultar todos por defecto
-      if (btnPerfil) btnPerfil.classList.add("hidden");
-      if (btnEditar) btnEditar.classList.add("hidden");
-      if (btnLogout) btnLogout.classList.add("hidden");
-      if (btnLogin) btnLogin.classList.remove("hidden");
-      if (btnRegistro) btnRegistro.classList.remove("hidden");
-      // Mostrar según sesión
-      if (logueado === "true" && rol === "admin") {
-        if (btnEditar) btnEditar.classList.remove("hidden");
-        if (btnLogout) btnLogout.classList.remove("hidden");
-        if (btnLogin) btnLogin.classList.add("hidden");
-        if (btnRegistro) btnRegistro.classList.add("hidden");
-      } else if (logueado === "true" && rol === "usuario") {
-        if (btnPerfil) btnPerfil.classList.remove("hidden");
-        if (btnLogout) btnLogout.classList.remove("hidden");
-        if (btnLogin) btnLogin.classList.add("hidden");
-        if (btnRegistro) btnRegistro.classList.add("hidden");
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      actualizarBotonesSesionIndex();
-      // Redirigir a perfil según rol
-      const btnPerfil = document.getElementById("btnVerPerfil");
-      if (btnPerfil) {
-        btnPerfil.onclick = function(e) {
-          e.preventDefault();
-          const rol = localStorage.getItem("rol");
-          if (rol === "admin") {
-            window.location.href = "src/admin/home.html";
-          } else {
-            window.location.href = "src/usuario/perfilUsuario.html";
-          }
-        };
-      }
-      // Logout robusto
-      const btnLogout = document.getElementById("btnLogout");
-      if (btnLogout) {
-        btnLogout.addEventListener("click", function(e) {
-          e.preventDefault();
-          // Mostrar toast
-          const toast = document.getElementById("toastLogout");
-          const toastMsg = document.getElementById("toastLogoutMsg");
-          // Limpiar toda la sesión
-          localStorage.removeItem("usuarioLogeado");
-          localStorage.removeItem("logueado");
-          localStorage.removeItem("rol");
-          if (toast && toastMsg) {
-            toastMsg.innerHTML = "Sesión cerrada correctamente. ¡Hasta pronto!";
-            toast.classList.remove("hidden");
-            toast.classList.add("opacity-100");
-            setTimeout(() => {
-              // Oculta botones solo justo antes de irse
-              actualizarBotonesSesionIndex();
-              toast.classList.add("hidden");
-              toast.classList.remove("opacity-100");
-              window.location.href = "index.html";
-            }, 1400);
-          } else {
-            actualizarBotonesSesionIndex();
-            window.location.href = "index.html";
-          }
-        });
-      }
-    });
-  </script>
 <script src="src/tienda/JS/index.js"></script>
 
 <!-- 🔻 FOOTER -->

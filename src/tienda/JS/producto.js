@@ -6,43 +6,35 @@ const rol = localStorage.getItem("rol");
 
 const loginBtn = document.getElementById("loginLink");
 const registroBtn = document.getElementById("registroLink");
-let perfilBtn = document.getElementById("perfilLink");
+
+const perfilBtn = document.getElementById("perfilLink");
+const verPerfilBtn = document.getElementById("verPerfilLink");
 
 if (logueado === "true") {
-  loginBtn?.classList.add("hidden");
-  registroBtn?.classList.add("hidden");
-
-if (!perfilBtn) {
-  perfilBtn = document.createElement("a");
-  perfilBtn.id = "perfilLink";
-  perfilBtn.href = rol === "admin"
-    ? "../../src/admin/home.html"
-    : "../../src/usuario/perfil.html";
-  perfilBtn.textContent = rol === "admin" ? "Panel de Admin" : "Ver Perfil";
-  perfilBtn.className = "nav-btn hover:text-[#39FF14] font-main";
-  document.getElementById("navbar-buttons")?.appendChild(perfilBtn);
+    loginBtn?.classList.add("hidden");
+    registroBtn?.classList.add("hidden");
+    if (rol === "admin") {
+        perfilBtn?.classList.remove("hidden");
+        perfilBtn.textContent = "Panel de Admin";
+        perfilBtn.href = "../admin/home.html";
+        verPerfilBtn?.classList.add("hidden");
+    } else if (rol === "usuario") {
+        verPerfilBtn?.classList.remove("hidden");
+        perfilBtn?.classList.add("hidden");
+        // Asegura que el botón "Ver Perfil" apunte a perfilUsuario.html
+        if (verPerfilBtn) {
+            verPerfilBtn.setAttribute("href", "../usuario/perfilUsuario.html");
+            verPerfilBtn.addEventListener("click", function(e) {
+                e.preventDefault();
+                window.location.href = "../usuario/perfilUsuario.html";
+            });
+        }
+    }
 } else {
-  perfilBtn.classList.remove("hidden");
-  perfilBtn.href = rol === "admin"
-    ? "../../src/admin/home.html"
-    : "../../src/usuario/perfil.html";
-  perfilBtn.textContent = rol === "admin" ? "Panel de Admin" : "Ver Perfil";
-}
-
-  // 🔸 Fade-out al hacer clic en Panel de Admin
-  perfilBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.body.classList.remove("opacity-100");
-    document.body.classList.add("opacity-0");
-    setTimeout(() => {
-      window.location.href = perfilBtn.href;
-    }, 400); // duración igual a la transición CSS
-  });
-
-} else {
-  loginBtn?.classList.remove("hidden");
-  registroBtn?.classList.remove("hidden");
-  perfilBtn?.classList.add("hidden");
+    loginBtn?.classList.remove("hidden");
+    registroBtn?.classList.remove("hidden");
+    perfilBtn?.classList.add("hidden");
+    verPerfilBtn?.classList.add("hidden");
 }
 
 // 🔹 Fade-in del body al cargar la página

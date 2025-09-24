@@ -135,10 +135,29 @@ function verificarLogin() {
   }
 }
   // 🔐 Actualizar botones de sesión al cargar la página
+
   document.addEventListener("DOMContentLoaded", function() {
     verificarLogin();
     if (typeof actualizarBotonesSesionIndex === "function") {
       actualizarBotonesSesionIndex();
+    }
+    // Lógica robusta para mostrar solo el botón de perfil correcto
+    const btnPerfil = document.getElementById("btnVerPerfil");
+    const btnPanelAdmin = document.getElementById("btnPanelAdmin");
+    const logueado = localStorage.getItem("logueado");
+    const rol = localStorage.getItem("rol");
+    if (btnPerfil) btnPerfil.classList.add("hidden");
+    if (btnPanelAdmin) btnPanelAdmin.classList.add("hidden");
+    if (logueado === "true" && rol === "usuario") {
+      if (btnPerfil) {
+        btnPerfil.classList.remove("hidden");
+        btnPerfil.setAttribute("href", "src/usuario/perfilUsuario.html");
+      }
+    } else if (logueado === "true" && rol === "admin") {
+      if (btnPanelAdmin) {
+        btnPanelAdmin.classList.remove("hidden");
+        btnPanelAdmin.setAttribute("href", "src/admin/home.html");
+      }
     }
   });
 
