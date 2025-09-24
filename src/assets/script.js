@@ -4,6 +4,14 @@ function fadeInBody() {
 	document.body.classList.add("opacity-100");
 }
 
+// Utilidad global para cerrar sesión de forma robusta
+function cerrarSesionGlobal(callback) {
+	localStorage.removeItem("usuarioLogeado");
+	localStorage.removeItem("logueado");
+	localStorage.removeItem("rol");
+	if (typeof callback === "function") callback();
+}
+
 // Ejecutar fadeInBody al cargar la página
 window.addEventListener('load', fadeInBody);
 // Muestra detalles del producto (placeholder)
@@ -94,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						</div>
 						<div class="flex gap-4">
 							<button id="close-cart-modal-index2" class="btn-secondary flex-1">Seguir Comprando</button>
+							<button id="btn-proceder-pago" class="btn-primary flex-1">Proceder al pago</button>
 						</div>
 					</div>
 				</div>
@@ -105,6 +114,21 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (closeBtn) closeBtn.onclick = () => { modal.style.display = 'none'; };
 			const closeBtn2 = document.getElementById('close-cart-modal-index2');
 			if (closeBtn2) closeBtn2.onclick = () => { modal.style.display = 'none'; };
+			const btnProcederPago = document.getElementById('btn-proceder-pago');
+			if (btnProcederPago) btnProcederPago.onclick = () => {
+				// Guardar carrito con la clave esperada por pago.js
+				const cart = JSON.parse(localStorage.getItem('cart')) || [];
+				localStorage.setItem('carrito', JSON.stringify(
+					cart.map(item => ({
+						nombre: item.name,
+						cantidad: item.quantity,
+						precio: item.price,
+						id: item.id
+					}))
+				));
+				// Redirigir a la ruta correcta de pago.html
+				window.location.href = 'src/checkout/pago.html';
+			};
 		}, 50);
 	}
 
@@ -213,6 +237,24 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (registroLink) registroLink.style.display = '';
 			if (loginLink) loginLink.style.display = '';
 			if (perfilLink) perfilLink.style.display = 'none';
+		}
+		// Botones de sesión en el body (index.html)
+		const btnEditarCatalogo = document.getElementById('btnEditarCatalogo');
+		const btnLogout = document.getElementById('btnLogout');
+		const btnIniciarSesion = document.querySelector('button[onclick*="src/login/login.html"]');
+		const btnRegistrarse = document.querySelector('button[onclick*="src/registro/registro.html"]');
+		if (btnEditarCatalogo && btnLogout && btnIniciarSesion && btnRegistrarse) {
+			if (logueado === 'true') {
+				btnEditarCatalogo.classList.remove('hidden');
+				btnLogout.classList.remove('hidden');
+				btnIniciarSesion.classList.add('hidden');
+				btnRegistrarse.classList.add('hidden');
+			} else {
+				btnEditarCatalogo.classList.add('hidden');
+				btnLogout.classList.add('hidden');
+				btnIniciarSesion.classList.remove('hidden');
+				btnRegistrarse.classList.remove('hidden');
+			}
 		}
 	}
 	actualizarNavbarUsuario();

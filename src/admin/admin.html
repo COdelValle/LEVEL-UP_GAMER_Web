@@ -36,10 +36,16 @@
   <!-- 🧠 PANEL ADMIN -->
   <section class="hero min-h-screen pt-32 px-6 fade-in text-center">
     <h1 class="text-5xl font-extrabold text-[#39FF14] mb-6 drop-shadow-lg">Panel de Administración</h1>
-    <p class="text-lg text-gray-300 mb-8">Aquí puedes editar el catálogo y gestionar productos.</p>
-    <button id="btnMostrarCatalogo" class="bg-[#39FF14] text-black px-6 py-3 rounded-lg font-bold hover:bg-green-700">Mostrar Catálogo</button>
+    <p class="text-lg text-gray-300 mb-8">Aquí puedes editar el catálogo, gestionar productos y ver usuarios registrados.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+      <button id="btnMostrarCatalogo" class="bg-[#39FF14] text-black px-6 py-3 rounded-lg font-bold hover:bg-green-700">Mostrar Catálogo</button>
+      <button id="btnMostrarUsuarios" class="bg-[#39FF14] text-black px-6 py-3 rounded-lg font-bold hover:bg-green-700">Ver Usuarios</button>
+    </div>
     <div id="catalogoAdmin" class="mt-8 space-y-4 hidden">
       <!-- Aquí se renderizan los productos -->
+    </div>
+    <div id="usuariosAdmin" class="mt-8 hidden">
+      <!-- Aquí se renderiza la tabla de usuarios -->
     </div>
   </section>
 

@@ -14,16 +14,26 @@ function verificarAccesoAdmin() {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const btnMostrar = document.getElementById("btnMostrarCatalogo");
   const catalogo = document.getElementById("catalogoAdmin");
   const btnCategorias = document.getElementById("btnCategorias");
   const menuCategorias = document.getElementById("menuCategorias");
   const btnLogout = document.getElementById("btnLogout");
+  const btnMostrarUsuarios = document.getElementById("btnMostrarUsuarios");
+  const usuariosAdmin = document.getElementById("usuariosAdmin");
 
   btnMostrar?.addEventListener("click", () => {
     catalogo.classList.toggle("hidden");
+    usuariosAdmin.classList.add("hidden");
     renderCatalogo();
+  });
+
+  btnMostrarUsuarios?.addEventListener("click", () => {
+    usuariosAdmin.classList.toggle("hidden");
+    catalogo.classList.add("hidden");
+    renderUsuarios();
   });
 
   btnCategorias?.addEventListener("click", () => {
@@ -46,6 +56,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   });
 });
+
+function renderUsuarios() {
+  const usuariosAdmin = document.getElementById("usuariosAdmin");
+  let usuarios = [];
+  try {
+    usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  } catch (e) { usuarios = []; }
+  if (!usuarios.length) {
+    usuariosAdmin.innerHTML = `<div class='text-gray-400 text-lg'>No hay usuarios registrados.</div>`;
+    return;
+  }
+  let tabla = `<div class='overflow-x-auto'><table class='min-w-full bg-[#0a192e] rounded-lg'><thead><tr class='text-[#39FF14] text-left'>
+    <th class='py-2 px-3'>Nombre</th>
+    <th class='py-2 px-3'>Correo</th>
+    <th class='py-2 px-3'>RUT</th>
+    <th class='py-2 px-3'>Región</th>
+    <th class='py-2 px-3'>Comuna</th>
+    <th class='py-2 px-3'>Teléfono</th>
+    <th class='py-2 px-3'>Duoc</th>
+    <th class='py-2 px-3'>Referido</th>
+    <th class='py-2 px-3'>Puntos</th>
+    <th class='py-2 px-3'>Nivel</th>
+  </tr></thead><tbody>`;
+  usuarios.forEach(u => {
+    tabla += `<tr class='border-b border-gray-700 hover:bg-[#12203a]'>
+      <td class='py-2 px-3'>${u.nombre} ${u.apellidoPaterno} ${u.apellidoMaterno}</td>
+      <td class='py-2 px-3'>${u.email}</td>
+      <td class='py-2 px-3'>${u.rut}</td>
+      <td class='py-2 px-3'>${u.region}</td>
+      <td class='py-2 px-3'>${u.comuna}</td>
+      <td class='py-2 px-3'>${u.telefono || '-'}</td>
+      <td class='py-2 px-3'>${u.descuentoDuoc ? 'Sí' : 'No'}</td>
+      <td class='py-2 px-3'>${u.referidoPor || '-'}</td>
+      <td class='py-2 px-3'>${u.puntos ?? 0}</td>
+      <td class='py-2 px-3'>${u.nivel ?? 1}</td>
+    </tr>`;
+  });
+  tabla += `</tbody></table></div>`;
+  usuariosAdmin.innerHTML = tabla;
+}
 
 function renderCatalogo() {
   const catalogo = document.getElementById("catalogoAdmin");

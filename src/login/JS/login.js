@@ -2,9 +2,13 @@
 window.addEventListener('load', fadeInBody);
 // 🔄 Transiciones visuales
 function fadeInBody() {
-  document.body.classList.remove("opacity-0");
-  document.body.classList.add("opacity-100");
+  setTimeout(() => {
+    document.body.style.visibility = "visible";
+    document.body.classList.add("opacity-100");
+    document.body.classList.remove("opacity-0");
+  }, 50); // Espera 50ms para que el navegador pinte el estado inicial
 }
+
 
 function fadeOutAndRedirect(url) {
   document.body.classList.remove("opacity-100");
