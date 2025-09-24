@@ -134,6 +134,13 @@ function verificarLogin() {
     if (btnEditar) btnEditar.classList.add("hidden");
   }
 }
+  // 🔐 Actualizar botones de sesión al cargar la página
+  document.addEventListener("DOMContentLoaded", function() {
+    verificarLogin();
+    if (typeof actualizarBotonesSesionIndex === "function") {
+      actualizarBotonesSesionIndex();
+    }
+  });
 
 document.addEventListener("DOMContentLoaded", verificarLogin);
 

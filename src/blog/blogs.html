@@ -8,7 +8,7 @@
     <!-- Google Fonts: Orbitron y Roboto igual que index -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../assets/stylee.css">
+    <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body onload="fadeInBody()" class="bg-black text-white opacity-0">
     <!-- 🔝 NAVBAR UNIFICADA -->
@@ -27,20 +27,14 @@
             <div class="flex items-center space-x-6 mr-8">
                 <a href="../../index.html" class="hover:text-[#39FF14]">Inicio</a>
                 <div class="relative">
-                    <button id="btnCatalogo" class="hover:text-[#39FF14]">Catálogo ▼</button>
-                    <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
-                        <a href="../../src/tienda/producto.html" class="block hover:text-[#39FF14]">Todos los Productos</a>
-                        <a href="../../src/tienda/sillas.html" class="block hover:text-[#39FF14]">Sillas Gamer</a>
-                        <a href="../../src/tienda/mandos.html" class="block hover:text-[#39FF14]">Mandos</a>
-                        <a href="../../src/tienda/videojuegos.html" class="block hover:text-[#39FF14]">Videojuegos</a>
-                        <a href="../../src/tienda/mouse.html" class="block hover:text-[#39FF14]">Mouse</a>
-                        <a href="../../src/tienda/teclados.html" class="block hover:text-[#39FF14]">Teclados</a>
-                        <a href="../../src/tienda/monitores.html" class="block hover:text-[#39FF14]">Monitores</a>
-                    </div>
+                    <a href="../../src/tienda/producto.html" class="hover:text-[#39FF14] font-bold">Catálogo</a>
                 </div>
                 <a href="blogs.html" class="hover:text-[#39FF14]">Blog</a>
-                <a href="../../src/registro/registro.html" class="hover:text-[#39FF14]">Registro</a>
-                <a href="../../src/login/login.html" class="hover:text-[#39FF14]" id="loginLink">Login</a>
+                <a href="../../src/registro/registro.html" class="hover:text-[#39FF14]" data-btn="registro" id="btnRegistro">Registro</a>
+                <a href="../../src/login/login.html" class="hover:text-[#39FF14]" data-btn="login" id="btnLogin">Login</a>
+                <a href="../../src/admin/home.html" class="hover:text-[#39FF14] hidden" id="btnPanelAdmin">Panel de Admin</a>
+                <a href="../../src/usuario/perfil.html" class="hover:text-[#39FF14] hidden" id="btnVerPerfil">Ver perfil</a>
+                <a href="#" class="hover:text-[#39FF14] hidden" id="btnLogout">Logout</a>
                 <!-- Carrito de compras -->
                 <div class="relative">
                     <button id="cart-btn" class="text-white hover:text-blue-400 relative">
@@ -54,7 +48,9 @@
     <!-- Sección Hero -->
     <section class="hero flex items-center pt-32 pb-12">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-6xl font-extrabold text-[#39FF14] drop-shadow-lg font-titles mb-2">Blog Gamer</h1>
+            
+            <h1 class="text-6xl font-extrabold gradient-text drop-shadow-lg font-['Orbitron'] mb-6 leading-snug">Blog Gamer</h1>
+
             <p class="text-xl text-secondary mb-8 max-w-3xl mx-auto mt-10">
                 Las últimas noticias, reviews y guías del mundo gaming. 
                 Todo lo que necesitas saber para estar al día.
@@ -80,7 +76,9 @@
     </section>
 
     <!-- Posts Destacados -->
-    <section class="py-20 section-bg-dark">
+    <section class="py-20 bg-gradient-to-br from-[#030712] via-[#050b1e] to-[#0a1f44] text-white">
+
+
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Posts Destacados</h2>
             
@@ -137,7 +135,8 @@
     </section>
 
     <!-- Todos los Posts -->
-    <section class="py-20">
+    <section class="py-20 bg-gradient-to-br from-[#020409] via-[#030712] to-[#050b1e] text-white">
+
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center mb-12 gradient-text">Todos los Posts</h2>
             
@@ -265,32 +264,33 @@
 
             <!-- Botón Cargar Más -->
             <div class="text-center mt-12">
-                <button class="btn-primary" id="load-more-btn">Cargar Más Posts</button>
+                <button id="load-more-btn" class="btn-primary px-8 py-3 font-main">Cargar más posts</button>
             </div>
         </div>
     </section>
 
     <!-- Newsletter -->
-    <section class="py-20 section-bg-dark">
+ <!-- Newsletter -->
+        <section class="py-20 section-bg-dark fade-section admin-table-bg">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl font-bold mb-6 gradient-text">Suscríbete al Newsletter</h2>
-            <p class="text-secondary mb-8 max-w-2xl mx-auto">
-                Recibe las últimas noticias gaming, reviews exclusivas y ofertas especiales 
-                directamente en tu correo.
+            <h2 class="text-4xl font-bold mb-6 gradient-text font-titles">¡No Te Pierdas las Ofertas!</h2>
+            <p class="text-secondary mb-8 max-w-2xl mx-auto font-main">
+            Suscríbete y recibe notificaciones de nuevos productos, ofertas exclusivas 
+            y descuentos especiales para la comunidad Level-Up.
             </p>
-            
+
             <form id="newsletter-form" class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
-                <input 
-                    type="email" 
-                    name="email"
-                    placeholder="Tu correo electrónico"
-                    class="form-input flex-1"
-                    required
-                >
-                <button type="submit" class="btn-primary px-8">Suscribirse</button>
+            <input 
+                type="email" 
+                name="email"
+                placeholder="Tu correo electrónico"
+                class="form-input flex-1 font-main"
+                required
+            >
+            <button type="submit" class="btn-primary px-8 py-3 font-main">Suscribirse</button>
             </form>
         </div>
-    </section>
+        </section>
 
         <!-- 🔻 FOOTER UNIFICADO -->
         <footer class="bg-[#0a192e] text-white mt-24 py-10 px-6">

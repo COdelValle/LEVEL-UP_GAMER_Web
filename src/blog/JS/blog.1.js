@@ -9,6 +9,66 @@ window.addEventListener('load', fadeInBody);
 // ====================================
 // BLOGS.JS - Funcionalidad específica para la página de blogs
 // ====================================
+// CONTROL DE NAVBAR SEGÚN LOGIN/ROL
+// ====================================
+function verificarLoginNavbar() {
+    const logueado = localStorage.getItem("logueado");
+    const rol = localStorage.getItem("rol");
+    const btnLogin = document.getElementById("btnLogin");
+    const btnRegistro = document.getElementById("btnRegistro");
+    const btnPanelAdmin = document.getElementById("btnPanelAdmin");
+    const btnVerPerfil = document.getElementById("btnVerPerfil");
+    const btnLogout = document.getElementById("btnLogout");
+
+    // Mostrar todos por defecto
+    if (btnLogin) btnLogin.classList.remove("hidden");
+    if (btnRegistro) btnRegistro.classList.remove("hidden");
+    if (btnPanelAdmin) btnPanelAdmin.classList.add("hidden");
+    if (btnVerPerfil) btnVerPerfil.classList.add("hidden");
+    if (btnLogout) btnLogout.classList.add("hidden");
+
+    if (logueado === "true") {
+        // Ocultar login y registro
+        if (btnLogin) btnLogin.classList.add("hidden");
+        if (btnRegistro) btnRegistro.classList.add("hidden");
+        // Mostrar logout
+        if (btnLogout) btnLogout.classList.remove("hidden");
+        // Mostrar solo el botón correspondiente
+        if (rol === "admin") {
+            if (btnPanelAdmin) btnPanelAdmin.classList.remove("hidden");
+            if (btnVerPerfil) btnVerPerfil.classList.add("hidden");
+        } else {
+            if (btnPanelAdmin) btnPanelAdmin.classList.add("hidden");
+            if (btnVerPerfil) btnVerPerfil.classList.remove("hidden");
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", verificarLoginNavbar);
+
+// Logout funcionalidad para blogs
+const btnLogout = document.getElementById("btnLogout");
+if (btnLogout) {
+    btnLogout.addEventListener("click", function(e) {
+        e.preventDefault();
+        // Mensaje visual de logout
+        let msg = document.createElement('div');
+        msg.className = 'logout-message';
+        msg.textContent = 'Sesión cerrada correctamente. ¡Hasta pronto!';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.classList.add('show'), 50);
+        // Fade out body y logout tras 2s
+        setTimeout(() => {
+            document.body.classList.remove("opacity-100");
+            document.body.classList.add("opacity-0");
+            setTimeout(() => {
+                localStorage.clear();
+                window.location.href = "../../index.html";
+            }, 600);
+        }, 2000);
+    });
+}
+// ====================================
 
 // Esperar a que cargue el DOM
 document.addEventListener('DOMContentLoaded', function() {

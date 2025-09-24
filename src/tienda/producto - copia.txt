@@ -23,26 +23,24 @@
             </a>
             <!-- Links de navegación -->
             <div class="flex-1 flex items-center justify-end">
-               <div class="flex items-center space-x-6 mr-8" id="navbar-buttons">
-        <a href="../../index.html" class="hover:text-[#39FF14] font-main">Inicio</a>
-        <div class="relative">
-            <button id="btnCatalogo" class="hover:text-[#39FF14] font-main">Catálogo ▼</button>
-            <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
-            <a href="../../src/tienda/producto.html" class="block hover:text-[#39FF14] font-main">Todos los Productos</a>
-            <a href="../../src/tienda/sillas.html" class="block hover:text-[#39FF14] font-main">Sillas Gamer</a>
-            <a href="../../src/tienda/mandos.html" class="block hover:text-[#39FF14] font-main">Mandos</a>
-            <a href="../../src/tienda/videojuegos.html" class="block hover:text-[#39FF14] font-main">Videojuegos</a>
-            <a href="../../src/tienda/mouse.html" class="block hover:text-[#39FF14] font-main">Mouse</a>
-            <a href="../../src/tienda/teclados.html" class="block hover:text-[#39FF14] font-main">Teclados</a>
-            <a href="../../src/tienda/monitores.html" class="block hover:text-[#39FF14] font-main">Monitores</a>
-            </div>
-        </div>
-        <a href="../../src/blog/blogs.html" class="hover:text-[#39FF14] font-main">Blog</a>
-        <a href="../../src/registro/registro.html" class="hover:text-[#39FF14] font-main" id="registroLink">Registro</a>
-        <a href="../../src/login/login.html" class="hover:text-[#39FF14] font-main" id="loginLink">Login</a>
-        <a href="../../src/admin/home.html" class="hover:text-[#39FF14] font-main hidden" id="perfilLink">Panel de Admin</a>
-        <a href="#" class="hover:text-red-500 font-main hidden" id="logoutLink">Cerrar sesión</a>
-        </div>      
+                <div class="flex items-center space-x-6 mr-8">
+                    <a href="../../index.html" class="hover:text-[#39FF14] font-main">Inicio</a>
+                    <div class="relative">
+                        <button id="btnCatalogo" class="hover:text-[#39FF14] font-main">Catálogo ▼</button>
+                        <div id="menuCatalogo" class="absolute hidden bg-[#0a192e] mt-2 rounded-lg shadow-lg p-4 space-y-2 z-50">
+                            <a href="../../src/tienda/producto.html" class="block hover:text-[#39FF14] font-main">Todos los Productos</a>
+                            <a href="../../src/tienda/sillas.html" class="block hover:text-[#39FF14] font-main">Sillas Gamer</a>
+                            <a href="../../src/tienda/mandos.html" class="block hover:text-[#39FF14] font-main">Mandos</a>
+                            <a href="../../src/tienda/videojuegos.html" class="block hover:text-[#39FF14] font-main">Videojuegos</a>
+                            <a href="../../src/tienda/mouse.html" class="block hover:text-[#39FF14] font-main">Mouse</a>
+                            <a href="../../src/tienda/teclados.html" class="block hover:text-[#39FF14] font-main">Teclados</a>
+                            <a href="../../src/tienda/monitores.html" class="block hover:text-[#39FF14] font-main">Monitores</a>
+                        </div>
+                    </div>
+                    <a href="../../src/blog/blogs.html" class="hover:text-[#39FF14] font-main">Blog</a>
+                    <a href="../../src/registro/registro.html" class="hover:text-[#39FF14] font-main">Registro</a>
+                    <a href="../../src/login/login.html" class="hover:text-[#39FF14] font-main" id="loginLink">Login</a>
+                </div>
             </div>
             <!-- Carrito de compras -->
             <div class="flex items-center space-x-4">
@@ -79,7 +77,7 @@
     </section>
 
 <!-- Filtros y Categorías -->
-<section class="py-20 bg-gradient-to-br from-[#020409] via-[#030712] to-[#050b1e] text-white">
+<section class="py-12 bg-gray-900">
   <div class="container mx-auto px-4">
     <!-- Categorías -->
     <div class="mb-8">
@@ -220,64 +218,10 @@
     &copy; 2025 Level-Up Gamer. Todos los derechos reservados.
   </div>
 
-  <!-- 💬 BOTÓN FLOTANTE DE WHATSAPP -->
-<a href="https://wa.me/56912345678" target="_blank" class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg z-50">
-  💬 Soporte
-</a>
 
     <!-- JavaScript -->
         <script src="../../assets/script.js"></script>
-
-                <script src="JS/producto.js"></script>
-                <script>
-                // Unificada: Actualiza visibilidad de botones de sesión en navbar de producto.html
-                function actualizarNavbarProducto() {
-                    const loginBtn = document.getElementById("loginLink");
-                    const registroBtn = document.getElementById("registroLink");
-                    const perfilBtn = document.getElementById("perfilLink");
-                    const logoutBtn = document.getElementById("logoutLink");
-                    const logueado = localStorage.getItem("logueado");
-                    const rol = localStorage.getItem("rol");
-                    if (loginBtn) loginBtn.classList.remove("hidden");
-                    if (registroBtn) registroBtn.classList.remove("hidden");
-                    if (perfilBtn) perfilBtn.classList.add("hidden");
-                    if (logoutBtn) logoutBtn.classList.add("hidden");
-                    if (logueado === "true" && rol === "admin") {
-                        if (perfilBtn) {
-                            perfilBtn.classList.remove("hidden");
-                            perfilBtn.textContent = "Panel de Admin";
-                            perfilBtn.href = "../admin/home.html";
-                        }
-                        if (loginBtn) loginBtn.classList.add("hidden");
-                        if (registroBtn) registroBtn.classList.add("hidden");
-                        if (logoutBtn) logoutBtn.classList.remove("hidden");
-                    } else if (logueado === "true" && rol === "usuario") {
-                        if (perfilBtn) {
-                            perfilBtn.classList.remove("hidden");
-                            perfilBtn.textContent = "Ver Perfil";
-                            perfilBtn.href = "../usuario/perfilUsuario.html";
-                        }
-                        if (loginBtn) loginBtn.classList.add("hidden");
-                        if (registroBtn) registroBtn.classList.add("hidden");
-                        if (logoutBtn) logoutBtn.classList.remove("hidden");
-                    }
-                }
-                document.addEventListener("DOMContentLoaded", function() {
-                    actualizarNavbarProducto();
-                    // Logout robusto
-                    const logoutBtn = document.getElementById("logoutLink");
-                    if (logoutBtn) {
-                        logoutBtn.addEventListener("click", function(e) {
-                            e.preventDefault();
-                            localStorage.removeItem("usuarioLogeado");
-                            localStorage.removeItem("logueado");
-                            localStorage.removeItem("rol");
-                            actualizarNavbarProducto();
-                            window.location.href = "../../index.html";
-                        });
-                    }
-                });
-                </script>
+        <script src="JS/producto.js"></script>
 
     <!-- Estilos eliminados: ahora todo está en style.css -->
 

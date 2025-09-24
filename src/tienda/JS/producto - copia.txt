@@ -1,64 +1,18 @@
-const filtroCategoria = document.getElementById("filtro-categoria");
-
-// 🔹 Lógica de sesión para navbar
-const logueado = localStorage.getItem("logueado");
-const rol = localStorage.getItem("rol");
-
-const loginBtn = document.getElementById("loginLink");
-const registroBtn = document.getElementById("registroLink");
-let perfilBtn = document.getElementById("perfilLink");
-
-if (logueado === "true") {
-  loginBtn?.classList.add("hidden");
-  registroBtn?.classList.add("hidden");
-
-if (!perfilBtn) {
-  perfilBtn = document.createElement("a");
-  perfilBtn.id = "perfilLink";
-  perfilBtn.href = rol === "admin"
-    ? "../../src/admin/home.html"
-    : "../../src/usuario/perfil.html";
-  perfilBtn.textContent = rol === "admin" ? "Panel de Admin" : "Ver Perfil";
-  perfilBtn.className = "nav-btn hover:text-[#39FF14] font-main";
-  document.getElementById("navbar-buttons")?.appendChild(perfilBtn);
-} else {
-  perfilBtn.classList.remove("hidden");
-  perfilBtn.href = rol === "admin"
-    ? "../../src/admin/home.html"
-    : "../../src/usuario/perfil.html";
-  perfilBtn.textContent = rol === "admin" ? "Panel de Admin" : "Ver Perfil";
-}
-
-  // 🔸 Fade-out al hacer clic en Panel de Admin
-  perfilBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.body.classList.remove("opacity-100");
-    document.body.classList.add("opacity-0");
-    setTimeout(() => {
-      window.location.href = perfilBtn.href;
-    }, 400); // duración igual a la transición CSS
-  });
-
-} else {
-  loginBtn?.classList.remove("hidden");
-  registroBtn?.classList.remove("hidden");
-  perfilBtn?.classList.add("hidden");
-}
-
-// 🔹 Fade-in del body al cargar la página
+// Fade-in del body al cargar la página (antes estaba inline en producto.html)
 function fadeInBody() {
-  document.body.classList.remove("opacity-0");
-  document.body.classList.add("opacity-100");
+    document.body.classList.remove("opacity-0");
+    document.body.classList.add("opacity-100");
 }
-window.addEventListener('load', fadeInBody);
 
-// 🔹 Utilidad debounce
+// Ejecutar fadeInBody al cargar la página
+window.addEventListener('load', fadeInBody);
+// Utilidad debounce para evitar múltiples llamadas rápidas
 function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
 }
 
 // Utilidad showMessage para mostrar mensajes flotantes
