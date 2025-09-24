@@ -183,3 +183,52 @@ document.getElementById("btnLogout").addEventListener("click", () => {
     }, 600);
   }, 2000);
 });
+
+// Función para cargar productos desde JSON
+async function loadProducts() {
+    try {
+        const response = await fetch('src/assets/json/bd_productos.json');
+        const products = await response.json();
+
+        const container = document.getElementById('products-container');
+        container.innerHTML = ''; // limpiar contenido previo
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = "min-w-[250px] max-w-[250px] bg-gray-900 p-4 rounded-xl shadow-lg text-center flex flex-col justify-between";
+
+            productCard.innerHTML = `
+                <img src="${product.imagen_url}" alt="${product.nombre}" class="w-full h-48 object-cover rounded mb-4">
+                <h4 class="text-lg font-bold">${product.nombre}</h4>
+                <p class="text-gray-400">${product.precio}</p>
+                <button class="mt-4 px-4 py-2 bg-[#1E90FF] hover:bg-blue-700 rounded-lg"
+                    onclick="addToCartIndex({codigo: '${product.codigo}', nombre: '${product.nombre}', precio: '${product.precio}', imagen: '${product.imagen_url}'})">
+                    Agregar al carrito
+                </button>
+            `;
+
+            container.appendChild(productCard);
+        });
+
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+    }
+}
+
+function addToCartIndex(product) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const exists = cart.find(item => item.codigo === product.codigo);
+
+    if (exists) {
+        alert(`${product.nombre} ya está en el carrito`);
+        return;
+    }
+
+    cart.push({...product, quantity: 1});
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${product.nombre} agregado al carrito`);
+}
+
+
+// Llamar al cargar la página
+window.addEventListener('DOMContentLoaded', loadProducts);
