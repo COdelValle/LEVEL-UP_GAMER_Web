@@ -1,5 +1,3 @@
-# 🎮 Level-Up Gamer
-
 **Level-Up Gamer** — Tienda online chilena especializada en productos para gamers.  
 Ofrecemos consolas, periféricos, computadores, sillas ergonómicas y merchandising, con despacho a todo el país.
 
