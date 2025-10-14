@@ -1,99 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Usuarios - Level-Up Gamer Admin</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-<link href="../assets/estilos.css" rel="stylesheet">
-<style>
-    .admin-sidebar { background: linear-gradient(135deg, rgba(30,144,255,0.1), rgba(57,255,20,0.05)); border-right:1px solid rgba(30,144,255,0.3); min-height:100vh; }
-    .admin-nav-link { color: #ccc; text-decoration:none; padding:.75rem 1rem; display:block; border-radius:.5rem; margin-bottom:.5rem; transition:.3s; }
-    .admin-nav-link:hover { background: rgba(30,144,255,0.2); color:#1E90FF; }
-    .admin-nav-link.active { background: #1E90FF; color:white; }
-    .gradient-text { background: linear-gradient(90deg,#1E90FF,#39FF14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family:'Orbitron',sans-serif; }
-    .main-content { padding: 2rem; }
-    .btn-new-user { margin-bottom: 1rem; }
-    .btn-group-table {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-    .btn-group-table .btn {
-        width: 100%;
-        text-align: center;
-        white-space: nowrap;
-    }
-
-    /* Columnas ocultas según resolución */
-    @media (max-width: 1286px) {
-        .d-hide-md { display: none !important; } /* Oculta columnas secundarias en pantallas medias */
-    }
-    @media (max-width: 767px) {
-        .d-hide-sm { display: none !important; } /* Oculta columnas secundarias en móviles */
-        .table td, .table th { font-size: 0.85rem; padding: 0.35rem; }
-    }
-
-    /* Tabla responsive */
-    .table-responsive {
-        overflow-x: auto;
-        width: 100%;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Level-Up Gamer Admin</title>
+    
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/stylee.css" rel="stylesheet">
 </head>
 <body>
-
-<header class="admin-header">
-    <div class="d-flex justify-content-between align-items-center">
-        <h3 class="gradient-text mb-0">Level-Up Gamer - Admin Panel</h3>
-        <div>
-            <span class="text-secondary">Bienvenido, <span id="admin-name">Admin</span></span>
-            <button class="btn btn-secondary btn-sm" onclick="logout()">🚪 Cerrar Sesión</button>
+    <!-- Admin Header (idéntico a home.html) -->
+    <header class="admin-header" style="background:rgba(0,0,30,0.99);padding:1rem 2rem;border-bottom:1.5px solid #1E90FF33;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="../../index.html" class="flex items-center space-x-2" style="text-decoration:none;">
+                    <img src="../assets/img/LevelUpGamer.png" alt="Logo" class="h-10" style="height:2.5rem;">
+                    <span class="logo-gradient text-2xl font-extrabold font-titles">Level-Up Gamer</span>
+                    <span class="text-secondary font-main text-lg align-middle ml-2">- Admin Panel</span>
+                </a>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-secondary">Bienvenido, <span id="admin-name">Admin</span></span>
+                <button class="btn btn-secondary btn-sm" id="logoutBtn">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
         </div>
+    </header>
+
+    <div class="d-flex">
+        <!-- Sidebar (idéntico a home.html) -->
+        <nav class="admin-sidebar" style="width: 260px;background:rgba(0,0,30,0.99);border-right:1px solid #1E90FF33;min-height:100vh;">
+            <div class="p-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="home.html" class="admin-nav-link">📊 Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="nuevo_producto.html" class="admin-nav-link">➕ Nuevo Producto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="home.html#products-section" class="admin-nav-link">📦 Gestionar Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="home.html#orders-section" class="admin-nav-link">🛒 Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="usuarios.html" class="admin-nav-link active">👥 Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="../../index.html" class="admin-nav-link">🏠 Ir a la Tienda</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content flex-grow-1">
+            <!-- Header Section -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="gradient-text mb-3">Gestión de Usuarios</h2>
+                            <p class="text-secondary">Administra los usuarios registrados en la plataforma</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="addNewUser()">
+                            Nuevo Usuario
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="total-users-count">0</div>
+                        <div class="text-secondary">Total Usuarios</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="active-users-count">0</div>
+                        <div class="text-secondary">Usuarios Activos</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="new-users-month">0</div>
+                        <div class="text-secondary">Nuevos Este Mes</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="premium-users">0</div>
+                        <div class="text-secondary">Usuarios Premium</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Management -->
+            <div class="row g-4">
+                <!-- Search and Filters -->
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label">Buscar usuario</label>
+                                    <input type="text" class="form-control" id="search-input" placeholder="Buscar por nombre, correo, RUN..." onkeyup="searchUsers(this.value)">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label">Filtrar por tipo</label>
+                                    <select class="form-control" id="filter-tipo" onchange="filterByTipo(this.value)">
+                                        <option value="todos">Todos los tipos</option>
+                                        <option value="Cliente">Cliente</option>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Vendedor">Vendedor</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button class="btn btn-secondary w-100" onclick="clearFilters()">
+                                        Limpiar filtros
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="col-12 col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
+                                <h5 class="gradient-text mb-0">Lista de Usuarios</h5>
+                                <span class="text-secondary" id="users-count">0 usuarios</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>RUN</th>
+                                            <th>Nombre</th>
+                                            <th class="d-none d-lg-table-cell">Apellidos</th>
+                                            <th class="d-none d-md-table-cell">Correo</th>
+                                            <th class="d-none d-xl-table-cell">Fecha Nac.</th>
+                                            <th class="d-none d-sm-table-cell">Tipo Usuario</th>
+                                            <th class="d-none d-xl-table-cell">Región</th>
+                                            <th class="d-none d-xl-table-cell">Comuna</th>
+                                            <th class="d-none d-xxl-table-cell">Dirección</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table">
+                                        <tr>
+                                            <td colspan="10" class="text-center text-secondary">
+                                                Cargando usuarios...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="col-12 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="gradient-text mb-3">Actividad Reciente</h5>
+                            <div id="user-activity">
+                                <div class="activity-item">
+                                    <div class="text-secondary">Cargando actividad...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-</header>
 
-<div class="d-flex">
-    <!-- Sidebar -->
-    <nav class="admin-sidebar" style="width:250px;">
-        <div class="p-3">
-            <ul class="nav flex-column">
-                <li><a href="../home.html" class="admin-nav-link">📊 Dashboard</a></li>
-                <li><a href="#" class="admin-nav-link active">👥 Usuarios</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-content flex-grow-1">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="gradient-text">Lista de Usuarios</h2>
-            <button class="btn btn-success btn-new-user" onclick="window.location.href='agregar_usuarios.html'">➕ Nuevo Usuario</button>
-        </div>
-
-        <div class="table-responsive">
-            <table class="table table-dark table-striped table-responsive">
-                <thead>
-                    <tr>
-                        <th>RUN</th>
-                        <th>Nombre</th>
-                        <th class="d-hide-md d-hide-sm">Apellidos</th>
-                        <th class="d-hide-md d-hide-sm">Correo</th>
-                        <th class="d-hide-md d-hide-sm">Fecha Nac.</th>
-                        <th class="d-hide-md d-hide-sm">Tipo Usuario</th>
-                        <th class="d-hide-md d-hide-sm">Región</th>
-                        <th class="d-hide-md d-hide-sm">Comuna</th>
-                        <th class="d-hide-md d-hide-sm">Dirección</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="users-table"></tbody>
-            </table>
-        </div>
-
-    </main>
-</div>
-
-<script src="JS/usuarios.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/script.js"></script>
+    <script src="JS/usuarios.js"></script>
 </body>
 </html>
