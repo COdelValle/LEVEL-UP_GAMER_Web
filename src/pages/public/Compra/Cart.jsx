@@ -1,5 +1,5 @@
-import { useCart } from '../context/CartContext';
-import { formatPrice } from '../utils/formatters';
+import { useCart } from '../../../context/CartContext';
+import { formatPrice } from '../../../utils/formatters';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
