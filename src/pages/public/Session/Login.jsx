@@ -24,7 +24,7 @@ const Login = () => {
 
     // Simular autenticación
     setTimeout(() => {
-      if (formData.email === 'admin' && formData.password === 'levelup2024') {
+      if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
         login({ username: 'Admin', role: 'admin' });
         navigate('/admin');
       } else {
