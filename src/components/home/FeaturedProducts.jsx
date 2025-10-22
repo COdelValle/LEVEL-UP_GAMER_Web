@@ -7,7 +7,7 @@ const FeaturedProducts = () => {
       nombre: "PlayStation 5",
       precio: 699990,
       categoria: "consolas",
-      imagen: "/assets/img/PlayStation5.png",
+      imagen: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
       descripcion: "La última consola de Sony con tecnología de vanguardia",
       stock: 15,
       destacado: true,
@@ -19,27 +19,11 @@ const FeaturedProducts = () => {
       }
     },
     {
-      id: 2,
-      nombre: "Nintendo Switch Lite",
-      precio: 249990,
-      categoria: "consolas",
-      imagen: "/assets/img/SwitchLite.png",
-      descripcion: "Consola portátil perfecta para gaming on-the-go",
-      stock: 25,
-      destacado: false,
-      nuevo: true,
-      especificaciones: {
-        "Pantalla": "5.5 pulgadas",
-        "Batería": "3-7 horas",
-        "Colores": "Disponible en múltiples colores"
-      }
-    },
-    {
       id: 3,
       nombre: "PC Gamer ASUS ROG Strix",
       precio: 1299990,
       categoria: "pc-gamers",
-      imagen: "/assets/img/AsusRogStrix.png",
+      imagen: "https://dlcdnwebimgs.asus.com/gain/3C22B609-1A38-4660-ADF5-8DEB93CA5F3D",
       descripcion: "Potente PC gaming para los más exigentes",
       stock: 8,
       destacado: true,
@@ -51,27 +35,11 @@ const FeaturedProducts = () => {
       }
     },
     {
-      id: 4,
-      nombre: "Audífonos HyperX Cloud II",
-      precio: 89990,
-      categoria: "perifericos",
-      imagen: "/assets/img/HyperXCloud2.png",
-      descripcion: "Audífonos gaming con sonido surround 7.1",
-      stock: 30,
-      destacado: false,
-      nuevo: true,
-      especificaciones: {
-        "Conectividad": "USB y 3.5mm",
-        "Micrófono": "Desmontable con cancelación de ruido",
-        "Compatibilidad": "PC, PS4, PS5, Xbox, Switch"
-      }
-    },
-    {
       id: 5,
       nombre: "Silla Gaming SecretLab Titan",
       precio: 499990,
       categoria: "sillas",
-      imagen: "/assets/img/SecretLabTitan.png",
+      imagen: "https://images.secretlab.co/turntable/tr:n-w_750/R22PU-Stealth_02.jpg",
       descripcion: "Silla gaming ergonómica de alta gama",
       stock: 12,
       destacado: true,
@@ -87,8 +55,8 @@ const FeaturedProducts = () => {
   return (
     <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4 gradient-text font-orbitron">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-bold mb-3 gradient-text font-orbitron">
             Productos Destacados
           </h2>
           <p className="text-xl text-gray-300">
@@ -96,11 +64,13 @@ const FeaturedProducts = () => {
           </p>
         </div>
 
-        <div className="text-center py-12">
+        <div className="text-center">
           <CardCarrusel products={Products} />
+          {/*
           <p className="text-gray-400 text-lg">
             Próximamente productos destacados
           </p>
+          */}
         </div>
       </div>
     </section>
