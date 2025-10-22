@@ -1,11 +1,13 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import { formatPrice } from '../utils/formatters';
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { getProductById, loading } = useProducts();
   const product = getProductById(id);
+  const { addToCart } = useCart();
 
   if (loading) {
     return (
@@ -83,12 +85,13 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <button
-                    className="btn-primary flex-1 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                    disabled={product.stock === 0}
-                  >
-                    🛒 Agregar al Carrito
-                  </button>
+                    <button
+                      onClick={() => addToCart({ ...product, quantity: 1 })}
+                      className="btn-primary flex-1 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={product.stock === 0}
+                    >
+                      🛒 Agregar al Carrito
+                    </button>
                   <button className="btn-secondary px-6 py-4 text-lg">
                     ❤️
                   </button>

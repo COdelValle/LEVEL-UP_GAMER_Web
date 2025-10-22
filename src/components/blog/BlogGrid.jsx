@@ -65,7 +65,11 @@ const BlogGrid = ({ activeCategory = 'todas', searchTerm = '' }) => {
     <>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {filteredPosts.slice(0, visiblePosts).map(post => (
-          <BlogCard key={post.id} post={post} />
+          <div key={post.id} className="p-1 rounded-2xl bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10">
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-gray-800 shadow-xl hover:shadow-[0_12px_40px_rgba(99,102,241,0.12)] transition-shadow">
+              <BlogCard post={post} />
+            </div>
+          </div>
         ))}
       </div>
 
@@ -73,7 +77,7 @@ const BlogGrid = ({ activeCategory = 'todas', searchTerm = '' }) => {
         <div className="text-center">
           <button 
             onClick={loadMore}
-            className="bg-gradient-to-r from-blue-500 to-green-500 text-black px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity"
+            className="bg-gradient-to-r from-blue-500 to-pink-500 text-black px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity"
           >
             Cargar más posts
           </button>

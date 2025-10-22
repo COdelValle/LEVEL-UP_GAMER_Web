@@ -1,7 +1,14 @@
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../../utils/formatters';
+import { useCart } from '../../context/CartContext';
 
 const ProductCard = ({ product, className = "" }) => {
+  const { addToCart } = useCart();
+
+  const handleAdd = () => {
+    addToCart({ ...product, quantity: 1 });
+  }
+
   return (
     <div className={`card-gaming p-6 group hover:scale-105 transition-all duration-300 ${className}`}>
       <div className="relative overflow-hidden rounded-lg mb-4">
@@ -53,6 +60,7 @@ const ProductCard = ({ product, className = "" }) => {
           Ver Detalles
         </Link>
         <button
+          onClick={handleAdd}
           className="btn-secondary px-4 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed min-w-[48px]"
           disabled={product.stock === 0}
         >
