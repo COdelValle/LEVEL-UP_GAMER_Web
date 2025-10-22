@@ -1,0 +1,33 @@
+:root {
+  --color-negro: #000000;
+  --color-blanco: #FFFFFF;
+  --color-azul-oscuro: #0a192f;
+  --color-azul-electrico: #1E90FF;
+  --color-azul-claro: #39cfff;
+  --color-gris-claro: #D3D3D3;
+  --color-verde-neon: #39FF14;
+  
+  --font-principal: 'Roboto', sans-serif;
+  --font-encabezados: 'Orbitron', sans-serif;
+  
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-principal);
+  background-color: var(--color-negro);
+  color: var(--color-blanco);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-encabezados);
+  font-weight: 600;
+}
