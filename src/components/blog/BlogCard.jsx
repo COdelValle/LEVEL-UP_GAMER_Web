@@ -12,7 +12,7 @@ const BlogCard = ({ post }) => {
         <div className="flex items-center justify-between mb-3">
           <span className="category-badge capitalize">{post.category}</span>
           <span className="text-gray-400 text-sm">
-            {new Date(post.date).toLocaleDateString('es-CL')}
+            {post.date}
           </span>
         </div>
         <h3 className="text-xl font-bold mb-3 text-white font-orbitron">
@@ -24,7 +24,7 @@ const BlogCard = ({ post }) => {
         <div className="flex items-center justify-between">
           <Link 
             to={`/blog/${post.id}`}
-            className="bg-gradient-to-r from-azul-electrico to-verde-neon text-black px-4 py-2 rounded-lg font-bold hover:opacity-90 transition-opacity"
+            className="bg-gradient-to-r from-blue-500 to-green-500 text-black px-4 py-2 rounded-lg font-bold hover:opacity-90 transition-opacity"
           >
             Leer Más →
           </Link>

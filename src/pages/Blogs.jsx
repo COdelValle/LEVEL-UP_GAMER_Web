@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import BlogGrid from '../components/blog/BlogGrid';
-import { categories } from '../../data/blogData';
+
+// DATOS DIRECTOS - elimina la importación
+const categories = [
+  { id: 'todas', name: 'Todas las Categorías' },
+  { id: 'guias', name: 'Guías' },
+  { id: 'reviews', name: 'Reviews' },
+  { id: 'noticias', name: 'Noticias' },
+  { id: 'tutoriales', name: 'Tutoriales' }
+];
 
 const Blogs = () => {
   const [activeCategory, setActiveCategory] = useState('todas');
