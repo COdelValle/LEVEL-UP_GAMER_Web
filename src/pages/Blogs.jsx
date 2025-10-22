@@ -15,8 +15,8 @@ const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-28 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent font-orbitron">

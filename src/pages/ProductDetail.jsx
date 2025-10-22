@@ -31,8 +31,8 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black pt-24 pb-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="card-gaming p-8">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Imagen del producto */}

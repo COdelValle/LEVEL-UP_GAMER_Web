@@ -1,7 +1,7 @@
 const Nosotros = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black pt-28 pb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-6 gradient-text font-orbitron">
