@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useProducts } from '../../hooks/useProducts';
+import { useAuth } from '../../../context/AuthContext';
+import { useProducts } from '../../../hooks/useProducts';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const NuevoProducto = () => {

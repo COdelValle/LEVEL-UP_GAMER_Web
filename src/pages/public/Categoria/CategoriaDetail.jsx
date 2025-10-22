@@ -1,4 +1,4 @@
-const Categorias = () =>{
+export const CategoriaDetail = () =>{
     return(
         <>
         </>

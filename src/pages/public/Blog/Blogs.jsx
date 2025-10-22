@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import BlogGrid from '../components/blog/BlogGrid';
+import BlogGrid from '../../../components/blog/BlogGrid';
 
 // DATOS DIRECTOS - elimina la importación
 const categories = [
