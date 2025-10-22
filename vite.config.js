@@ -8,16 +8,23 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/setupTests.js"
   },
+  root: '.',
   server: {
     port: 5175,
     host: true // Permite acceso desde la red
   },
-  // Esta configuración es crucial para SPA
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
       input: {
         main: './index.html'
       }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': '/src'
     }
   }
 })

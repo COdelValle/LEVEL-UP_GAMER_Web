@@ -2,8 +2,14 @@ import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
-    <section className="hero min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-black bg-opacity-60" />
+    <section 
+      className="hero min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
+      style={{ backgroundImage: "url('/assets/img/BackgroundIndex1.jpg')" }}
+    >
+      <div 
+        className="absolute inset-0" 
+        style={{ backgroundColor: 'rgba(2,20,50,0.55)' }}
+      />
       
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 gradient-text font-orbitron animate-pulse">
