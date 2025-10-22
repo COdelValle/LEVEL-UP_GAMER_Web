@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const Login = () => {
 
     // Simular autenticación
     setTimeout(() => {
-      if (formData.email === 'admin' && formData.password === 'levelup2024') {
+      if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
         login({ username: 'Admin', role: 'admin' });
         navigate('/admin');
       } else {

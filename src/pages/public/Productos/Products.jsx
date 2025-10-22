@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import ProductFilter from '../components/products/ProductFilter';
-import ProductGrid from '../components/products/ProductGrid';
+import ProductFilter from '../../../components/products/ProductFilter';
+import ProductGrid from '../../../components/products/ProductGrid';
 
 const Products = () => {
   const [filters, setFilters] = useState({});
