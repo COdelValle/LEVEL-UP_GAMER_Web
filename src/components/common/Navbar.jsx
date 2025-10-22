@@ -37,7 +37,7 @@ const Navbar = () => {
               alt="Level-Up Gamer" 
               className="h-10"
             />
-            <span className="logo-gradient text-2xl font-bold font-orbitron">
+            <span className="logo-gradient text-2xl font-bold font-orbitron bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-green-400 to-cyan-400 animate-gradient-x">
               Level-Up Gamer
             </span>
           </Link>
@@ -72,6 +72,13 @@ const Navbar = () => {
 
           {/* Botones Desktop */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Cart Icon */}
+            <Link to="/cart" className="relative">
+              <span className="text-2xl">🛒</span>
+              <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                {getTotalItems()}
+              </span>
+            </Link>
             {isAuthenticated ? (
               <>
                 {user?.role === 'admin' && (

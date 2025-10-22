@@ -99,8 +99,8 @@ const BlogDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-24 pb-12">
-      <nav className="container mx-auto px-4 mb-8 text-gray-400">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black pt-28 pb-12">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-gray-400">
         <Link to="/" className="hover:text-green-400 transition-colors">Inicio</Link>
         <span className="mx-2">/</span>
         <Link to="/blogs" className="hover:text-green-400 transition-colors">Blog</Link>

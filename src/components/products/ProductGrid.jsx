@@ -7,6 +7,16 @@ const ProductGrid = ({ filters = {} }) => {
   const applyFilters = (products) => {
     let filtered = [...products];
 
+    // Filtrar por búsqueda
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.nombre.toLowerCase().includes(searchTerm) ||
+        product.descripcion.toLowerCase().includes(searchTerm) ||
+        product.categoria.toLowerCase().includes(searchTerm)
+      );
+    }
+
     // Filtrar por categoría
     if (filters.category) {
       filtered = filtered.filter(product => product.categoria === filters.category);

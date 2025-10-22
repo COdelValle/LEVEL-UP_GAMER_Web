@@ -13,6 +13,7 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Blogs = lazy(() => import('./pages/Blogs'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
+const Cart = lazy(() => import('./pages/Cart'));
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const AppRoutes = () => {
           <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
           <Route path="/registro" element={<PageTransition><Register /></PageTransition>} />
           <Route path="/blog/:id" element={<PageTransition><BlogDetail /></PageTransition>} />
+          <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
           
           {/* Rutas temporales - redirigen a páginas existentes */}
           <Route path="/admin" element={<PageTransition><Home /></PageTransition>} />
