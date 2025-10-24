@@ -1,0 +1,26 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientCycle {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.gradient-animate {
+  background: linear-gradient(270deg, var(--color-azul-electrico), var(--color-azul-claro));
+  background-size: 400% 400%;
+  animation: gradientCycle 6s ease infinite;
+}

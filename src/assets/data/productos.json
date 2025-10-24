@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "nombre": "PlayStation 5",
+    "precio": 599990,
+    "categoria": "Consolas",
+    "imagen": "PlayStation5.svg",
+    "descripcion": "La consola de nueva generación de Sony con gráficos 4K y SSD ultrarrápido."
+  },
+  {
+    "id": 2,
+    "nombre": "HyperX Cloud II",
+    "precio": 89990,
+    "categoria": "Accesorios",
+    "imagen": "HyperXCloud2.svg",
+    "descripcion": "Audífonos gamer con sonido envolvente 7.1 y micrófono desmontable."
+  }
+]
