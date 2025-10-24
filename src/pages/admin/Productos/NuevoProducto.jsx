@@ -1,210 +1,164 @@
+// /src/pages/admin/Productos/NuevoProducto.jsx
 import { useState } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { useProducts } from '../../../hooks/useProducts';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import BackButton from '../../../components/common/BackButton';
 
 const NuevoProducto = () => {
-  const { user } = useAuth();
-  const { addProduct } = useProducts();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     nombre: '',
-    categoria: '',
     precio: '',
+    categoria: '',
     descripcion: '',
     stock: '',
-    imagen: '',
-    destacado: false,
-    nuevo: false
+    imagen: ''
   });
-
-  if (!user || user.role !== 'admin') {
-    return <Navigate to="/login" replace />;
-  }
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const productData = {
-      ...formData,
-      precio: parseInt(formData.precio),
-      stock: parseInt(formData.stock),
-      especificaciones: {}
-    };
-
     // Simular guardado
     setTimeout(() => {
-      addProduct(productData);
+      // Guardar en localStorage
+      const products = JSON.parse(localStorage.getItem('products') || '[]');
+      const newProduct = {
+        ...formData,
+        id: Date.now(),
+        precio: parseInt(formData.precio),
+        stock: parseInt(formData.stock),
+        fechaCreacion: new Date().toISOString()
+      };
+      products.push(newProduct);
+      localStorage.setItem('products', JSON.stringify(products));
+
       setLoading(false);
-      navigate('/admin');
-    }, 1000);
+      alert('✅ Producto creado exitosamente');
+      navigate('/admin'); // Redirección correcta
+    }, 2000);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black py-8">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12 pt-32">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold gradient-text font-orbitron mb-2">
-            Crear Nuevo Producto
-          </h1>
-          <p className="text-gray-300">
-            Completa la información del producto para agregarlo al catálogo
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="card-gaming p-8 space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-[#0f1e3a] border-2 border-azul-electrico rounded-xl p-8 shadow-2xl">
+          {/* Header con botón de retroceso */}
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Nombre del Producto *
-              </label>
-              <input
-                type="text"
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
-                required
-                placeholder="Ej: PC Gamer ASUS ROG Strix"
-              />
+              <h1 className="text-3xl font-bold gradient-text">Nuevo Producto</h1>
+              <p className="text-gray-300">Agrega un nuevo producto al catálogo</p>
+            </div>
+            <BackButton to="/admin" text="Volver al Panel" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white mb-2">Nombre del Producto</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  value={formData.nombre}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-white mb-2">Precio ($)</label>
+                <input
+                  type="number"
+                  name="precio"
+                  value={formData.precio}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-white mb-2">Categoría</label>
+                <select
+                  name="categoria"
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
+                  required
+                >
+                  <option value="">Selecciona una categoría</option>
+                  <option value="Consolas">Consolas</option>
+                  <option value="Accesorios">Accesorios</option>
+                  <option value="Juegos">Juegos</option>
+                  <option value="PC Gaming">PC Gaming</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-white mb-2">Stock</label>
+                <input
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleChange}
+                  className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
+                  required
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Categoría *
-              </label>
-              <select
-                name="categoria"
-                value={formData.categoria}
+              <label className="block text-white mb-2">Descripción</label>
+              <textarea
+                name="descripcion"
+                value={formData.descripcion}
                 onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
+                rows="4"
+                className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
                 required
+              ></textarea>
+            </div>
+
+            <div>
+              <label className="block text-white mb-2">URL de Imagen</label>
+              <input
+                type="url"
+                name="imagen"
+                value={formData.imagen}
+                onChange={handleChange}
+                placeholder="https://ejemplo.com/imagen.jpg"
+                className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico"
+                required
+              />
+            </div>
+
+            <div className="flex space-x-4 pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-azul-electrico hover:bg-azul-claro py-3 rounded-lg font-bold text-black transition duration-300 disabled:opacity-50"
               >
-                <option value="">Seleccionar categoría</option>
-                <option value="pc-gamers">PC Gamers</option>
-                <option value="consolas">Consolas</option>
-                <option value="perifericos">Periféricos</option>
-                <option value="sillas">Sillas Gaming</option>
-                <option value="accesorios">Accesorios</option>
-              </select>
+                {loading ? 'Creando Producto...' : '🚀 Crear Producto'}
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => navigate('/admin')}
+                className="px-6 bg-gray-600 hover:bg-gray-500 py-3 rounded-lg text-white transition duration-300"
+              >
+                Cancelar
+              </button>
             </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Precio (CLP) *
-              </label>
-              <input
-                type="number"
-                name="precio"
-                value={formData.precio}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
-                required
-                placeholder="999990"
-                min="0"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Stock Disponible *
-              </label>
-              <input
-                type="number"
-                name="stock"
-                value={formData.stock}
-                onChange={handleChange}
-                className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
-                required
-                placeholder="10"
-                min="0"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Descripción *
-            </label>
-            <textarea
-              name="descripcion"
-              value={formData.descripcion}
-              onChange={handleChange}
-              rows="3"
-              className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
-              required
-              placeholder="Descripción del producto..."
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              URL de la Imagen
-            </label>
-            <input
-              type="url"
-              name="imagen"
-              value={formData.imagen}
-              onChange={handleChange}
-              className="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:border-azul-electrico focus:ring-1 focus:ring-azul-electrico outline-none"
-              placeholder="https://ejemplo.com/imagen.jpg"
-            />
-          </div>
-
-          <div className="flex gap-6">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="destacado"
-                checked={formData.destacado}
-                onChange={handleChange}
-                className="rounded border-gray-600 bg-gray-800 text-azul-electrico focus:ring-azul-electrico"
-              />
-              <span className="text-gray-300">Producto destacado</span>
-            </label>
-
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                name="nuevo"
-                checked={formData.nuevo}
-                onChange={handleChange}
-                className="rounded border-gray-600 bg-gray-800 text-azul-electrico focus:ring-azul-electrico"
-              />
-              <span className="text-gray-300">Producto nuevo</span>
-            </label>
-          </div>
-
-          <div className="flex gap-4 pt-6">
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary flex-1 py-3 disabled:opacity-50"
-            >
-              {loading ? 'Guardando...' : '💾 Guardar Producto'}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/admin')}
-              className="btn-secondary px-6 py-3"
-            >
-              ← Volver
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

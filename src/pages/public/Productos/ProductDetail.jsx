@@ -1,12 +1,20 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useProducts } from '../../../hooks/useProducts';
-import { formatPrice } from '../../../utils/formatters';
+import { useProducts } from '../hooks/useProducts';
+import { useCart } from '../context/CartContext';
+import { formatPrice } from '../utils/formatters';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { getProductById, loading } = useProducts();
-  const product = getProductById(id);
   const { addToCart } = useCart();
+  const product = getProductById(id);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product);
+      alert(`¡${product.nombre} agregado al carrito!`);
+    }
+  };
 
   if (loading) {
     return (
@@ -32,8 +40,8 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black pt-24 pb-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="card-gaming p-8">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Imagen del producto */}
@@ -84,14 +92,14 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="flex gap-4">
-                    <button
-                      onClick={() => addToCart({ ...product, quantity: 1 })}
-                      className="btn-primary flex-1 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={product.stock === 0}
-                    >
-                      🛒 Agregar al Carrito
-                    </button>
-                  <button className="btn-secondary px-6 py-4 text-lg">
+                  <button
+                    onClick={handleAddToCart}
+                    className="btn-primary flex-1 py-4 text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform"
+                    disabled={product.stock === 0}
+                  >
+                    🛒 Agregar al Carrito
+                  </button>
+                  <button className="btn-secondary px-6 py-4 text-lg hover:bg-azul-electrico hover:text-white transition-colors">
                     ❤️
                   </button>
                 </div>

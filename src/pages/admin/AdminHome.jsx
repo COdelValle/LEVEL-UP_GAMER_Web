@@ -1,6 +1,6 @@
 import { useAuth } from '../../context/AuthContext';
 import { useProducts } from '../../hooks/useProducts';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom'; // ✅ Agregar Link
 import { formatPrice } from '../../utils/formatters';
 
 const AdminHome = () => {
@@ -67,28 +67,32 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - CORREGIDO */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           <div className="card-gaming p-6">
             <h3 className="text-xl font-bold gradient-text mb-4">
               Acciones Rápidas
             </h3>
             <div className="space-y-3">
-              <a
-                href="/admin/nuevo-producto"
+              {/* ✅ CORREGIDO: Usar Link en lugar de <a> */}
+              <Link
+                to="/admin/nuevo-producto"
                 className="block btn-primary text-center py-3"
               >
                 ➕ Agregar Nuevo Producto
-              </a>
-              <a
-                href="/admin/usuarios"
+              </Link>
+              <Link
+                to="/admin/usuarios"
                 className="block btn-secondary text-center py-3"
               >
                 👥 Gestionar Usuarios
-              </a>
-              <button className="block btn-secondary w-full text-center py-3">
+              </Link>
+              <Link
+                to="/admin/reportes"
+                className="block btn-secondary text-center py-3"
+              >
                 📊 Generar Reporte
-              </button>
+              </Link>
             </div>
           </div>
 

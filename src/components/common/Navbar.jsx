@@ -143,6 +143,20 @@ const Navbar = () => {
               >
                 Nosotros
               </Link>
+
+              {/* Cart Icon en Mobile */}
+              <div className="flex justify-center py-2">
+                <Link 
+                  to="/cart" 
+                  className="relative flex items-center text-white hover:text-azul-claro"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-2xl">🛒</span>
+                  <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                    {getTotalItems()}
+                  </span>
+                </Link>
+              </div>
               
               {isAuthenticated ? (
                 <>
