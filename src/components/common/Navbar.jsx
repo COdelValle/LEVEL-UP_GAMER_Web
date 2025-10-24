@@ -24,6 +24,7 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
+  // Dentro de los pixeles de ancho 768px y 955px se rompen los link y botones, aparte del nombre de la página.
   return (
     <nav className={`navbar-deepblue fixed w-full top-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-[rgba(0,0,30,0.95)] shadow-lg' : ''
