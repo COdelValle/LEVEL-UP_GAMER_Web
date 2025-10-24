@@ -16,6 +16,7 @@ const Blogs = lazy(() => import('./pages/public/Blog/Blogs'));
 const BlogDetail = lazy(() => import('./pages/public/Blog/BlogDetail'));
 const Categorias = lazy(() => import('./pages/public/Categoria/Categorias'))
 const CategoriaDetail = lazy(() => import('./pages/public/Categoria/CategoriaDetail'))
+const Cart = lazy(() => import('./pages/public/Compra/Cart'))
 const Comprar = lazy(() => import('./pages/public/Compra/Comprar'))
 const CompraDetail = lazy(() => import('./pages/public/Compra/CompraDetail'))
 const Ofertas = lazy(() => import('./pages/public/Productos/Ofertas'))
@@ -52,6 +53,7 @@ const AppRoutes = () => {
           <Route path="/blog/:id" element={<PageTransition><BlogDetail /></PageTransition>} />
           <Route path="/categorias" element={<PageTransition><Categorias /></PageTransition>} />
           <Route path="/categorias/:id" element={<PageTransition><CategoriaDetail /></PageTransition>} />
+          <Route path="/carrito" element={<PageTransition><Cart /></PageTransition>} />
           <Route path="/comprar" element={<PageTransition><Comprar /></PageTransition>} />
           <Route path="/comprar/:id" element={<PageTransition><CompraDetail /></PageTransition>} />
           <Route path="/ofertas" element={<PageTransition><Ofertas /></PageTransition>} />
