@@ -25,14 +25,21 @@ const Ofertas = lazy(() => import('./pages/public/Productos/Ofertas'))
 const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
 const BoletaDetail = lazy(() => import('./pages/admin/Boleta/BoletaDetail'))
 const Boletas = lazy(() => import('./pages/admin/Boleta/Boletas'))
-const HistorialCompras = lazy(() => import('./pages/admin/Usuario/HistorialCompras'))
+const CategoriasAdmin = lazy(() => import('./pages/admin/Categoria/Categorias.jsx'))
+const NuevaCategoria = lazy(() => import('./pages/admin/Categoria/NuevaCategoria.jsx'))
+const EditarCategoria = lazy(() => import('./pages/admin/Categoria/EditarCategoria.jsx'))
+const VerProducto = lazy(() => import('./pages/admin/Productos/VerProducto.jsx'))
 const NuevoProducto = lazy(() => import('./pages/admin/Productos/NuevoProducto'))
+const EditarProducto = lazy(() => import('./pages/admin/Productos/EditarProducto.jsx'))
 const Perfil = lazy(() => import('./pages/admin/Perfil'))
 const ProductosCriticos = lazy(() => import('./pages/admin/AdminHome'))
-const Reportes = lazy(() => import('./pages/admin/Reporte/Reportes'))
-const ReportesProductos = lazy(() => import('./pages/admin/Reporte/ReportesProductos'))
-const Usuarios = lazy(() => import('./pages/admin/Usuario/Usuarios'))
-const VerUsuarios = lazy(() => import('./pages/admin/Usuario/VerUsuarios'))
+const Reportes = lazy(() => import('./pages/admin/Reportes.jsx'))
+const ReportesProductos = lazy(() => import('./pages/admin/Productos/ReportesProductos.jsx'))
+const Usuarios = lazy(() => import('./pages/admin/Usuario/Usuarios.jsx'))
+const VerUsuarios = lazy(() => import('./pages/admin/Usuario/VerUsuarios.jsx'))
+const NuevoUsuario = lazy(() => import('./pages/admin/Usuario/NuevoUsuario.jsx'))
+const EditarUsuario = lazy(() => import('./pages/admin/Usuario/EditarUsuario.jsx'))
+const HistorialCompras = lazy(() => import('./pages/admin/Usuario/HistorialCompras'))
 
 
 const AppRoutes = () => {
@@ -58,18 +65,25 @@ const AppRoutes = () => {
           <Route path="/comprar/:id" element={<PageTransition><CompraDetail /></PageTransition>} />
           <Route path="/ofertas" element={<PageTransition><Ofertas /></PageTransition>} />
           
-          {/* Rutas temporales - redirigen a páginas existentes */}
+          {/* Rutas Administración */}
           <Route path="/admin" element={<PageTransition><AdminHome /></PageTransition>} />
           <Route path="/admin/boletas/:id" element={<PageTransition><BoletaDetail /></PageTransition>} />
           <Route path="/admin/boletas" element={<PageTransition><Boletas /></PageTransition>} />
-          <Route path="/admin/usuario/:id/historial-compras" element={<PageTransition><HistorialCompras /></PageTransition>} />
+          <Route path="/admin/categorias" element={<PageTransition><CategoriasAdmin /></PageTransition>} />
+          <Route path="/admin/categorias/nueva-categoria" element={<PageTransition><NuevaCategoria /></PageTransition>} />
+          <Route path="/admin/categorias/:id/editar-categoria" element={<PageTransition><EditarCategoria /></PageTransition>} />
+          <Route path="/admin/productos/:id" element={<PageTransition><VerProducto /></PageTransition>} />
           <Route path="/admin/productos/nuevo-producto" element={<PageTransition><NuevoProducto /></PageTransition>} />
+          <Route path="/admin/productos/:id/editar-producto" element={<PageTransition><EditarProducto /></PageTransition>} />
           <Route path="/admin/perfil" element={<PageTransition><Perfil /></PageTransition>} />
           <Route path="/admin/productos/criticos" element={<PageTransition><ProductosCriticos /></PageTransition>} />
           <Route path="/admin/productos/reportes" element={<PageTransition><ReportesProductos /></PageTransition>} />
           <Route path="/admin/reportes" element={<PageTransition><Reportes /></PageTransition>} />
           <Route path="/admin/usuarios" element={<PageTransition><Usuarios /></PageTransition>} />
+          <Route path="/admin/usuarios/nuevo-usuario" element={<PageTransition><NuevoUsuario /></PageTransition>} />
+          <Route path="/admin/usuarios/:id/editar-usuario" element={<PageTransition><EditarUsuario /></PageTransition>} />
           <Route path="/admin/usuario/:id" element={<PageTransition><VerUsuarios /></PageTransition>} />
+          <Route path="/admin/usuario/:id/historial-compras" element={<PageTransition><HistorialCompras /></PageTransition>} />
         </Routes>
       </Suspense>
     </AnimatePresence>
