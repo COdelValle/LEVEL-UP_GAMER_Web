@@ -1,6 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useProducts } from '../../../hooks/useProducts';
 import { formatPrice } from '../../../utils/formatters';
+import { useCart } from "../../../context/CartContext";
 
 const ProductDetail = () => {
   const { id } = useParams();

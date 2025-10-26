@@ -8,7 +8,7 @@ import LoadingSpinner from './components/common/LoadingSpinner';
 // Páginas públicas
 const Home = lazy(() => import('./pages/public/Home'));
 const Products = lazy(() => import('./pages/public/Productos/Products'));
-const ProductDetail = lazy(() => import('./pages/public/Productos/ProductDetail'));
+const ProductDetail = lazy(() => import("./pages/public/Productos/ProductDetail.jsx"));
 const Nosotros = lazy(() => import('./pages/public/Nosotros'));
 const Login = lazy(() => import('./pages/public/Session/Login'));
 const Register = lazy(() => import('./pages/public/Session/Register'));

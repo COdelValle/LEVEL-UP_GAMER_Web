@@ -74,7 +74,7 @@ const Navbar = () => {
           {/* Botones Desktop */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Cart Icon */}
-            <Link to="/cart" className="relative">
+            <Link to="/carrito" className="relative">
               <span className="text-2xl">🛒</span>
               <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {getTotalItems()}

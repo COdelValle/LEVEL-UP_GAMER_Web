@@ -2,17 +2,161 @@
   {
     "id": 1,
     "nombre": "PlayStation 5",
-    "precio": 599990,
-    "categoria": "Consolas",
-    "imagen": "PlayStation5.svg",
-    "descripcion": "La consola de nueva generación de Sony con gráficos 4K y SSD ultrarrápido."
+    "precio": 699990,
+    "categoria": "consolas",
+    "imagen": "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
+    "descripcion": "La última consola de Sony con tecnología de vanguardia",
+    "stock": 15,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Almacenamiento": "825GB SSD",
+      "Resolución": "4K",
+      "Características": "Ray Tracing, 120Hz"
+    }
   },
   {
     "id": 2,
-    "nombre": "HyperX Cloud II",
+    "nombre": "PC Gamer ASUS ROG Strix",
+    "precio": 1299990,
+    "categoria": "pc-gamers",
+    "imagen": "https://dlcdnwebimgs.asus.com/gain/3C22B609-1A38-4660-ADF5-8DEB93CA5F3D",
+    "descripcion": "Potente PC gaming para los más exigentes",
+    "stock": 8,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Procesador": "Intel i7-13700K",
+      "GPU": "RTX 4070",
+      "RAM": "32GB DDR5"
+    }
+  },
+  {
+    "id": 3,
+    "nombre": "Audífonos HyperX Cloud II",
     "precio": 89990,
-    "categoria": "Accesorios",
-    "imagen": "HyperXCloud2.svg",
-    "descripcion": "Audífonos gamer con sonido envolvente 7.1 y micrófono desmontable."
+    "categoria": "perifericos",
+    "imagen": "https://media.spdigital.cl/thumbnails/products/r412a2ud_794ad640_thumbnail_4096.png",
+    "descripcion": "Audífonos gaming con sonido surround 7.1",
+    "stock": 30,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Conectividad": "USB y 3.5mm",
+      "Micrófono": "Desmontable con cancelación de ruido",
+      "Compatibilidad": "PC, PS4, PS5, Xbox, Switch"
+    }
+  },
+  {
+    "id": 4,
+    "nombre": "Silla Gaming SecretLab Titan",
+    "precio": 499990,
+    "categoria": "sillas",
+    "imagen": "https://images.secretlab.co/turntable/tr:n-w_750/R22PU-Stealth_02.jpg",
+    "descripcion": "Silla gaming ergonómica de alta gama",
+    "stock": 12,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Material": "Cuero sintético premium",
+      "Ajustes": "Altura, inclinación, apoyabrazos 4D",
+      "Garantía": "5 años"
+    }
+  },
+  {
+    "id": 5,
+    "nombre": "Catan",
+    "precio": 29990,
+    "categoria": "juegos-de-mesa",
+    "imagen": "https://i.ytimg.com/vi/3t0BVFjhhCA/maxresdefault.jpg",
+    "descripcion": "Un clásico juego de estrategia donde los jugadores compiten por colonizar y expandirse en la isla de Catan. Ideal para 3-4 jugadores y perfecto para noches de juego en familia o con amigos.",
+    "stock": 20,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Jugadores": "3-4",
+      "Duración": "60-120 minutos",
+      "Edad recomendada": "10+ años"
+    }
+  },
+  {
+    "id": 6,
+    "nombre": "Carcassonne",
+    "precio": 24990,
+    "categoria": "juegos-de-mesa",
+    "imagen": "https://geekz.cl/web/image/product.template/21455/image",
+    "descripcion": "Un juego de colocación de fichas donde los jugadores construyen el paisaje alrededor de la fortaleza medieval de Carcassonne. Ideal para 2-5 jugadores y fácil de aprender.",
+    "stock": 18,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Jugadores": "2-5",
+      "Duración": "30-45 minutos",
+      "Edad recomendada": "8+ años"
+    }
+  },
+  {
+    "id": 7,
+    "nombre": "Controlador Inalámbrico Xbox Series X",
+    "precio": 59990,
+    "categoria": "accesorios",
+    "imagen": "https://png.pngtree.com/png-vector/20250704/ourmid/pngtree-high-angle-close-up-of-a-black-xbox-wireless-controller-png-image_16692353.webp",
+    "descripcion": "Ofrece una experiencia de juego cómoda con botones mapeables y una respuesta táctil mejorada. Compatible con consolas Xbox y PC.",
+    "stock": 25,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Conectividad": "Bluetooth / USB-C",
+      "Compatibilidad": "Xbox Series X|S, Xbox One, PC",
+      "Batería": "2 pilas AA o batería recargable"
+    }
+  },
+  {
+    "id": 8,
+    "nombre": "Mouse Gamer Logitech G502 HERO",
+    "precio": 49990,
+    "categoria": "mouse",
+    "imagen": "https://cdnx.jumpseller.com/gtigx1/image/19900405/resize/640/640?1634678226",
+    "descripcion": "Con sensor de alta precisión y botones personalizables, este mouse es ideal para gamers que buscan un control preciso y personalización.",
+    "stock": 40,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Sensor": "HERO 25K",
+      "Botones": "11 programables",
+      "Peso ajustable": "Sí"
+    }
+  },
+  {
+    "id": 9,
+    "nombre": "Mousepad Razer Goliathus Extended Chroma",
+    "precio": 29990,
+    "categoria": "mousepad",
+    "imagen": "https://www.centec.cl/cdn/shop/files/open-uri20220520-20794-kc6gvb_1200x1200_crop_center.jpg?v=1736799229",
+    "descripcion": "Ofrece un área de juego amplia con iluminación RGB personalizable, asegurando una superficie suave y uniforme para el movimiento del mouse.",
+    "stock": 35,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Iluminación": "RGB Chroma",
+      "Tamaño": "Extended (920mm x 294mm)",
+      "Base": "Antideslizante de goma"
+    }
+  },
+  {
+    "id": 10,
+    "nombre": "Polera Gamer Personalizada 'Level-Up'",
+    "precio": 14990,
+    "categoria": "ropa",
+    "imagen": "https://static.vecteezy.com/system/resources/thumbnails/066/148/442/small/transparent-background-of-realistic-white-t-shirt-back-view-displaying-comfort-and-style-ideal-for-casual-wear-free-png.png",
+    "descripcion": "Una camiseta cómoda y estilizada, con la posibilidad de personalizarla con tu gamer tag o diseño favorito.",
+    "stock": 50,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Material": "Algodón 100%",
+      "Tallas": "S, M, L, XL",
+      "Personalización": "Texto o diseño a elección"
+    }
   }
 ]
