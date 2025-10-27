@@ -24,6 +24,7 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
+  // Dentro de los pixeles de ancho 768px y 955px se rompen los link y botones, aparte del nombre de la página.
   return (
     <nav className={`navbar-deepblue fixed w-full top-0 z-50 transition-all duration-300 ${
       scrolled ? 'bg-[rgba(0,0,30,0.95)] shadow-lg' : ''
@@ -73,7 +74,7 @@ const Navbar = () => {
           {/* Botones Desktop */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Cart Icon */}
-            <Link to="/cart" className="relative">
+            <Link to="/carrito" className="relative">
               <span className="text-2xl">🛒</span>
               <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {getTotalItems()}

@@ -9,30 +9,39 @@ import AdminLayout from './components/admin/AdminLayout';
 // Páginas públicas
 const Home = lazy(() => import('./pages/public/Home'));
 const Products = lazy(() => import('./pages/public/Productos/Products'));
-const ProductDetail = lazy(() => import('./pages/public/Productos/ProductDetail'));
+const ProductDetail = lazy(() => import("./pages/public/Productos/ProductDetail.jsx"));
 const Nosotros = lazy(() => import('./pages/public/Nosotros'));
 const Login = lazy(() => import('./pages/public/Session/Login'));
 const Register = lazy(() => import('./pages/public/Session/Register'));
 const Blogs = lazy(() => import('./pages/public/Blog/Blogs'));
 const BlogDetail = lazy(() => import('./pages/public/Blog/BlogDetail'));
-const Categorias = lazy(() => import('./pages/public/Categoria/Categorias'));
-const CategoriaDetail = lazy(() => import('./pages/public/Categoria/CategoriaDetail'));
-const Comprar = lazy(() => import('./pages/public/Compra/Comprar'));
-const CompraDetail = lazy(() => import('./pages/public/Compra/CompraDetail'));
-const Ofertas = lazy(() => import('./pages/public/Productos/Ofertas'));
-
-// Carrito y compras
-const Cart = lazy(() => import('./pages/public/Compra/Cart'));
+const Categorias = lazy(() => import('./pages/public/Categoria/Categorias'))
+const CategoriaDetail = lazy(() => import('./pages/public/Categoria/CategoriaDetail'))
+const Cart = lazy(() => import('./pages/public/Compra/Cart'))
 const Checkout = lazy(() => import('./pages/public/Compra/Checkout'));
 const Payment = lazy(() => import('./pages/public/Compra/Payment'));
+const CompraDetail = lazy(() => import('./pages/public/Compra/CompraDetail'))
+const Ofertas = lazy(() => import('./pages/public/Productos/Ofertas'))
 
 // Páginas Administración
-const AdminHome = lazy(() => import('./pages/admin/AdminHome'));
-const NuevoProducto = lazy(() => import('./pages/admin/Productos/NuevoProducto'));
-const Reportes = lazy(() => import('./pages/admin/Reporte/Reportes'));
-const ReportesProductos = lazy(() => import('./pages/admin/Reporte/ReportesProductos'));
-const Usuarios = lazy(() => import('./pages/admin/Usuario/Usuarios'));
-const ProductosCriticos = lazy(() => import('./pages/admin/Productos/ProductosCriticos'));
+const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
+const BoletaDetail = lazy(() => import('./pages/admin/Boleta/BoletaDetail'))
+const Boletas = lazy(() => import('./pages/admin/Boleta/Boletas'))
+const CategoriasAdmin = lazy(() => import('./pages/admin/Categoria/Categorias.jsx'))
+const NuevaCategoria = lazy(() => import('./pages/admin/Categoria/NuevaCategoria.jsx'))
+const EditarCategoria = lazy(() => import('./pages/admin/Categoria/EditarCategoria.jsx'))
+const VerProducto = lazy(() => import('./pages/admin/Productos/VerProducto.jsx'))
+const NuevoProducto = lazy(() => import('./pages/admin/Productos/NuevoProducto'))
+const EditarProducto = lazy(() => import('./pages/admin/Productos/EditarProducto.jsx'))
+const Perfil = lazy(() => import('./pages/admin/Perfil'))
+const ProductosCriticos = lazy(() => import('./pages/admin/AdminHome'))
+const Reportes = lazy(() => import('./pages/admin/Reportes.jsx'))
+const ReportesProductos = lazy(() => import('./pages/admin/Productos/ReportesProductos.jsx'))
+const Usuarios = lazy(() => import('./pages/admin/Usuario/Usuarios.jsx'))
+const VerUsuarios = lazy(() => import('./pages/admin/Usuario/VerUsuarios.jsx'))
+const NuevoUsuario = lazy(() => import('./pages/admin/Usuario/NuevoUsuario.jsx'))
+const EditarUsuario = lazy(() => import('./pages/admin/Usuario/EditarUsuario.jsx'))
+const HistorialCompras = lazy(() => import('./pages/admin/Usuario/HistorialCompras'))
 
 // Componentes básicos para rutas que no existen aún
 const BasicAdminPage = lazy(() => import('./components/admin/BasicAdminPage'));
@@ -55,6 +64,7 @@ const AppRoutes = () => {
           <Route path="/registro" element={<PageTransition><Register /></PageTransition>} />
           <Route path="/categorias" element={<PageTransition><Categorias /></PageTransition>} />
           <Route path="/categorias/:id" element={<PageTransition><CategoriaDetail /></PageTransition>} />
+          <Route path="/carrito" element={<PageTransition><Cart /></PageTransition>} />
           <Route path="/comprar" element={<PageTransition><Comprar /></PageTransition>} />
           <Route path="/comprar/:id" element={<PageTransition><CompraDetail /></PageTransition>} />
           <Route path="/ofertas" element={<PageTransition><Ofertas /></PageTransition>} />
@@ -160,6 +170,14 @@ const AppRoutes = () => {
               </PageTransition>
             </AdminLayout>
           } />
+          <Route path="/admin/categorias" element={<PageTransition><CategoriasAdmin /></PageTransition>} />
+          <Route path="/admin/categorias/nueva-categoria" element={<PageTransition><NuevaCategoria /></PageTransition>} />
+          <Route path="/admin/categorias/:id/editar-categoria" element={<PageTransition><EditarCategoria /></PageTransition>} />
+          <Route path="/admin/productos/:id" element={<PageTransition><VerProducto /></PageTransition>} />
+          <Route path="/admin/productos/:id/editar-producto" element={<PageTransition><EditarProducto /></PageTransition>} />
+          <Route path="/admin/reportes" element={<PageTransition><Reportes /></PageTransition>} />
+          <Route path="/admin/usuarios/nuevo-usuario" element={<PageTransition><NuevoUsuario /></PageTransition>} />
+          <Route path="/admin/usuarios/:id/editar-usuario" element={<PageTransition><EditarUsuario /></PageTransition>} />
         </Routes>
       </Suspense>
     </AnimatePresence>
