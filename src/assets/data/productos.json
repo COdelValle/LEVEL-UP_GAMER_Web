@@ -1,4 +1,326 @@
-[
+
+  [
+  {
+    "id": 1,
+    "nombre": "PlayStation 5",
+    "precio": 699990,
+    "categoria": "consolas",
+    "imagen": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&h=400&fit=crop",
+    "descripcion": "La última consola de Sony con tecnología de vanguardia",
+    "stock": 15,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Almacenamiento": "825GB SSD",
+      "Resolución": "4K",
+      "Características": "Ray Tracing, 120Hz"
+    }
+  },
+  {
+    "id": 2,
+    "nombre": "Nintendo Switch OLED",
+    "precio": 449990,
+    "categoria": "consolas",
+    "imagen": "https://images.unsplash.com/photo-1580327344181-c1163234e5a0?w=600&h=400&fit=crop",
+    "descripcion": "Consola híbrida con pantalla OLED mejorada",
+    "stock": 25,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Pantalla": "7 pulgadas OLED",
+      "Almacenamiento": "64GB",
+      "Modos": "TV, Mesa, Portátil"
+    }
+  },
+  {
+    "id": 3,
+    "nombre": "PC Gamer ASUS ROG Strix",
+    "precio": 1299990,
+    "categoria": "pc-gamers",
+    "imagen": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=400&fit=crop",
+    "descripcion": "Potente PC gaming para los más exigentes",
+    "stock": 8,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Procesador": "Intel i7-13700K",
+      "GPU": "RTX 4070",
+      "RAM": "32GB DDR5"
+    }
+  },
+  {
+    "id": 4,
+    "nombre": "Audífonos HyperX Cloud II",
+    "precio": 89990,
+    "categoria": "perifericos",
+    "imagen": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=400&fit=crop",
+    "descripcion": "Audífonos gaming con sonido surround 7.1",
+    "stock": 30,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Conectividad": "USB y 3.5mm",
+      "Micrófono": "Desmontable con cancelación de ruido",
+      "Compatibilidad": "PC, PS4, PS5, Xbox, Switch"
+    }
+  },
+  {
+    "id": 5,
+    "nombre": "Silla Gaming SecretLab Titan",
+    "precio": 499990,
+    "categoria": "sillas",
+    "imagen": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=400&fit=crop",
+    "descripcion": "Silla gaming ergonómica de alta gama",
+    "stock": 12,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Material": "Cuero sintético premium",
+      "Ajustes": "Altura, inclinación, apoyabrazos 4D",
+      "Garantía": "5 años"
+    }
+  },
+  {
+    "id": 6,
+    "nombre": "Teclado Mecánico Razer BlackWidow V3",
+    "precio": 129990,
+    "categoria": "perifericos",
+    "imagen": "https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=600&h=400&fit=crop",
+    "descripcion": "Teclado mecánico con switches Razer Green y RGB Chroma",
+    "stock": 18,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Switches": "Razer Green mecánicos",
+      "Iluminación": "RGB Chroma",
+      "Teclas": "Programables"
+    }
+  },
+  {
+    "id": 7,
+    "nombre": "Monitor Gaming 27\" 144Hz ASUS",
+    "precio": 299990,
+    "categoria": "monitores",
+    "imagen": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&h=400&fit=crop",
+    "descripcion": "Monitor gaming con alta tasa de refresco y FreeSync",
+    "stock": 10,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Tamaño": "27 pulgadas",
+      "Resolución": "QHD 2560x1440",
+      "Tasa de refresco": "144Hz"
+    }
+  },
+  {
+    "id": 8,
+    "nombre": "Mouse Gamer Logitech G502 HERO",
+    "precio": 49990,
+    "categoria": "perifericos",
+    "imagen": "https://images.unsplash.com/photo-1527814050087-3793815479db?w=600&h=400&fit=crop",
+    "descripcion": "Mouse gaming de alto rendimiento con sensor HERO",
+    "stock": 35,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Sensor": "HERO 25K DPI",
+      "Botones": "11 programables",
+      "Peso": "Ajustable"
+    }
+  },
+  {
+    "id": 9,
+    "nombre": "Xbox Series X",
+    "precio": 599990,
+    "categoria": "consolas",
+    "imagen": "https://images.unsplash.com/photo-1621259182978-8e3d0d2c80ce?w=600&h=400&fit=crop",
+    "descripcion": "La consola más poderosa de Microsoft",
+    "stock": 12,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Almacenamiento": "1TB SSD",
+      "Resolución": "4K 120Hz",
+      "Características": "Quick Resume, Auto HDR"
+    }
+  },
+  {
+    "id": 10,
+    "nombre": "Mousepad RGB SteelSeries QcK",
+    "precio": 34990,
+    "categoria": "accesorios",
+    "imagen": "https://images.unsplash.com/photo-1591030434469-3d78c7b12820?w=600&h=400&fit=crop",
+    "descripcion": "Mousepad gaming con iluminación RGB personalizable",
+    "stock": 40,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Tamaño": "Extended 900x300mm",
+      "Iluminación": "RGB Prism",
+      "Superficie": "Optimizada para gaming"
+    }
+  },
+  {
+    "id": 11,
+    "nombre": "Catan - Edición Especial",
+    "precio": 39990,
+    "categoria": "juegos-mesa",
+    "imagen": "https://images.unsplash.com/photo-1632501641765-e56828ad3615?w=600&h=400&fit=crop",
+    "descripcion": "El clásico juego de estrategia y comercio",
+    "stock": 22,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Jugadores": "3-4",
+      "Duración": "60-90 min",
+      "Edad": "10+ años"
+    }
+  },
+  {
+    "id": 12,
+    "nombre": "Microfono Blue Yeti USB",
+    "precio": 99990,
+    "categoria": "streaming",
+    "imagen": "https://images.unsplash.com/photo-1599669454699-248893623440?w=600&h=400&fit=crop",
+    "descripcion": "Micrófono USB profesional para streaming y podcasts",
+    "stock": 15,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Patrones": "4 patrones polares",
+      "Conectividad": "USB",
+      "Compatibilidad": "PC, Mac, PS4, PS5"
+    }
+  },
+  {
+    "id": 13,
+    "nombre": "Webcam Logitech C922 Pro",
+    "precio": 79990,
+    "categoria": "streaming",
+    "imagen": "https://images.unsplash.com/photo-1599669454699-248893623440?w=600&h=400&fit=crop",
+    "descripcion": "Webcam Full HD para streaming profesional",
+    "stock": 20,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Resolución": "1080p 30fps / 720p 60fps",
+      "Micrófono": "Estéreo integrado",
+      "Compatibilidad": "USB Plug and Play"
+    }
+  },
+  {
+    "id": 14,
+    "nombre": "Auriculares Inalámbricos Sony WH-1000XM4",
+    "precio": 299990,
+    "categoria": "audio",
+    "imagen": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=400&fit=crop",
+    "descripcion": "Audífonos con cancelación de ruido líder en la industria",
+    "stock": 8,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Cancelación": "Noise Cancelling Pro",
+      "Batería": "30 horas",
+      "Conectividad": "Bluetooth 5.0"
+    }
+  },
+  {
+    "id": 15,
+    "nombre": "Tableta Gráfica Wacom Intuos",
+    "precio": 149990,
+    "categoria": "creativo",
+    "imagen": "https://images.unsplash.com/photo-1642793244812-67d1f990e292?w=600&h=400&fit=crop",
+    "descripcion": "Tableta gráfica perfecta para diseñadores y artistas",
+    "stock": 14,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Área activa": "Medium",
+      "Sensibilidad": "4096 niveles",
+      "Compatibilidad": "PC, Mac, Android"
+    }
+  },
+  {
+    "id": 16,
+    "nombre": "Laptop Gaming ASUS ROG Zephyrus",
+    "precio": 1499990,
+    "categoria": "laptops",
+    "imagen": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&h=400&fit=crop",
+    "descripcion": "Laptop gaming ultradelgada con RTX 4060",
+    "stock": 6,
+    "destacado": true,
+    "nuevo": true,
+    "especificaciones": {
+      "Procesador": "AMD Ryzen 9",
+      "GPU": "RTX 4060",
+      "Pantalla": "15.6\" QHD 165Hz"
+    }
+  },
+  {
+    "id": 17,
+    "nombre": "Controlador Xbox Elite Series 2",
+    "precio": 149990,
+    "categoria": "accesorios",
+    "imagen": "https://images.unsplash.com/photo-1599669454699-248893623440?w=600&h=400&fit=crop",
+    "descripcion": "Controlador profesional con botones personalizables",
+    "stock": 10,
+    "destacado": true,
+    "nuevo": false,
+    "especificaciones": {
+      "Botones": "Intercambiables",
+      "Batería": "40 horas",
+      "Compatibilidad": "Xbox, PC"
+    }
+  },
+  {
+    "id": 18,
+    "nombre": "Carcassonne - Edición 20 Aniversario",
+    "precio": 34990,
+    "categoria": "juegos-mesa",
+    "imagen": "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=600&h=400&fit=crop",
+    "descripcion": "Edición especial del clásico juego de colocación de fichas",
+    "stock": 18,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Jugadores": "2-5",
+      "Duración": "30-45 min",
+      "Edad": "7+ años"
+    }
+  },
+  {
+    "id": 19,
+    "nombre": "Soporte para Monitor Ergonómico",
+    "precio": 59990,
+    "categoria": "accesorios",
+    "imagen": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=400&fit=crop",
+    "descripcion": "Soporte ajustable para optimizar tu espacio de trabajo",
+    "stock": 25,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Ajuste": "Altura, inclinación, rotación",
+      "Capacidad": "Hasta 27 pulgadas",
+      "Material": "Aluminio reforzado"
+    }
+  },
+  {
+    "id": 20,
+    "nombre": "Kit de Limpieza para Electrónicos",
+    "precio": 15990,
+    "categoria": "accesorios",
+    "imagen": "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=400&fit=crop",
+    "descripcion": "Kit completo para mantener tus dispositivos impecables",
+    "stock": 50,
+    "destacado": false,
+    "nuevo": true,
+    "especificaciones": {
+      "Incluye": "Spray, microfibras, cepillos",
+      "Seguro": "Para pantallas y componentes",
+      "Uso": "PC, consolas, móviles"
+    }
+  }
+  ,
   {
     "id": 1,
     "nombre": "PlayStation 5",
@@ -68,7 +390,7 @@
     "nombre": "Catan",
     "precio": 29990,
     "categoria": "juegos-de-mesa",
-    "imagen": "https://i.ytimg.com/vi/3t0BVFjhhCA/maxresdefault.jpg",
+    "imagen": "/assets/img/catan-base.jpg",
     "descripcion": "Un clásico juego de estrategia donde los jugadores compiten por colonizar y expandirse en la isla de Catan. Ideal para 3-4 jugadores y perfecto para noches de juego en familia o con amigos.",
     "stock": 20,
     "destacado": true,

@@ -2,6 +2,7 @@ import { useParams, Navigate } from 'react-router-dom';
 import { useProducts } from '../../../hooks/useProducts';
 import { formatPrice } from '../../../utils/formatters';
 import { useCart } from "../../../context/CartContext";
+import BackButton from '../../../components/common/BackButton';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -39,16 +40,22 @@ const ProductDetail = () => {
     return <Navigate to="/productos" replace />;
   }
 
+  const resolveImage = (img) => {
+    if (!img) return '';
+    return (img.startsWith('http') || img.startsWith('/')) ? img : `/assets/img/${img}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12">
       <div className="max-w-6xl mx-auto px-4">
+        <BackButton />
         <div className="card-gaming p-8">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Imagen del producto */}
             <div className="space-y-4">
               <div className="relative overflow-hidden rounded-lg">
                 <img
-                  src={product.imagen}
+                  src={resolveImage(product.imagen)}
                   alt={product.nombre}
                   className="w-full h-96 object-cover hover:scale-105 transition-transform duration-300"
                 />

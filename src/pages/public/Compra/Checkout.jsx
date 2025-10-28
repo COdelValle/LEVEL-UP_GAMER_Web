@@ -1,8 +1,10 @@
 // /src/pages/Checkout.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '../../../context/CartContext';
 import { formatPrice } from '../../../utils/formatters';
 import { Link, useNavigate } from 'react-router-dom';
+import { chileRegions, getComunasByRegion } from '../../../assets/data/chileRegions';
+import BackButton from '../../../components/common/BackButton';
 
 const Checkout = () => {
   const { cartItems, getCartTotal } = useCart();
@@ -12,11 +14,31 @@ const Checkout = () => {
     email: '',
     telefono: '',
     direccion: '',
+    region: '',
     ciudad: '',
-    region: ''
+    comuna: ''
   });
 
   const [errors, setErrors] = useState({});
+  const [comunas, setComunas] = useState([]);
+
+  // Actualizar comunas cuando cambia la región
+  useEffect(() => {
+    if (shippingInfo.region) {
+      const nuevasComunas = getComunasByRegion(shippingInfo.region);
+      setComunas(nuevasComunas);
+      
+      // Resetear comuna si ya no está disponible en la nueva región
+      if (shippingInfo.comuna && !nuevasComunas.includes(shippingInfo.comuna)) {
+        setShippingInfo(prev => ({
+          ...prev,
+          comuna: ''
+        }));
+      }
+    } else {
+      setComunas([]);
+    }
+  }, [shippingInfo.region]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,12 +77,16 @@ const Checkout = () => {
       newErrors.direccion = 'La dirección es requerida';
     }
     
+    if (!shippingInfo.region) {
+      newErrors.region = 'La región es requerida';
+    }
+    
     if (!shippingInfo.ciudad.trim()) {
       newErrors.ciudad = 'La ciudad es requerida';
     }
     
-    if (!shippingInfo.region.trim()) {
-      newErrors.region = 'La región es requerida';
+    if (!shippingInfo.comuna) {
+      newErrors.comuna = 'La comuna es requerida';
     }
     
     setErrors(newErrors);
@@ -91,6 +117,7 @@ const Checkout = () => {
           <div className="card-gaming p-8">
             <h2 className="text-2xl font-bold mb-6 gradient-text">Información de Envío</h2>
             <form onSubmit={handleContinueToPayment} className="space-y-4">
+              {/* Nombre completo */}
               <div>
                 <label className="block text-gray-300 mb-2">Nombre completo *</label>
                 <input
@@ -109,6 +136,7 @@ const Checkout = () => {
                 )}
               </div>
 
+              {/* Email y Teléfono */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-gray-300 mb-2">Email *</label>
@@ -146,6 +174,7 @@ const Checkout = () => {
                 </div>
               </div>
 
+              {/* Dirección */}
               <div>
                 <label className="block text-gray-300 mb-2">Dirección *</label>
                 <input
@@ -164,7 +193,31 @@ const Checkout = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* Región, Ciudad y Comuna */}
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-gray-300 mb-2">Región *</label>
+                  <select
+                    name="region"
+                    value={shippingInfo.region}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white focus:outline-none focus:border-azul-electrico ${
+                      errors.region ? 'border-red-500' : 'border-gray-700'
+                    }`}
+                    required
+                  >
+                    <option value="">Selecciona una región</option>
+                    {chileRegions.map(region => (
+                      <option key={region.id} value={region.id}>
+                        {region.nombre}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.region && (
+                    <p className="text-red-400 text-sm mt-1">{errors.region}</p>
+                  )}
+                </div>
+
                 <div>
                   <label className="block text-gray-300 mb-2">Ciudad *</label>
                   <input
@@ -175,32 +228,40 @@ const Checkout = () => {
                     className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white focus:outline-none focus:border-azul-electrico ${
                       errors.ciudad ? 'border-red-500' : 'border-gray-700'
                     }`}
-                    placeholder="Santiago"
+                    placeholder="Ej: Santiago"
                     required
                   />
                   {errors.ciudad && (
                     <p className="text-red-400 text-sm mt-1">{errors.ciudad}</p>
                   )}
                 </div>
+
                 <div>
-                  <label className="block text-gray-300 mb-2">Región *</label>
-                  <input
-                    type="text"
-                    name="region"
-                    value={shippingInfo.region}
+                  <label className="block text-gray-300 mb-2">Comuna *</label>
+                  <select
+                    name="comuna"
+                    value={shippingInfo.comuna}
                     onChange={handleInputChange}
+                    disabled={!shippingInfo.region}
                     className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white focus:outline-none focus:border-azul-electrico ${
-                      errors.region ? 'border-red-500' : 'border-gray-700'
-                    }`}
-                    placeholder="Metropolitana"
+                      errors.comuna ? 'border-red-500' : 'border-gray-700'
+                    } ${!shippingInfo.region ? 'opacity-50 cursor-not-allowed' : ''}`}
                     required
-                  />
-                  {errors.region && (
-                    <p className="text-red-400 text-sm mt-1">{errors.region}</p>
+                  >
+                    <option value="">Selecciona una comuna</option>
+                    {comunas.map(comuna => (
+                      <option key={comuna} value={comuna}>
+                        {comuna}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.comuna && (
+                    <p className="text-red-400 text-sm mt-1">{errors.comuna}</p>
                   )}
                 </div>
               </div>
 
+              {/* Botón de enviar */}
               <div className="pt-4">
                 <button 
                   type="submit"
@@ -222,11 +283,11 @@ const Checkout = () => {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex justify-between items-center">
                   <div className="flex items-center space-x-3">
-                    <img
-                      src={`/assets/img/${item.imagen}`}
-                      alt={item.nombre}
-                      className="w-12 h-12 object-cover rounded"
-                    />
+                      <img
+                        src={(item.imagen && (item.imagen.startsWith('http') || item.imagen.startsWith('/'))) ? item.imagen : `/assets/img/${item.imagen}`}
+                        alt={item.nombre}
+                        className="w-16 h-16 object-cover rounded"
+                      />
                     <div>
                       <p className="text-white font-medium">{item.nombre}</p>
                       <p className="text-gray-300 text-sm">Cantidad: {item.quantity}</p>

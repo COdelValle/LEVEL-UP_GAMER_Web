@@ -1,16 +1,18 @@
-// /src/pages/Cart.jsx
+// Cart.jsx - Componente del carrito de compras
 import { Link } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import { formatPrice } from '../../../utils/formatters';
+import BackButton from '../../../components/common/BackButton';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12 pt-32"> {/* Cambiado pt-24 por pt-32 */}
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="card-gaming p-8 text-center">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12 pt-32">
+      <div className="max-w-4xl mx-auto px-4">
+        <BackButton />
+        <div className="card-gaming p-8 text-center">
             <h2 className="text-3xl font-bold mb-4 gradient-text">Carrito Vacío</h2>
             <p className="text-gray-300 mb-6">No hay productos en tu carrito</p>
             <Link to="/productos" className="btn-primary">
@@ -41,7 +43,7 @@ const Cart = () => {
               <div key={item.id} className="flex items-center justify-between p-4 border border-gray-700 rounded-lg">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={`/assets/img/${item.imagen}`}
+                    src={(item.imagen && (item.imagen.startsWith('http') || item.imagen.startsWith('/'))) ? item.imagen : `/assets/img/${item.imagen}`}
                     alt={item.nombre}
                     className="w-16 h-16 object-cover rounded"
                   />

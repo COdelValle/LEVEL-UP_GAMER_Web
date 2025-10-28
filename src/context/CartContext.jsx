@@ -1,7 +1,7 @@
 // /src/context/CartContext.jsx
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 const cartReducer = (state, action) => {
   switch (action.type) {

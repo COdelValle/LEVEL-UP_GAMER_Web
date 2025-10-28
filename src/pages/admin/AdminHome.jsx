@@ -1,11 +1,12 @@
 import { useAuth } from '../../context/AuthContext';
 import { useProducts } from '../../hooks/useProducts';
-import { Navigate, Link } from 'react-router-dom'; // ✅ Agregar Link
+import { Navigate, useNavigate } from 'react-router-dom';
 import { formatPrice } from '../../utils/formatters';
 
 const AdminHome = () => {
   const { user } = useAuth();
   const { products } = useProducts();
+  const navigate = useNavigate();
 
   // Verificar si es admin
   if (!user || user.role !== 'admin') {
@@ -16,12 +17,57 @@ const AdminHome = () => {
     totalProducts: products.length,
     totalStock: products.reduce((sum, product) => sum + product.stock, 0),
     totalValue: products.reduce((sum, product) => sum + (product.precio * product.stock), 0),
-    featuredProducts: products.filter(p => p.destacado).length
+    featuredProducts: products.filter(p => p.destacado).length,
+    lowStockProducts: products.filter(p => p.stock < 10).length
   };
 
   const recentProducts = products
     .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion))
     .slice(0, 5);
+
+  // ✅ FUNCIONES DE NAVEGACIÓN PARA TODAS LAS PÁGINAS
+  const handleAddProduct = () => {
+    navigate('/admin/productos/nuevo-producto');
+  };
+
+  const handleManageUsers = () => {
+    navigate('/admin/usuarios');
+  };
+
+  const handleGenerateReport = () => {
+    navigate('/admin/reportes');
+  };
+
+  const handleViewBoletas = () => {
+    navigate('/admin/boletas');
+  };
+
+  const handleManageCategories = () => {
+    navigate('/admin/categorias');
+  };
+
+  const handleCriticalProducts = () => {
+    navigate('/admin/productos/criticos');
+  };
+
+  const handleProductReports = () => {
+    navigate('/admin/productos/reportes');
+  };
+
+  const handleEditProduct = (productId) => {
+    navigate(`/admin/productos/${productId}/editar-producto`);
+  };
+
+  const handleViewProduct = (productId) => {
+    navigate(`/admin/productos/${productId}`);
+  };
+
+  const handleDeleteProduct = (productId) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+      // Lógica para eliminar producto
+      console.log('Eliminando producto:', productId);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black">
@@ -67,32 +113,55 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Quick Actions - CORREGIDO */}
+        {/* Quick Actions - CON TODOS LOS BOTONES FUNCIONALES */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           <div className="card-gaming p-6">
             <h3 className="text-xl font-bold gradient-text mb-4">
               Acciones Rápidas
             </h3>
             <div className="space-y-3">
-              {/* ✅ CORREGIDO: Usar Link en lugar de <a> */}
-              <Link
-                to="/admin/nuevo-producto"
-                className="block btn-primary text-center py-3"
+              <button
+                onClick={handleAddProduct}
+                className="w-full btn-primary text-center py-3 hover:scale-105 transition-transform"
               >
                 ➕ Agregar Nuevo Producto
-              </Link>
-              <Link
-                to="/admin/usuarios"
-                className="block btn-secondary text-center py-3"
+              </button>
+              <button
+                onClick={handleManageUsers}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
               >
                 👥 Gestionar Usuarios
-              </Link>
-              <Link
-                to="/admin/reportes"
-                className="block btn-secondary text-center py-3"
+              </button>
+              <button
+                onClick={handleGenerateReport}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
               >
-                📊 Generar Reporte
-              </Link>
+                📊 Generar Reportes
+              </button>
+              <button
+                onClick={handleViewBoletas}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
+              >
+                🧾 Ver Boletas
+              </button>
+              <button
+                onClick={handleManageCategories}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
+              >
+                📁 Gestionar Categorías
+              </button>
+              <button
+                onClick={handleCriticalProducts}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
+              >
+                ⚠️ Productos Críticos
+              </button>
+              <button
+                onClick={handleProductReports}
+                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
+              >
+                📈 Reportes de Productos
+              </button>
             </div>
           </div>
 
@@ -115,6 +184,23 @@ const AdminHome = () => {
                 </div>
               ))}
             </div>
+
+            {/* Alerta de productos con stock crítico */}
+            {stats.lowStockProducts > 0 && (
+              <div className="mt-6 p-4 bg-red-500/20 border border-red-500 rounded-lg">
+                <div className="flex items-center">
+                  <span className="text-red-400 text-lg mr-2">⚠️</span>
+                  <div>
+                    <div className="text-white font-medium">
+                      {stats.lowStockProducts} producto(s) con stock bajo
+                    </div>
+                    <div className="text-red-300 text-sm">
+                      Revisa la sección de productos críticos
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -191,10 +277,25 @@ const AdminHome = () => {
                     </td>
                     <td className="py-4">
                       <div className="flex space-x-2">
-                        <button className="text-azul-claro hover:text-azul-electrico">
+                        <button 
+                          onClick={() => handleViewProduct(product.id)}
+                          className="text-azul-claro hover:text-azul-electrico"
+                          title="Ver detalles"
+                        >
+                          👁️
+                        </button>
+                        <button 
+                          onClick={() => handleEditProduct(product.id)}
+                          className="text-yellow-400 hover:text-yellow-300"
+                          title="Editar"
+                        >
                           ✏️
                         </button>
-                        <button className="text-red-400 hover:text-red-300">
+                        <button 
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="text-red-400 hover:text-red-300"
+                          title="Eliminar"
+                        >
                           🗑️
                         </button>
                       </div>
@@ -204,6 +305,12 @@ const AdminHome = () => {
               </tbody>
             </table>
           </div>
+
+          {products.length === 0 && (
+            <div className="text-center py-8 text-gray-400">
+              No hay productos registrados
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,8 +1,9 @@
-// /src/pages/Payment.jsx
 import { useState } from 'react';
 import { useCart } from '../../../context/CartContext';
 import { formatPrice } from '../../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
+import PayPalButton from '../../../components/payment/PayPalButton';
+import BackButton from '../../../components/common/BackButton';
 
 const Payment = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
@@ -10,16 +11,19 @@ const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState('transferencia');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Convertir CLP a USD para PayPal (tasa aproximada)
+  // Protección de ruta
+  if (cartItems.length === 0) {
+    navigate('/carrito');
+    return null;
+  }
+
   const convertToUSD = (clpAmount) => {
-    const exchangeRate = 0.0011; // 1 CLP ≈ 0.0011 USD
+    const exchangeRate = 0.0011;
     return (clpAmount * exchangeRate).toFixed(2);
   };
 
-  // Simular pago con transferencia
   const handleTransferPayment = async () => {
     setIsProcessing(true);
-    
     setTimeout(() => {
       setIsProcessing(false);
       clearCart();
@@ -28,33 +32,7 @@ const Payment = () => {
     }, 3000);
   };
 
-  // REDIRECCIÓN DIRECTA A PAYPAL
-  const handlePayPalRedirect = () => {
-    const totalUSD = convertToUSD(getCartTotal());
-    
-    // Simular redirección a PayPal (en una nueva pestaña)
-    const paypalUrl = `https://www.sandbox.paypal.com/checkoutnow?token=TEST-${Date.now()}&amount=${totalUSD}`;
-    
-    // Abrir PayPal en nueva pestaña
-    const newWindow = window.open(paypalUrl, '_blank', 'width=800,height=600');
-    
-    if (newWindow) {
-      // Simular proceso de pago exitoso después de 5 segundos
-      setTimeout(() => {
-        // Cerrar la ventana de PayPal simulada
-        if (!newWindow.closed) {
-          newWindow.close();
-        }
-        
-        // Procesar pago exitoso
-        clearCart();
-        alert(`¡Pago con PayPal completado! Total: $${totalUSD} USD. Tu pedido está en proceso.`);
-        navigate('/');
-      }, 5000);
-    } else {
-      alert('Por favor permite ventanas emergentes para completar el pago con PayPal');
-    }
-  };
+
 
   if (cartItems.length === 0) {
     navigate('/cart');
@@ -62,13 +40,35 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12 pt-32">
+    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black py-12 pt-32 relative">
+      {/* Botón Volver */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-24 left-6 flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-6 w-6" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M10 19l-7-7m0 0l7-7m-7 7h18" 
+          />
+        </svg>
+        <span>Volver</span>
+      </button>
+
       <div className="max-w-4xl mx-auto px-4">
         <div className="card-gaming p-8">
           <h2 className="text-3xl font-bold mb-8 gradient-text text-center">Método de Pago</h2>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Métodos de pago */}
+            {/* Columna izquierda - Métodos de pago */}
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-white mb-4">Selecciona tu método de pago</h3>
               
@@ -148,7 +148,7 @@ const Payment = () => {
                 </div>
               )}
 
-              {/* BOTÓN DE REDIRECCIÓN A PAYPAL */}
+              {/* Botón de PayPal */}
               {paymentMethod === 'paypal' && (
                 <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                   <h4 className="text-white font-semibold mb-3">Pago con PayPal:</h4>
@@ -157,13 +157,20 @@ const Payment = () => {
                     <span className="text-xs text-gray-400 ml-2">(Aproximado)</span>
                   </p>
                   
-                  <button
-                    onClick={handlePayPalRedirect}
-                    className="w-full py-4 bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <span>Pagar con</span>
-                    <span className="font-bold text-lg">PayPal</span>
-                  </button>
+                  <PayPalButton
+                    amount={convertToUSD(getCartTotal())}
+                    onSuccess={(details) => {
+                      clearCart();
+                      alert(`¡Pago completado! Transacción ID: ${details.id}`);
+                      navigate('/');
+                    }}
+                    onError={() => {
+                      alert('Hubo un error al procesar el pago. Por favor, intenta nuevamente.');
+                    }}
+                    onCancel={() => {
+                      alert('Has cancelado el pago.');
+                    }}
+                  />
                   
                   <p className="text-gray-400 text-xs mt-3 text-center">
                     Serás redirigido a PayPal para completar tu pago de forma segura
@@ -172,13 +179,20 @@ const Payment = () => {
               )}
             </div>
 
-            {/* Resumen del pedido */}
+            {/* Columna derecha - Resumen del pedido */}
             <div className="card-gaming p-6">
               <h3 className="text-xl font-bold mb-4 gradient-text">Resumen Final</h3>
               <div className="space-y-3 mb-4">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span className="text-gray-300">{item.nombre} x {item.quantity}</span>
+                  <div key={item.id} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={(item.imagen && (item.imagen.startsWith('http') || item.imagen.startsWith('/'))) ? item.imagen : `/assets/img/${item.imagen}`}
+                        alt={item.nombre}
+                        className="w-14 h-14 object-cover rounded"
+                      />
+                      <span className="text-gray-300">{item.nombre} x {item.quantity}</span>
+                    </div>
                     <span className="text-white">{formatPrice(item.precio * item.quantity)}</span>
                   </div>
                 ))}

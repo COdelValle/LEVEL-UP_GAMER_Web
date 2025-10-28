@@ -54,7 +54,13 @@ const Login = () => {
     if (smsCode === '123456') { // Código simulado
       // Verificar credenciales finales
       if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
-        login({ username: 'Admin', role: 'admin' });
+        // Login como admin con información adicional para la sesión persistente
+        login({
+          username: 'Admin',
+          role: 'admin',
+          email: formData.email,
+          lastLogin: new Date().toISOString()
+        });
         navigate('/admin');
       } else {
         const users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -63,7 +69,8 @@ const Login = () => {
           login({ 
             username: user.nickname,
             email: user.email,
-            role: user.role 
+            role: user.role,
+            lastLogin: new Date().toISOString()
           });
           navigate('/');
         }
