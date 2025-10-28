@@ -1,9 +1,9 @@
 import {fireEvent, render,screen} from "@testing-library/react"
-import { Card } from './../Card.jsx'
+import {Button} from "../Button"
 import { beforeEach, describe, expect, vi } from "vitest"
 
-describe("Testing Card",()=>{
+describe("Testing Button",()=>{
     it("Prueba 1",()=>{
-        <Card/>
+        <Button></Button>
     })
 })
