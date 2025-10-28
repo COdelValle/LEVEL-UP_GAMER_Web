@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { getOrders } from '../../../utils/ordersStorage';
 
 const Boletas = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [boletas, setBoletas] = useState([]);
 
-  // Datos de ejemplo
-  const boletas = [
-    { id: 1, numero: 'B001-2024', fecha: '2024-01-15', cliente: 'Juan Pérez', total: 150.00 },
-    { id: 2, numero: 'B002-2024', fecha: '2024-01-16', cliente: 'María García', total: 200.00 },
-    { id: 3, numero: 'B003-2024', fecha: '2024-01-17', cliente: 'Carlos López', total: 75.50 },
-  ];
+  useEffect(() => {
+    const loaded = getOrders();
+    // Map orders to boleta-like objects for display
+    const mapped = loaded.map((o, idx) => ({
+      id: o.id || idx,
+      numero: o.id,
+      fecha: o.fecha ? new Date(o.fecha).toLocaleDateString() : '-',
+      cliente: o.shipping?.nombre || o.user?.username || o.shipping?.email || 'Cliente',
+      total: o.total || 0,
+      raw: o
+    }));
+    setBoletas(mapped);
+  }, []);
 
   const filteredBoletas = boletas.filter(boleta =>
     boleta.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -69,11 +78,11 @@ const Boletas = () => {
                     <td className="py-4 text-white font-medium">{boleta.numero}</td>
                     <td className="py-4 text-gray-300">{boleta.fecha}</td>
                     <td className="py-4 text-gray-300">{boleta.cliente}</td>
-                    <td className="py-4 text-white font-medium">${boleta.total}</td>
+                    <td className="py-4 text-white font-medium">${boleta.total?.toLocaleString?.() ?? boleta.total}</td>
                     <td className="py-4">
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => navigate(`/admin/boletas/${boleta.id}`)}
+                          onClick={() => navigate(`/admin/boletas/${boleta.id}`, { state: { order: boleta.raw } })}
                           className="text-azul-claro hover:text-azul-electrico"
                         >
                           👁️ Ver

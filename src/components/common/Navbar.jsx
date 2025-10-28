@@ -81,6 +81,14 @@ const Navbar = () => {
             </Link>
             {isAuthenticated ? (
               <>
+                {/* Enlace al perfil del usuario */}
+                <Link 
+                  to="/perfil" 
+                  className={`nav-link text-sm xl:text-base ${location.pathname === '/perfil' ? 'active' : ''}`}
+                >
+                  Mi Perfil
+                </Link>
+                
                 {user?.role === 'admin' && (
                   <Link to="/admin" className="btn-secondary text-sm xl:text-base py-1.5 px-3 xl:px-4">
                     Panel Admin
@@ -152,10 +160,21 @@ const Navbar = () => {
                 Nosotros
               </Link>
 
+              {/* Enlace al perfil en mobile (solo si está autenticado) */}
+              {isAuthenticated && (
+                <Link 
+                  to="/perfil" 
+                  className="block text-white hover:text-azul-claro py-2 text-lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Mi Perfil
+                </Link>
+              )}
+
               {/* Cart Icon en Mobile */}
               <div className="flex justify-center py-2">
                 <Link 
-                  to="/cart" 
+                  to="/carrito" 
                   className="relative flex items-center text-white hover:text-azul-claro"
                   onClick={() => setIsMenuOpen(false)}
                 >

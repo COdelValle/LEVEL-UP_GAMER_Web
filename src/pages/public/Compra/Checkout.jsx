@@ -105,7 +105,7 @@ const Checkout = () => {
   };
 
   if (cartItems.length === 0) {
-    navigate('/cart');
+    navigate('/carrito');
     return null;
   }
 

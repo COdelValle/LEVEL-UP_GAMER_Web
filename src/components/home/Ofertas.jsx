@@ -12,7 +12,7 @@ const Ofertas = () => {
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 relative z-10">
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold mb-3 gradient-text font-orbitron">
+          <h2 className="text-6xl font-bold mb-3 gradient-text font-orbitron">
             Nuevos Ingresos
           </h2>
           <p className="text-xl text-gray-300">
@@ -21,7 +21,16 @@ const Ofertas = () => {
         </div>
 
         <div className="text-center">
-          <CardCarrusel products={nuevos} />
+          {loading ? (
+            <div className="py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="text-gray-300 mt-4">Cargando nuevos ingresos...</p>
+            </div>
+          ) : nuevos && nuevos.length > 0 ? (
+            <CardCarrusel products={nuevos} size="large" />
+          ) : (
+            <p className="text-gray-400 text-lg">No hay nuevos ingresos por el momento</p>
+          )}
           {/*
           <p className="text-gray-400 text-lg">
             Próximamente nuevas ofertas

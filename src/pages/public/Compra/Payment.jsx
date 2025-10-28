@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { useCart } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext';
 import { formatPrice } from '../../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import PayPalButton from '../../../components/payment/PayPalButton';
 import BackButton from '../../../components/common/BackButton';
+import { useLocation } from 'react-router-dom';
+import { addOrder } from '../../../utils/ordersStorage';
 
 const Payment = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const shippingInfo = location.state?.shippingInfo || {};
   const [paymentMethod, setPaymentMethod] = useState('transferencia');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -26,16 +32,39 @@ const Payment = () => {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
+      // Build order object
+      const order = {
+        id: `ORDER${Date.now()}`,
+        fecha: new Date().toISOString(),
+        items: cartItems,
+        total: getCartTotal(),
+        estado: 'pendiente',
+        metodoPago: 'transferencia',
+        shipping: shippingInfo,
+        // attach user info for filtering in Profile
+        userId: user?.id,
+        user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
+      };
+
+      // Persist order to shared orders storage and save lastOrder for immediate display
+      try {
+        addOrder(order);
+      } catch (err) {
+        // fallback: still save lastOrder
+        console.error('Could not add order to storage', err);
+      }
+      localStorage.setItem('lastOrder', JSON.stringify(order));
+
       clearCart();
-      alert('¡Pago procesado exitosamente! Te enviaremos los datos de transferencia por email.');
-      navigate('/');
-    }, 3000);
+      // Navigate to simulated receipt
+      navigate('/boleta', { state: { order } });
+    }, 1200);
   };
 
 
 
   if (cartItems.length === 0) {
-    navigate('/cart');
+    navigate('/carrito');
     return null;
   }
 
@@ -160,9 +189,31 @@ const Payment = () => {
                   <PayPalButton
                     amount={convertToUSD(getCartTotal())}
                     onSuccess={(details) => {
+                      // Build completed order
+                      const order = {
+                        id: `ORDER${Date.now()}`,
+                        fecha: new Date().toISOString(),
+                        items: cartItems,
+                        total: getCartTotal(),
+                        estado: 'completado',
+                        metodoPago: 'paypal',
+                        shipping: shippingInfo,
+                        paypalDetails: details,
+                        // attach user info for filtering in Profile
+                        userId: user?.id,
+                        user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
+                      };
+
+                      // Persist order to shared orders storage and save lastOrder for immediate display
+                      try {
+                        addOrder(order);
+                      } catch (err) {
+                        console.error('Could not add order to storage', err);
+                      }
+                      localStorage.setItem('lastOrder', JSON.stringify(order));
+
                       clearCart();
-                      alert(`¡Pago completado! Transacción ID: ${details.id}`);
-                      navigate('/');
+                      navigate('/boleta', { state: { order } });
                     }}
                     onError={() => {
                       alert('Hubo un error al procesar el pago. Por favor, intenta nuevamente.');

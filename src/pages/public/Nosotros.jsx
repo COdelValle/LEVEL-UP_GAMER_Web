@@ -1,9 +1,11 @@
 const Nosotros = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-azul-oscuro to-black">
-      {/* Hero Section with Parallax Effect (background handled globally) */}
-      <div className="relative h-[80vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-azul-oscuro/80 to-black/90"></div>
+    // Dejar el background global visible (no establecer fondo aquí)
+    <div className="min-h-screen relative">
+    
+      <div className=" h-[80vh] overflow-hidden">
+
+  
         
         {/* Animated Gaming Icons */}
         <div className="absolute inset-0 overflow-hidden">
@@ -41,7 +43,7 @@ const Nosotros = () => {
       <div className="max-w-7xl mx-auto px-4 py-16">
   {/* Misión, Visión, Valores Cards */}
   <div className="grid md:grid-cols-3 gap-8 mt-8 relative z-10 mb-24">
-          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-blue-500/20">
+          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-black/30 backdrop-blur-sm border border-white/10">
             <div className="text-5xl mb-6 animate-bounce-slow">🎯</div>
             <h3 className="text-2xl font-bold gradient-text mb-4">Nuestra Misión</h3>
             <p className="text-gray-300 leading-relaxed">
@@ -50,7 +52,7 @@ const Nosotros = () => {
             </p>
           </div>
 
-          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-purple-500/20">
+          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-black/30 backdrop-blur-sm border border-white/10">
             <div className="text-5xl mb-6 animate-bounce-slow">🚀</div>
             <h3 className="text-2xl font-bold gradient-text mb-4">Nuestra Visión</h3>
             <p className="text-gray-300 leading-relaxed">
@@ -59,7 +61,7 @@ const Nosotros = () => {
             </p>
           </div>
 
-          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-pink-500/20">
+          <div className="card-gaming p-8 text-center transform hover:scale-105 transition-transform duration-300 bg-black/30 backdrop-blur-sm border border-white/10">
             <div className="text-5xl mb-6 animate-bounce-slow">💎</div>
             <h3 className="text-2xl font-bold gradient-text mb-4">Nuestros Valores</h3>
             <p className="text-gray-300 leading-relaxed">
@@ -70,8 +72,8 @@ const Nosotros = () => {
         </div>
 
         {/* Historia Section with Glowing Border */}
-        <div className="relative p-1 rounded-2xl mb-24 mt-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-          <div className="card-gaming p-8 rounded-xl bg-gradient-to-br from-gray-900 to-black">
+          <div className="relative p-1 rounded-2xl mb-24 mt-16 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+          <div className="card-gaming p-8 rounded-xl bg-black/30 backdrop-blur-sm">
             <h2 className="text-4xl font-bold gradient-text mb-8 text-center font-orbitron">
               Nuestra Historia
             </h2>
@@ -91,7 +93,7 @@ const Nosotros = () => {
               </div>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse-slow opacity-20"></div>
-                <div className="relative z-10 w-full h-64 bg-gradient-to-br from-azul-electrico to-azul-claro rounded-full flex items-center justify-center text-8xl">
+                <div className="relative z-10 w-full h-64 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center text-8xl">
                   🎮
                 </div>
               </div>
@@ -116,7 +118,7 @@ const Nosotros = () => {
                 className="group relative p-1 rounded-xl bg-gradient-to-r hover:scale-105 transition-transform duration-300"
                 style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }}
               >
-                <div className="card-gaming p-8 text-center rounded-lg bg-gray-900 relative z-10">
+                <div className="card-gaming p-8 text-center rounded-lg bg-black/30 backdrop-blur-sm relative z-10">
                   <div className="text-5xl mb-6 group-hover:animate-bounce-slow">{member.emoji}</div>
                   <h3 className="font-bold text-white mb-2">{member.name}</h3>
                   <p className="text-azul-claro text-sm">{member.role}</p>
@@ -127,8 +129,8 @@ const Nosotros = () => {
         </div>
 
         {/* Contact Section with Animated Border */}
-        <div className="relative p-1 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x">
-          <div className="card-gaming p-12 text-center rounded-xl bg-gray-900">
+          <div className="relative p-1 rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x">
+          <div className="card-gaming p-12 text-center rounded-xl bg-black/30 backdrop-blur-sm">
             <h2 className="text-4xl font-bold gradient-text mb-6 font-orbitron">
               ¿Tienes alguna pregunta?
             </h2>

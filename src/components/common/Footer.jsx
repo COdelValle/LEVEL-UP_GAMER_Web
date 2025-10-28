@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="relative bg-[#0a192f] text-white py-12 z-20">
+  <footer className="relative bg-black/30 backdrop-blur-sm text-white py-12 z-20">
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
@@ -44,8 +44,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center">
-          <p className="text-gray-400">
+        <div className="border-t border-white/10 pt-8 text-center">
+          <p className="text-gray-300">
             © 2024 Level-Up Gamer. Todos los derechos reservados.
           </p>
         </div>
