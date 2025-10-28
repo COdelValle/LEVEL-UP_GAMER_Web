@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { formatPrice } from '../../utils/formatters';
 
-const ProductCard = ({ product, className = "", compact = false, showAdd = true }) => {
+const ProductCard = ({ product, className = "", compact = false, showAdd = true, variant = '' }) => {
   const { addToCart } = useCart();
 
   const resolveImage = (img) => {
@@ -16,6 +16,65 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true 
     addToCart(product);
     alert(`¡${product.nombre} agregado al carrito!`);
   };
+
+  // If variant is 'catalog' render the larger, grid-like card used in ProductGrid
+  if (variant === 'catalog') {
+    return (
+      <div className={`bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105 h-full flex flex-col ${className}`}>
+        <div className="relative h-64 overflow-hidden">
+          <img
+            src={resolveImage(product.imagen)}
+            alt={product.nombre}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+
+          <div className="absolute top-2 left-2 flex gap-1">
+            {product.destacado && (
+              <span className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">⭐ Destacado</span>
+            )}
+            {product.nuevo && (
+              <span className="bg-green-500 text-black text-xs px-2 py-1 rounded-full font-bold">🆕 Nuevo</span>
+            )}
+          </div>
+
+          <div className="absolute top-2 right-2">
+            <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+              product.stock > 10 ? 'bg-green-500 text-white' : product.stock > 0 ? 'bg-yellow-500 text-black' : 'bg-red-500 text-white'
+            }`}>
+              {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-4 flex flex-col flex-grow">
+          <h3 className="text-white font-bold text-lg mb-2 line-clamp-2">{product.nombre}</h3>
+          <p className="text-gray-400 text-sm mb-3 line-clamp-2">{product.descripcion}</p>
+
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-2xl font-bold text-blue-400">{formatPrice(product.precio)}</span>
+            <span className="text-xs text-gray-500 capitalize">{product.categoria}</span>
+          </div>
+
+          <div className="mt-auto flex items-center gap-3">
+            <button
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors font-medium text-sm ${
+                product.stock === 0 ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-azul-electrico hover:bg-blue-700 text-white'
+              }`}
+            >
+              <span className="text-lg">🛒</span>
+              <span>{product.stock === 0 ? 'Agotado' : 'Agregar al carrito'}</span>
+            </button>
+
+            <Link to={`/producto/${product.id}`} className="w-32 h-12 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center justify-center text-sm font-medium">
+              Ver Detalles
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`card-gaming p-6 group hover:scale-105 transition-all duration-300 h-full flex flex-col ${className}`}>

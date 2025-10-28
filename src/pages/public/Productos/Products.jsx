@@ -137,7 +137,7 @@ const Products = () => {
       {/* Nota: usamos el fondo global en App.jsx (background2.jpg). Se removió el fondo por página para evitar duplicados. */}
       {/* Contenido principal */}
       <div className="relative pt-24 pb-12">
-        <div className="max-w-4xl mx-auto px-4"> {/* Cambiado a max-w-4xl para más centrado */}
+  <div className="max-w-7xl mx-auto px-4"> {/* Aumentado a max-w-7xl para usar más espacio lateral */}
           
           {/* Header Section */}
           <div className="text-center mb-8">

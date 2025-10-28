@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from "../../context/CartContext";
+import { Link } from 'react-router-dom';
 
 const ProductGrid = ({ products, filters }) => {
   const { addToCart } = useCart();
@@ -79,14 +80,14 @@ const ProductGrid = ({ products, filters }) => {
           <p className="text-gray-400">Intenta con otros filtros o términos de búsqueda</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105"
+              className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105 h-full flex flex-col"
             >
               {/* Imagen del producto */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-64 overflow-hidden">
                 <img
                   src={(product.imagen && (product.imagen.startsWith('http') || product.imagen.startsWith('/'))) ? product.imagen : `/assets/img/${product.imagen}`}
                   alt={product.nombre}
@@ -122,7 +123,7 @@ const ProductGrid = ({ products, filters }) => {
               </div>
 
               {/* Contenido */}
-              <div className="p-4">
+              <div className="p-4 flex flex-col flex-grow">
                 <h3 className="text-white font-bold text-lg mb-2 line-clamp-2">
                   {product.nombre}
                 </h3>
@@ -141,21 +142,23 @@ const ProductGrid = ({ products, filters }) => {
                 </div>
 
                 {/* Botones de acción */}
-                <div className="flex gap-2">
+                <div className="mt-auto flex items-center gap-3">
                   <button 
                     onClick={() => handleAddToCart(product)}
                     disabled={product.stock === 0}
-                    className={`flex-1 py-2 px-4 rounded-lg transition-colors font-medium ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-colors font-medium text-sm ${
                       product.stock === 0
                         ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-azul-electrico hover:bg-blue-700 text-white'
                     }`}
                   >
-                    {product.stock === 0 ? 'Agotado' : 'Agregar al Carrito'}
+                    <span className="text-lg">🛒</span>
+                    <span>{product.stock === 0 ? 'Agotado' : 'Agregar al carrito'}</span>
                   </button>
-                  <button className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg transition-colors">
-                    ❤️
-                  </button>
+
+                  <Link to={`/producto/${product.id}`} className="w-32 h-12 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center justify-center text-sm font-medium">
+                    Ver Detalles
+                  </Link>
                 </div>
               </div>
             </div>
