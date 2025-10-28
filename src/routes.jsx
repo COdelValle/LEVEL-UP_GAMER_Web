@@ -24,6 +24,8 @@ const Payment = lazy(() => import('./pages/public/Compra/Payment'));
 const Comprar = lazy(() => import('./pages/public/Compra/Comprar'));
 const CompraDetail = lazy(() => import('./pages/public/Compra/CompraDetail'));
 const Ofertas = lazy(() => import('./pages/public/Productos/Ofertas'));
+const Profile = lazy(() => import('./pages/public/Session/Profile'));
+const Boleta = lazy(() => import('./pages/public/Compra/Boleta'));
 
 // Páginas Administración
 const AdminHome = lazy(() => import('./pages/admin/AdminHome'))
@@ -67,11 +69,11 @@ const AppRoutes = () => {
           <Route path="/categorias" element={<PageTransition><Categorias /></PageTransition>} />
           <Route path="/categorias/:id" element={<PageTransition><CategoriaDetail /></PageTransition>} />
           <Route path="/ofertas" element={<PageTransition><Ofertas /></PageTransition>} />
+          <Route path="/perfil" element={<PageTransition><Profile /></PageTransition>} /> {/* ✅ NUEVA RUTA */}
           
           {/* ========== CARRITO Y PROCESO DE COMPRA ========== */}
           {/* Rutas del carrito */}
           <Route path="/carrito" element={<PageTransition><Cart /></PageTransition>} />
-          <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
           
           {/* Proceso de pago */}
           <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
@@ -80,6 +82,7 @@ const AppRoutes = () => {
           {/* Proceso de compra */}
           <Route path="/comprar" element={<PageTransition><Comprar /></PageTransition>} />
           <Route path="/comprar/:id" element={<PageTransition><CompraDetail /></PageTransition>} />
+          <Route path="/boleta" element={<PageTransition><Boleta /></PageTransition>} />
           
           {/* ========== RUTAS DE ADMINISTRACIÓN ========== */}
           {/* Dashboard */}
@@ -199,6 +202,7 @@ const AppRoutes = () => {
               </AdminLayout>
             </ProtectedAdminRoute>
           } />
+          
           {/* Categorías */}
           <Route path="/admin/categorias" element={
             <ProtectedAdminRoute>
