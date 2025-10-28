@@ -1,95 +1,151 @@
-import { useState, useEffect } from 'react';
-import BlogCard from './BlogCard';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { blogPosts } from '../../assets/data/blogData.js';
 
-// DATOS DIRECTOS aquí también
-const blogPosts = [
-  {
-    id: 1,
-    title: "Cómo Armar el Setup Gamer Perfecto en 2025",
-    excerpt: "Descubre los componentes esenciales para crear tu estación de juego ideal...",
-    content: "<p>Contenido...</p>",
-    category: "guias",
-    author: "Level-Up Gamer Team",
-    date: "2025-01-15",
-    readTime: "8 min lectura",
-    image: "🎮",
-    gradient: "from-blue-600 to-purple-600",
-    featured: true,
-    likes: 12
-  },
-  {
-    id: 2,
-    title: "Los Esports en Chile: Crecimiento y Oportunidades",
-    excerpt: "Análisis del panorama actual de los deportes electrónicos en Chile...",
-    content: "<p>Contenido...</p>",
-    category: "noticias", 
-    author: "Level-Up Gamer Team",
-    date: "2025-01-12",
-    readTime: "6 min lectura",
-    image: "🏆",
-    gradient: "from-green-600 to-blue-600",
-    featured: true,
-    likes: 8
+const BlogGrid = ({ activeCategory, searchTerm, sortBy }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
+
+  // Filtrar posts por categoría y término de búsqueda
+  const filteredPosts = blogPosts.filter(post => {
+    const matchesCategory = activeCategory === 'todas' || post.category === activeCategory;
+    const matchesSearch = !searchTerm || 
+                         post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  // Ordenar posts
+  const sortedPosts = [...filteredPosts].sort((a, b) => {
+    switch (sortBy) {
+      case 'newest':
+        return new Date(b.date) - new Date(a.date);
+      case 'oldest':
+        return new Date(a.date) - new Date(b.date);
+      case 'popular':
+        return (b.views || 0) - (a.views || 0);
+      case 'likes':
+        return b.likes - a.likes;
+      default:
+        return 0;
+    }
+  });
+
+  // Paginación
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+
+  if (sortedPosts.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-6xl mb-4">🔍</div>
+        <h3 className="text-2xl font-bold text-white mb-2">No se encontraron posts</h3>
+        <p className="text-gray-400">Intenta con otros términos de búsqueda o categoría</p>
+      </div>
+    );
   }
-  // ... agrega más posts si quieres
-];
-
-const BlogGrid = ({ activeCategory = 'todas', searchTerm = '' }) => {
-  const [visiblePosts, setVisiblePosts] = useState(6);
-  const [filteredPosts, setFilteredPosts] = useState([]);
-
-  useEffect(() => {
-    let filtered = blogPosts;
-
-    if (activeCategory !== 'todas') {
-      filtered = filtered.filter(post => 
-        post.category.toLowerCase() === activeCategory.toLowerCase()
-      );
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter(post =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredPosts(filtered);
-  }, [activeCategory, searchTerm]);
-
-  const loadMore = () => {
-    setVisiblePosts(prev => prev + 6);
-  };
 
   return (
-    <>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        {filteredPosts.slice(0, visiblePosts).map(post => (
-          <div key={post.id} className="p-1 rounded-2xl bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10">
-            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-gray-800 shadow-xl hover:shadow-[0_12px_40px_rgba(99,102,241,0.12)] transition-shadow">
-              <BlogCard post={post} />
+    <div>
+      {/* Info de resultados */}
+      <div className="text-center mb-6">
+        <p className="text-gray-400">
+          Mostrando {currentPosts.length} de {sortedPosts.length} artículos
+          {activeCategory !== 'todas' && ` en ${activeCategory}`}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {currentPosts.map(post => (
+          <Link 
+            key={post.id}
+            to={`/blog/${post.id}`}
+            className="bg-gray-800 rounded-2xl overflow-hidden hover:scale-105 transition-transform duration-300 border border-gray-700 hover:border-green-500/30 group"
+          >
+            <div className={`h-48 bg-gradient-to-br ${post.gradient} relative`}>
+              <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                <span className="text-6xl group-hover:scale-110 transition-transform duration-300">
+                  {post.image}
+                </span>
+              </div>
+              {post.featured && (
+                <div className="absolute top-4 left-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black px-3 py-1 rounded-full text-xs font-bold">
+                  ⭐ Destacado
+                </div>
+              )}
             </div>
-          </div>
+
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-3">
+                <span className="bg-gradient-to-r from-blue-500 to-green-500 text-black px-3 py-1 rounded-full text-xs font-bold capitalize">
+                  {post.category}
+                </span>
+                <span className="text-gray-400 text-sm">📅 {post.date}</span>
+              </div>
+
+              <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 group-hover:text-green-400 transition-colors">
+                {post.title}
+              </h3>
+
+              <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                {post.excerpt}
+              </p>
+
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <span>⏱️ {post.readTime}</span>
+                <span className="text-green-400 font-medium">Leer más →</span>
+              </div>
+
+              {/* Stats adicionales */}
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                <div className="flex items-center space-x-4 text-xs text-gray-400">
+                  <span>❤️ {post.likes}</span>
+                  <span>👁️ {post.views}</span>
+                </div>
+                <span className="text-xs text-gray-500">{post.author}</span>
+              </div>
+            </div>
+          </Link>
         ))}
       </div>
 
-      {visiblePosts < filteredPosts.length && (
-        <div className="text-center">
-          <button 
-            onClick={loadMore}
-            className="bg-gradient-to-r from-blue-500 to-pink-500 text-black px-8 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity"
+      {/* Paginación */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-2 mt-8">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600 transition-colors"
           >
-            Cargar más posts
+            ← Anterior
+          </button>
+          
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                currentPage === index + 1
+                  ? 'bg-gradient-to-r from-blue-500 to-green-500 text-black font-bold'
+                  : 'bg-gray-700 hover:bg-gray-600'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+          
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600 transition-colors"
+          >
+            Siguiente →
           </button>
         </div>
       )}
-
-      {filteredPosts.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-xl text-gray-300">No se encontraron posts.</p>
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 

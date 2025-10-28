@@ -45,7 +45,7 @@ const CardCarrusel = ({ products }) => {
           <SwiperSlide key={product.id} className="h-full">
             <div className="flex items-center justify-center h-full">
               <div className="w-full h-[500px] flex items-stretch mx-auto" style={{ maxWidth: 'min(280px, 100%)' }}>
-                <ProductCard product={product} className="w-full p-4 lg:p-5" />
+                <ProductCard product={product} className="w-full p-4 lg:p-5" compact={true} showAdd={true} />
               </div>
             </div>
           </SwiperSlide>

@@ -33,6 +33,18 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+    
+    // Si es admin, crear una sesión con expiración
+    if (userData.role === 'admin') {
+      const expirationTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 días
+      const adminSession = {
+        isAuthenticated: true,
+        username: userData.username,
+        role: userData.role,
+        expiresAt: expirationTime
+      };
+      localStorage.setItem('adminSession', JSON.stringify(adminSession));
+    }
   };
 
   const logout = () => {

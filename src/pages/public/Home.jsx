@@ -4,10 +4,14 @@ import Ofertas from '../../components/home/Ofertas';
 
 const Home = () => {
   return (
-    <div>
-      <Hero />
-      <FeaturedProducts />
-      <Ofertas />
+    <div className="min-h-screen relative">
+      {/* Background handled globally in App.jsx */}
+      
+      <div className="relative z-10">
+        <Hero />
+        <FeaturedProducts />
+        <Ofertas />
+      </div>
     </div>
   );
 };

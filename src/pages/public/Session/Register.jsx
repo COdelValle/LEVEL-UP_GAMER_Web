@@ -5,9 +5,13 @@ import { useAuth } from '../../../context/AuthContext';
 const Register = () => {
   const [formData, setFormData] = useState({
     nombre: '',
+    apellido: '',
+    rut: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    nickname: '',
+    telefono: ''
   });
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -37,21 +41,30 @@ const Register = () => {
       return;
     }
 
-    // Simular registro
-    setTimeout(() => {
-      login({ 
-        username: formData.nombre, 
-        email: formData.email,
-        role: 'user' 
-      });
-      setLoading(false);
-      navigate('/');
-    }, 1500);
+    // Guardar en localStorage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const newUser = {
+      ...formData,
+      id: Date.now(),
+      role: 'user'
+    };
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    // Iniciar sesión automáticamente
+    login({ 
+      username: formData.nickname, 
+      email: formData.email,
+      role: 'user' 
+    });
+    setLoading(false);
+    navigate('/');
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-azul-oscuro to-black py-12 px-4">
-      <div className="register-container max-w-md w-full">
+      {/* RECUADRO DE FONDO */}
+      <div className="register-container max-w-md w-full bg-[#0f1e3a] border-2 border-azul-electrico rounded-xl p-8 shadow-2xl">
         <div className="text-center mb-8">
           <span className="text-4xl mb-4 block">👤</span>
           <h2 className="text-3xl font-bold gradient-text font-orbitron mb-2">
@@ -61,14 +74,63 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="apellido"
+                placeholder="Apellido"
+                value={formData.apellido}
+                onChange={handleChange}
+                className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+                required
+              />
+            </div>
+          </div>
+
           <div>
             <input
               type="text"
-              name="nombre"
-              placeholder="Nombre completo"
-              value={formData.nombre}
+              name="rut"
+              placeholder="RUT (sin puntos y con guión)"
+              value={formData.rut}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-[#0f1e3a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              required
+            />
+          </div>
+
+          <div>
+            <input
+              type="text"
+              name="nickname"
+              placeholder="Nickname"
+              value={formData.nickname}
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              required
+            />
+          </div>
+
+          <div>
+            <input
+              type="tel"
+              name="telefono"
+              placeholder="Teléfono (+56 9 XXXXXXXX)"
+              value={formData.telefono}
+              onChange={handleChange}
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
               required
             />
           </div>
@@ -80,7 +142,7 @@ const Register = () => {
               placeholder="Correo electrónico"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-[#0f1e3a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
               required
             />
           </div>
@@ -92,7 +154,7 @@ const Register = () => {
               placeholder="Contraseña"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-[#0f1e3a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
               required
             />
           </div>
@@ -104,7 +166,7 @@ const Register = () => {
               placeholder="Confirmar contraseña"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full p-3 rounded bg-[#0f1e3a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
+              className="w-full p-3 rounded bg-[#1a2d4a] text-white border border-azul-electrico focus:outline-none focus:ring-2 focus:ring-azul-electrico transition duration-300"
               required
             />
           </div>
