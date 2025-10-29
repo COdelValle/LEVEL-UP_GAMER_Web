@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { getOrders } from '../../../utils/ordersStorage';
+import { useAuth } from '../../../context/AuthContext';
+import { getOrders, updateOrder } from '../../../utils/ordersStorage';
 
 const Boletas = () => {
   const { user } = useAuth();
@@ -22,6 +22,30 @@ const Boletas = () => {
     }));
     setBoletas(mapped);
   }, []);
+
+  const reload = () => {
+    const loaded = getOrders();
+    const mapped = loaded.map((o, idx) => ({
+      id: o.id || idx,
+      numero: o.id,
+      fecha: o.fecha ? new Date(o.fecha).toLocaleDateString() : '-',
+      cliente: o.shipping?.nombre || o.user?.username || o.shipping?.email || 'Cliente',
+      total: o.total || 0,
+      raw: o
+    }));
+    setBoletas(mapped);
+  };
+
+  const handleReject = (orderId) => {
+    if (!window.confirm('¿Confirmas que quieres rechazar este pago?')) return;
+    const updated = updateOrder(orderId, { estado: 'rechazado' });
+    if (updated) {
+      reload();
+      alert('Pago marcado como rechazado.');
+    } else {
+      alert('No se pudo actualizar la boleta.');
+    }
+  };
 
   const filteredBoletas = boletas.filter(boleta =>
     boleta.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,6 +113,12 @@ const Boletas = () => {
                         </button>
                         <button className="text-green-400 hover:text-green-300">
                           📄 PDF
+                        </button>
+                        <button
+                          onClick={() => handleReject(boleta.numero)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          ❌ Rechazar
                         </button>
                       </div>
                     </td>

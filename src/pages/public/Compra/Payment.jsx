@@ -16,6 +16,10 @@ const Payment = () => {
   const shippingInfo = location.state?.shippingInfo || {};
   const [paymentMethod, setPaymentMethod] = useState('transferencia');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [transferProof, setTransferProof] = useState(null);
+  const [transferFileName, setTransferFileName] = useState('');
+  const [paymentError, setPaymentError] = useState('');
+  const [showValidation, setShowValidation] = useState(false);
 
   // Protección de ruta
   if (cartItems.length === 0) {
@@ -29,34 +33,49 @@ const Payment = () => {
   };
 
   const handleTransferPayment = async () => {
+    // Require transfer proof before entering the validation step
+    if (!transferProof) {
+      setPaymentError('Debe subir la captura de la transferencia para confirmar el pago.');
+      return;
+    }
+
+    // Show the simulated validation UI (allow user to validate/reject before generating boleta)
+    setShowValidation(true);
+  };
+
+  const finalizeTransfer = (result) => {
+    // result: 'validado' | 'rechazado'
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      // Build order object
+
+      const estadoFinal = result === 'validado' ? 'completado' : 'rechazado';
+
       const order = {
         id: `ORDER${Date.now()}`,
         fecha: new Date().toISOString(),
         items: cartItems,
         total: getCartTotal(),
-        estado: 'pendiente',
+        estado: estadoFinal,
         metodoPago: 'transferencia',
         shipping: shippingInfo,
+        transferProof,
+        transferFileName,
         // attach user info for filtering in Profile
         userId: user?.id,
         user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
       };
 
-      // Persist order to shared orders storage and save lastOrder for immediate display
       try {
         addOrder(order);
       } catch (err) {
-        // fallback: still save lastOrder
         console.error('Could not add order to storage', err);
       }
       localStorage.setItem('lastOrder', JSON.stringify(order));
 
+      // Clear cart regardless so the UI reflects order was processed/simulated
       clearCart();
-      // Navigate to simulated receipt
+      // Navigate to simulated receipt showing estado (completado/rechazado)
       navigate('/boleta', { state: { order } });
     }, 1200);
   };
@@ -147,7 +166,7 @@ const Payment = () => {
                 </div>
               </div>
 
-              {/* Información de transferencia */}
+                {/* Información de transferencia */}
               {paymentMethod === 'transferencia' && (
                 <div className="bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                   <h4 className="text-white font-semibold mb-3">Datos para transferencia:</h4>
@@ -174,6 +193,64 @@ const Payment = () => {
                       `Confirmar Transferencia ${formatPrice(getCartTotal())}`
                     )}
                   </button>
+                  {/* Simulación de validación antes de generar la boleta */}
+                  {showValidation && (
+                    <div className="mt-4 p-4 bg-gray-700/60 border border-gray-600 rounded-lg">
+                      <p className="text-sm text-gray-200 mb-3">
+                        Simula la validación del comprobante antes de generar la boleta. Selecciona si el comprobante es correcto o incorrecto.
+                      </p>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => finalizeTransfer('validado')}
+                          disabled={isProcessing}
+                          className="btn-primary flex-1 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          {isProcessing ? 'Procesando...' : 'Comprobante correcto'}
+                        </button>
+                        <button
+                          onClick={() => finalizeTransfer('rechazado')}
+                          disabled={isProcessing}
+                          className="btn-secondary flex-1 py-1.5 text-sm disabled:opacity-50"
+                        >
+                          {isProcessing ? 'Procesando...' : 'Comprobante incorrecto'}
+                        </button>
+                        <button
+                          onClick={() => setShowValidation(false)}
+                          disabled={isProcessing}
+                          className="px-2 py-1.5 text-sm bg-gray-600 text-gray-200 rounded-md hover:bg-gray-500"
+                        >Cancelar</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Upload de comprobante para transferencia */}
+              {paymentMethod === 'transferencia' && (
+                <div className="mt-4 bg-gray-800/40 p-4 rounded-lg border border-gray-700">
+                  <label className="block text-sm text-gray-300 mb-2">Sube la captura de la transferencia (obligatorio):</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      setPaymentError('');
+                      const file = e.target.files?.[0];
+                      if (!file) {
+                        setTransferProof(null);
+                        setTransferFileName('');
+                        return;
+                      }
+                      setTransferFileName(file.name);
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setTransferProof(reader.result);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                    className="w-full text-sm text-gray-200"
+                  />
+                  {transferFileName && <p className="text-gray-300 text-sm mt-2">Archivo: {transferFileName}</p>}
+                  {paymentError && <p className="text-sm text-red-400 mt-2">{paymentError}</p>}
                 </div>
               )}
 

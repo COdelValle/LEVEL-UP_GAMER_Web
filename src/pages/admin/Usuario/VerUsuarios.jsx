@@ -1,9 +1,10 @@
 import { useAuth } from '../../../context/AuthContext';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, useNavigate } from 'react-router-dom';
 
 const VerUsuario = () => {
   const { user } = useAuth();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   if (!user || user.role !== 'admin') {
     return <Navigate to="/login" replace />;
@@ -116,7 +117,10 @@ const VerUsuario = () => {
                 Acciones
               </h3>
               <div className="space-y-3">
-                <button className="btn-primary w-full text-center py-2">
+                <button
+                  onClick={() => navigate(`/admin/usuarios/${id}/editar-usuario`)}
+                  className="btn-primary w-full text-center py-2"
+                >
                   ✏️ Editar Usuario
                 </button>
                 <button className="btn-secondary w-full text-center py-2">

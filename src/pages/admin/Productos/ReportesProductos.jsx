@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../../context/AuthContext';
 import { useProducts } from '../../hooks/useProducts';
 
 const ReportesProductos = () => {
@@ -115,7 +115,48 @@ const ReportesProductos = () => {
             <h3 className="text-xl font-bold gradient-text">
               Productos {filtro !== 'todos' && `- ${filtro.replace('-', ' ')}`}
             </h3>
-            <button className="btn-primary">Exportar Reporte</button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => {
+                  // Export filtered products as CSV
+                  const rows = productosFiltrados.map(p => ({
+                    id: p.id,
+                    nombre: p.nombre,
+                    categoria: p.categoria,
+                    precio: p.precio,
+                    stock: p.stock,
+                    destacado: p.destacado ? 'sí' : 'no',
+                    nuevo: p.nuevo ? 'sí' : 'no',
+                    valor_total: (p.precio * p.stock).toFixed(2)
+                  }));
+
+                  if (rows.length === 0) {
+                    alert('No hay productos para exportar con el filtro actual.');
+                    return;
+                  }
+
+                  const header = Object.keys(rows[0]);
+                  const csv = [header.join(',')].concat(
+                    rows.map(r => header.map(h => `"${String(r[h]).replace(/"/g, '""')}"`).join(','))
+                  ).join('\n');
+
+                  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  const fileName = `report_productos_${filtro}_${new Date().toISOString().slice(0,10)}.csv`;
+                  link.setAttribute('download', fileName);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url);
+                }}
+                className="btn-primary"
+              >
+                Exportar CSV
+              </button>
+              <button className="btn-secondary" onClick={() => window.print()}>Imprimir</button>
+            </div>
           </div>
 
           <div className="overflow-x-auto">

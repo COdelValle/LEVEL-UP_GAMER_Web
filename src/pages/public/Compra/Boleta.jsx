@@ -22,8 +22,22 @@ const Boleta = () => {
         <div className="card-gaming p-8">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-green-400">Se ha realizado la compra. nro #{order.id}</h1>
-              <p className="text-sm text-gray-400 mt-1">Completa la siguiente información</p>
+              {order.estado === 'rechazado' ? (
+                <>
+                  <h1 className="text-3xl font-bold text-red-400">Tu compra ha sido rechazada</h1>
+                  <p className="text-sm text-gray-300 mt-1">Se ha detectado un problema con el comprobante de transferencia. Si crees que esto es un error, contacta a soporte: soporte@levelupgamer.cl</p>
+                </>
+              ) : order.estado === 'pendiente' ? (
+                <>
+                  <h1 className="text-3xl font-bold text-yellow-400">Pedido pendiente - nro #{order.id}</h1>
+                  <p className="text-sm text-gray-400 mt-1">Tu pago está en revisión. Pronto te notificaremos el estado.</p>
+                </>
+              ) : (
+                <>
+                  <h1 className="text-3xl font-bold text-green-400">Se ha realizado la compra. nro #{order.id}</h1>
+                  <p className="text-sm text-gray-400 mt-1">Gracias por tu compra. A continuación encontrarás los detalles.</p>
+                </>
+              )}
             </div>
             <div className="text-right text-xs text-gray-400">Código orden: {order.id}</div>
           </div>

@@ -106,6 +106,9 @@ const ProductGrid = ({ products, filters }) => {
                       🆕 Nuevo
                     </span>
                   )}
+                  {product.oferta && product.precioOferta && (
+                    <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">Oferta</span>
+                  )}
                 </div>
                 
                 {/* Stock */}
@@ -133,9 +136,16 @@ const ProductGrid = ({ products, filters }) => {
                 </p>
                 
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl font-bold text-blue-400">
-                    {formatPrice(product.precio)}
-                  </span>
+                  <div>
+                    {product.oferta && product.precioOferta ? (
+                      <div className="space-y-1">
+                        <div className="text-sm text-gray-400 line-through">{formatPrice(product.precio)}</div>
+                        <div className="text-2xl font-bold text-blue-400">{formatPrice(product.precioOferta)}</div>
+                      </div>
+                    ) : (
+                      <span className="text-2xl font-bold text-blue-400">{formatPrice(product.precio)}</span>
+                    )}
+                  </div>
                   <span className="text-xs text-gray-500 capitalize">
                     {product.categoria}
                   </span>

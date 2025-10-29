@@ -148,7 +148,7 @@ const ProductosCriticos = () => {
                       +5 Stock
                     </button>
                     <Link
-                      to={`/admin/productos/editar/${producto.id}`}
+                      to={`/admin/productos/${producto.id}/editar-producto`}
                       className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
                     >
                       Editar

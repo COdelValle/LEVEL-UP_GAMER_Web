@@ -121,46 +121,22 @@ const AdminHome = () => {
             </h3>
             <div className="space-y-3">
               <button
-                onClick={handleAddProduct}
-                className="w-full btn-primary text-center py-3 hover:scale-105 transition-transform"
-              >
-                ➕ Agregar Nuevo Producto
-              </button>
-              <button
-                onClick={handleManageUsers}
-                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
-              >
-                👥 Gestionar Usuarios
-              </button>
-              <button
-                onClick={handleGenerateReport}
-                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
-              >
-                📊 Generar Reportes
-              </button>
-              <button
                 onClick={handleViewBoletas}
                 className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
               >
                 🧾 Ver Boletas
               </button>
               <button
-                onClick={handleManageCategories}
-                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
+                onClick={handleAddProduct}
+                className="w-full btn-primary text-center py-3 hover:scale-105 transition-transform"
               >
-                📁 Gestionar Categorías
+                ➕ Agregar Nuevo Producto
               </button>
               <button
                 onClick={handleCriticalProducts}
                 className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
               >
                 ⚠️ Productos Críticos
-              </button>
-              <button
-                onClick={handleProductReports}
-                className="w-full btn-secondary text-center py-3 hover:scale-105 transition-transform"
-              >
-                📈 Reportes de Productos
               </button>
             </div>
           </div>

@@ -141,25 +141,15 @@ const AppRoutes = () => {
           <Route path="/admin/boletas" element={
             <ProtectedAdminRoute>
               <AdminLayout>
-                <PageTransition>
-                  <BasicAdminPage 
-                    title="Gestión de Boletas" 
-                    description="Administra y visualiza todas las boletas de venta."
-                  />
-                </PageTransition>
+                <PageTransition><Boletas /></PageTransition>
               </AdminLayout>
             </ProtectedAdminRoute>
           } />
-          
+
           <Route path="/admin/boletas/:id" element={
             <ProtectedAdminRoute>
               <AdminLayout>
-                <PageTransition>
-                  <BasicAdminPage 
-                    title="Detalle de Boleta" 
-                    description="Detalle completo de la boleta seleccionada."
-                  />
-                </PageTransition>
+                <PageTransition><BoletaDetail /></PageTransition>
               </AdminLayout>
             </ProtectedAdminRoute>
           } />
@@ -194,10 +184,7 @@ const AppRoutes = () => {
             <ProtectedAdminRoute>
               <AdminLayout>
                 <PageTransition>
-                  <BasicAdminPage 
-                    title="Detalle de Usuario" 
-                    description="Información detallada del usuario."
-                  />
+                  <VerUsuarios />
                 </PageTransition>
               </AdminLayout>
             </ProtectedAdminRoute>

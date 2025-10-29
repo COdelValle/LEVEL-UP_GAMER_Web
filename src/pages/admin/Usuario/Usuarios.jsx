@@ -1,8 +1,9 @@
 import { useAuth } from '../../../context/AuthContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Usuarios = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   if (!user || user.role !== 'admin') {
     return <Navigate to="/login" replace />;
@@ -102,13 +103,19 @@ const Usuarios = () => {
                     </td>
                     <td className="py-4">
                       <div className="flex space-x-2">
-                        <button className="text-azul-claro hover:text-azul-electrico text-sm">
-                          👁️ Ver
-                        </button>
-                        <button className="text-green-400 hover:text-green-300 text-sm">
-                          ✏️ Editar
-                        </button>
-                      </div>
+                          <button
+                            onClick={() => navigate(`/admin/usuario/${usuario.id}`)}
+                            className="text-azul-claro hover:text-azul-electrico text-sm"
+                          >
+                            👁️ Ver
+                          </button>
+                          <button
+                            onClick={() => navigate(`/admin/usuarios/${usuario.id}/editar-usuario`)}
+                            className="text-green-400 hover:text-green-300 text-sm"
+                          >
+                            ✏️ Editar
+                          </button>
+                        </div>
                     </td>
                   </tr>
                 ))}

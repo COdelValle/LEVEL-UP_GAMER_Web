@@ -51,7 +51,16 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
           <p className="text-gray-400 text-sm mb-3 line-clamp-2">{product.descripcion}</p>
 
           <div className="flex items-center justify-between mb-3">
-            <span className="text-2xl font-bold text-blue-400">{formatPrice(product.precio)}</span>
+            <div>
+              {product.oferta && product.precioOferta ? (
+                <div className="space-y-1">
+                  <div className="text-sm text-gray-400 line-through">{formatPrice(product.precio)}</div>
+                  <div className="text-2xl font-bold text-blue-400">{formatPrice(product.precioOferta)}</div>
+                </div>
+              ) : (
+                <span className="text-2xl font-bold text-blue-400">{formatPrice(product.precio)}</span>
+              )}
+            </div>
             <span className="text-xs text-gray-500 capitalize">{product.categoria}</span>
           </div>
 
@@ -94,6 +103,11 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
             DESTACADO
           </span>
         )}
+         {product.oferta && product.precioOferta && (
+           <span className="absolute top-10 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+             Oferta
+           </span>
+         )}
       </div>
 
       <div className="mb-3">
@@ -108,10 +122,17 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
 
       {compact ? (
         <>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl font-bold gradient-text">
-              {formatPrice(product.precio)}
-            </span>
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              {product.oferta && product.precioOferta ? (
+                <div className="space-y-1">
+                  <div className="text-sm text-gray-400 line-through">{formatPrice(product.precio)}</div>
+                  <div className="text-2xl font-bold gradient-text">{formatPrice(product.precioOferta)}</div>
+                </div>
+              ) : (
+                <span className="text-2xl font-bold gradient-text">{formatPrice(product.precio)}</span>
+              )}
+            </div>
             <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
               {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
             </span>
@@ -128,9 +149,16 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
           </p>
 
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold gradient-text">
-              {formatPrice(product.precio)}
-            </span>
+            <div>
+              {product.oferta && product.precioOferta ? (
+                <div className="space-y-1">
+                  <div className="text-sm text-gray-400 line-through">{formatPrice(product.precio)}</div>
+                  <div className="text-2xl font-bold gradient-text">{formatPrice(product.precioOferta)}</div>
+                </div>
+              ) : (
+                <span className="text-2xl font-bold gradient-text">{formatPrice(product.precio)}</span>
+              )}
+            </div>
             <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
               {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
             </span>

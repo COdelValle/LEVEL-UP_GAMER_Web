@@ -52,8 +52,11 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 pt-24 pb-12">
-      <div className="max-w-6xl mx-auto px-4">
+    <div className="min-h-screen relative bg-[url('/assets/img/background2.jpg')] bg-cover bg-center pt-24 pb-12">
+      {/* Superposición rosada sutil sobre el background global */}
+      <div className="absolute inset-0 bg-pink-600/20 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900/15 via-gray-900/50 to-gray-900/40 backdrop-blur-[1px] pointer-events-none"></div>
+      <div className="relative z-10 max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent mb-4">
@@ -77,8 +80,8 @@ const Profile = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-blue-500 to-green-500 text-white shadow-lg'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-gradient-to-r from-slate-700 to-slate-800 text-white shadow-inner'
+                  : 'bg-gray-800/60 text-gray-300 hover:bg-gray-700'
               }`}
             >
               {tab.label}
