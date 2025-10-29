@@ -78,8 +78,26 @@ const Products = () => {
       return false;
     }
 
-    if (filters.category && product.categoria !== filters.category) {
-      return false;
+    if (filters.category) {
+      if (filters.subcategory) {
+        const cat = filters.category;
+        const sub = filters.subcategory;
+        const keywordsMap = subcategoryKeywords[cat] || {};
+        const keywords = keywordsMap[sub] || [];
+        const name = (product.nombre || '').toLowerCase();
+        const category = (product.categoria || '').toLowerCase();
+
+        // Si no hay keywords definidas (otros), comprobamos solo la categoría
+        if (keywords.length === 0) {
+          if (category !== cat) return false;
+        } else {
+          // Comprobar si alguno de los keywords aparece en el nombre o categoría
+          const matched = keywords.some(k => name.includes(k) || category.includes(k));
+          if (!matched) return false;
+        }
+      } else {
+        if (product.categoria !== filters.category) return false;
+      }
     }
 
     if (filters.priceRange) {
@@ -128,6 +146,98 @@ const Products = () => {
       ...data,
       count: normalizedProducts.filter(p => p.categoria === value).length
     }));
+  };
+
+  // Mapa de palabras clave para subcategorías (se usa para filtrar por nombre cuando no hay campo específico)
+  const subcategoryKeywords = {
+    'consolas': {
+      playstation: ['playstation', 'ps5', 'ps4'],
+      xbox: ['xbox', 'xbox series', 'xbox series x', 'xbox series s'],
+      nintendo: ['nintendo', 'switch'],
+      otros: []
+    },
+    'pc-gaming': {
+      desktop: ['pc', 'pc gamer', 'rog', 'tower'],
+      laptops: ['laptop', 'notebook', 'zephyrus', 'rog', 'predator'],
+      otros: []
+    },
+    'perifericos': {
+      teclados: ['teclado', 'keyboard', 'blackwidow'],
+      mouse: ['mouse', 'g502', 'ratón'],
+      audifonos: ['audífono', 'auricular', 'headset', 'headphones'],
+      mousepad: ['mousepad', 'qcK', 'mouse pad'],
+      otros: []
+    }
+  };
+
+  // Detectores dinámicos por producto para subcategorías
+  const detectConsoleSub = (product) => {
+    const name = (product.nombre || '').toLowerCase();
+    if (name.includes('ps') || name.includes('playstation') || name.includes('ps5') || name.includes('ps4')) return 'playstation';
+    if (name.includes('xbox')) return 'xbox';
+    if (name.includes('nintendo') || name.includes('switch')) return 'nintendo';
+    return 'otros';
+  };
+
+  const detectPcSub = (product) => {
+    const name = (product.nombre || '').toLowerCase();
+    if (name.includes('laptop') || name.includes('notebook') || name.includes('zephyrus') || name.includes('laptop')) return 'laptops';
+    return 'desktop';
+  };
+
+  const detectPeripheralsSub = (product) => {
+    const name = (product.nombre || '').toLowerCase();
+    const origCat = (product.categoria || '').toLowerCase();
+    if (origCat.includes('mouse') || name.includes('mouse') || name.includes('g502') || name.includes('ratón')) return 'mouse';
+    if (origCat.includes('teclado') || name.includes('teclado') || name.includes('keyboard')) return 'teclados';
+    if (origCat.includes('audifono') || origCat.includes('auricular') || name.includes('audífono') || name.includes('auricular') || name.includes('headset')) return 'audifonos';
+    if (origCat.includes('mousepad') || name.includes('mousepad') || name.includes('mouse pad') || name.includes('qcK'.toLowerCase())) return 'mousepad';
+    return 'otros';
+  };
+
+  const productMatchesSubcategory = (product, mainCat, subKey) => {
+    if (!subKey) return true;
+    if (mainCat === 'consolas') return detectConsoleSub(product) === subKey;
+    if (mainCat === 'pc-gaming') return detectPcSub(product) === subKey;
+    if (mainCat === 'perifericos') return detectPeripheralsSub(product) === subKey;
+    return false;
+  };
+
+  const computeSubcategories = (mainCat) => {
+    const counts = {};
+    normalizedProducts.forEach(p => {
+      const cat = (p.categoria || '').toLowerCase();
+      if (cat !== mainCat) return;
+      let key = 'otros';
+      if (mainCat === 'consolas') key = detectConsoleSub(p);
+      else if (mainCat === 'pc-gaming') key = detectPcSub(p);
+      else if (mainCat === 'perifericos') key = detectPeripheralsSub(p);
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    // Build array with labels
+    const labelMap = {
+      playstation: 'PlayStation',
+      xbox: 'Xbox',
+      nintendo: 'Nintendo',
+      desktop: 'Desktop',
+      laptops: 'Laptops',
+      teclados: 'Teclados',
+      mouse: 'Mouse',
+      audifonos: 'Audífonos',
+      mousepad: 'Mousepad',
+      otros: 'Otros'
+    };
+    return Object.keys(counts).map(k => ({ key: k, label: labelMap[k] || k, count: counts[k] }));
+  };
+  const handleCategorySelect = (category, subcategory) => {
+    // Toggle behavior: si ya está seleccionado, quitar
+    if (filters.category === category && filters.subcategory === subcategory) {
+      const { category: removed, subcategory: removedSub, ...rest } = filters;
+      setFilters(rest);
+      return;
+    }
+
+    setFilters({ ...filters, category, subcategory });
   };
 
   const mainCategories = getMainCategories();
@@ -295,6 +405,59 @@ const Products = () => {
                       />
                       Solo destacados
                     </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Categorías detalladas UI debajo de Disponibilidad (visible cuando showFilters) */}
+          {showFilters && (
+            <div className="bg-gray-800 rounded-lg p-6 mb-8 border border-gray-700">
+              <h3 className="text-lg font-bold text-white mb-4">Categorías detalladas</h3>
+              <div className="space-y-4">
+                <div>
+                  <div className="text-gray-200 font-medium mb-2">Consolas</div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {['playstation','xbox','nintendo','otros'].map(sub => (
+                      <button
+                        key={sub}
+                        onClick={() => handleCategorySelect('consolas', sub)}
+                        className={`px-3 py-2 rounded-lg text-sm ${filters.category === 'consolas' && filters.subcategory === sub ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                      >
+                        {sub === 'otros' ? 'Otros' : sub.charAt(0).toUpperCase() + sub.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-gray-200 font-medium mb-2">PC Gaming</div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {['desktop','laptops','otros'].map(sub => (
+                      <button
+                        key={sub}
+                        onClick={() => handleCategorySelect('pc-gaming', sub)}
+                        className={`px-3 py-2 rounded-lg text-sm ${filters.category === 'pc-gaming' && filters.subcategory === sub ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                      >
+                        {sub === 'desktop' ? 'Desktop' : sub === 'laptops' ? 'Laptops' : 'Otros'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-gray-200 font-medium mb-2">Periféricos</div>
+                  <div className="flex flex-wrap gap-2">
+                    {['teclados','mouse','audifonos','mousepad','otros'].map(sub => (
+                      <button
+                        key={sub}
+                        onClick={() => handleCategorySelect('perifericos', sub)}
+                        className={`px-3 py-2 rounded-lg text-sm ${filters.category === 'perifericos' && filters.subcategory === sub ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                      >
+                        {sub === 'audifonos' ? 'Audífonos' : sub === 'mousepad' ? 'Mousepad' : sub.charAt(0).toUpperCase() + sub.slice(1)}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
