@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import { useProducts } from '../../hooks/useProducts';
+import { useProducts } from '../../../hooks/useProducts';
 
 const ReportesProductos = () => {
   const { user } = useAuth();
