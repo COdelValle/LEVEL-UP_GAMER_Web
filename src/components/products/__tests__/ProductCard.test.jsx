@@ -11,7 +11,7 @@ vi.mock('../../../context/CartContext', () => ({
 
 import ProductCard from '../ProductCard';
 
-describe('ProductCard', () => {
+describe('Testing ProductCard', () => {
 	beforeEach(() => {
 		addToCartMock.mockReset();
 		// mock alert to avoid noisy dialogs during tests
