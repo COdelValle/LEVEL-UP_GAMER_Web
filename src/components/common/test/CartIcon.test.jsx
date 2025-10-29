@@ -12,7 +12,7 @@ vi.mock("../../context/CartContext", () => ({
 
 import CartIcon from "../CartIcon";
 
-describe("CartIcon", () => {
+describe("Testing CartIcon", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
