@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import createAPI from '../lib/APIHelper';
 
 const AuthContext = createContext();
 
@@ -11,8 +10,6 @@ export const useAuth = () => {
   return context;
 };
 
-const api = createAPI(import.meta.env.VITE_API_URL || 'http://localhost:8080');
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,59 +17,33 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedSession = localStorage.getItem('adminSession');
-    const storedToken = localStorage.getItem('token');
-
-    console.log('🔍 AuthContext init - localStorage:', { storedUser: !!storedUser, storedToken: !!storedToken, storedSession: !!storedSession });
-
-    if (storedToken) {
-      api.setToken(storedToken);
-      console.log('✓ Token restaurado desde localStorage');
-    }
-
+    
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      console.log('✓ User restaurado:', parsedUser);
+      setUser(JSON.parse(storedUser));
     } else if (storedSession) {
       const session = JSON.parse(storedSession);
       if (session.isAuthenticated && new Date().getTime() < session.expiresAt) {
         setUser({ username: session.username, role: 'admin' });
-        console.log('✓ Admin session restaurada');
       }
-    } else {
-      console.log('ℹ No hay sesión guardada');
     }
-
+    
     setLoading(false);
   }, []);
 
-  // Mantener la función `login` para flujos locales existentes
   const login = (userData) => {
-    // Normalizar 'rol' a 'role' si es necesario
-    const normalizedUser = {
-      ...userData,
-      role: userData.role || userData.rol
-    };
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
     
-    setUser(normalizedUser);
-    localStorage.setItem('user', JSON.stringify(normalizedUser));
-
     // Si es admin, crear una sesión con expiración
-    if (normalizedUser.role === 'admin' || normalizedUser.role === 'ADMIN') {
+    if (userData.role === 'admin') {
       const expirationTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 días
       const adminSession = {
         isAuthenticated: true,
-        username: normalizedUser.username || normalizedUser.nombre,
-        role: normalizedUser.role,
+        username: userData.username,
+        role: userData.role,
         expiresAt: expirationTime
       };
       localStorage.setItem('adminSession', JSON.stringify(adminSession));
-    }
-
-    // Si nos pasan token en userData, usarlo
-    if (normalizedUser?.token) {
-      api.setToken(normalizedUser.token);
-      localStorage.setItem('token', normalizedUser.token);
     }
   };
 
@@ -80,53 +51,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('adminSession');
-    localStorage.removeItem('token');
-    api.setToken(null);
-  };
-
-  // Nueva función que llama al backend para autenticar
-  const authenticate = async (email, password) => {
-    setLoading(true);
-    try {
-      const data = await api.login(email, password);
-
-      if (data?.token) {
-        api.setToken(data.token);
-        localStorage.setItem('token', data.token);
-      }
-
-      // Intentar extraer user de varias estructuras posibles:
-      // 1. data.user (estructura estándar)
-      // 2. data.usuario (variante)
-      // 3. Directamente en data si tiene usuarioId, nombre, email, rol (estructura actual del backend)
-      let userFromApi = data?.user || data?.usuario;
-      
-      if (!userFromApi && data?.usuarioId) {
-        // Tu backend devuelve la info del usuario directamente en el objeto
-        userFromApi = {
-          id: data.usuarioId,
-          nombre: data.nombre,
-          email: data.email,
-          rol: data.rol,
-          role: (data.rol || '').toLowerCase() // normalizar a minúsculas para consistencia
-        };
-      }
-
-      if (userFromApi) {
-        setUser(userFromApi);
-        localStorage.setItem('user', JSON.stringify(userFromApi));
-        console.log('✓ User guardado:', userFromApi);
-      } else {
-        console.warn('⚠ Backend no devolvió user en la respuesta:', data);
-      }
-
-      return data;
-    } catch (err) {
-      console.error('✗ Error en authenticate:', err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
   };
 
   const value = {
@@ -134,9 +58,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
-    isAuthenticated: !!user,
-    api, // exponer la instancia API para llamadas desde componentes
-    authenticate
+    isAuthenticated: !!user
   };
 
   return (

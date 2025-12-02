@@ -15,7 +15,7 @@ const Login = () => {
   const [recoveryMethod, setRecoveryMethod] = useState('email'); // 'email' o 'sms'
   const [recoveryEmail, setRecoveryEmail] = useState('');
   const [recoveryPhone, setRecoveryPhone] = useState('');
-  const { login, authenticate } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,71 +28,33 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Intentar autenticación contra el backend primero
-    try {
-      const data = await authenticate(formData.email, formData.password);
 
-      // Si la API indica que se requiere 2FA (nombres comunes: requires2FA, requires_sms)
-      if (data?.requires2FA || data?.requires_sms) {
-        setShowSMSAuth(true);
-        setLoading(false);
-        return;
-      }
-
-      // Si la API devolvió el usuario en la respuesta, navegar según su rol
-      const userFromApi = data?.user || data?.usuario || null;
-      if (userFromApi && userFromApi.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+    // Verificar credenciales básicas primero
+    if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
+      // Para admin, mostrar autenticación SMS
+      setShowSMSAuth(true);
       setLoading(false);
       return;
-    } catch (err) {
-      // Si falla la llamada al backend, mantener el comportamiento local como fallback
-      console.warn('Backend auth failed, falling back to local:', err.message || err);
     }
 
-    // Fallback local: verificar credenciales en localStorage
-    try {
-      // Verificar credenciales básicas primero (local dev admin)
-      if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
-        setShowSMSAuth(true);
-        setLoading(false);
-        return;
-      }
+    // Verificar en localStorage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.email === formData.email && u.password === formData.password);
 
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === formData.email && u.password === formData.password);
-
-      if (user) {
-        setShowSMSAuth(true);
-      } else {
-        alert('Credenciales incorrectas');
-      }
-    } finally {
-      setLoading(false);
+    if (user) {
+      // Para usuarios normales, también mostrar SMS
+      setShowSMSAuth(true);
+    } else {
+      alert('Credenciales incorrectas');
     }
+    setLoading(false);
   };
 
   const handleSMSVerification = () => {
     if (smsCode === '123456') { // Código simulado
-      // Si llegamos aquí, significa que authenticate() ya pasó en handleSubmit
-      // Simplemente navegar según el role guardado en localStorage
-      const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
-      
-      if (storedUser && (storedUser.role === 'admin' || storedUser.role === 'ADMIN')) {
-        navigate('/admin');
-        return;
-      }
-      
-      if (storedUser) {
-        navigate('/');
-        return;
-      }
-      
-      // Si no hay user guardado, hacer fallback local
+      // Verificar credenciales finales
       if (formData.email === 'admin@gmail.com' && formData.password === 'levelup2024') {
+        // Login como admin con información adicional para la sesión persistente
         login({
           username: 'Admin',
           role: 'admin',
@@ -100,21 +62,18 @@ const Login = () => {
           lastLogin: new Date().toISOString()
         });
         navigate('/admin');
-        return;
-      }
-
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find(u => u.email === formData.email && u.password === formData.password);
-      if (user) {
-        login({ 
-          username: user.nickname,
-          email: user.email,
-          role: user.role,
-          lastLogin: new Date().toISOString()
-        });
-        navigate('/');
       } else {
-        alert('Usuario no encontrado. Intenta de nuevo.');
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === formData.email && u.password === formData.password);
+        if (user) {
+          login({ 
+            username: user.nickname,
+            email: user.email,
+            role: user.role,
+            lastLogin: new Date().toISOString()
+          });
+          navigate('/');
+        }
       }
     } else {
       alert('Código incorrecto. Intenta con 123456');
