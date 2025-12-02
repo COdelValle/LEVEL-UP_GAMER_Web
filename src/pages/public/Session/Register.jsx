@@ -15,7 +15,7 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, api, authenticate } = useAuth();
   const navigate = useNavigate();
 
   // Función para validar RUT chileno
@@ -219,7 +219,29 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // Verificar si el email ya existe
+      // Intentar registrar en el backend primero
+      try {
+        const newUserPayload = {
+          nombre: formData.nombre,
+          rut: formData.rut,
+          email: formData.email,
+          password: formData.password,
+          passwordConfirm: formData.confirmPassword
+        };
+
+        // Endpoint: /api/v1/auth/register
+        const res = await api.post('/api/v1/auth/register', newUserPayload);
+
+        // Si el registro fue exitoso, intentar autenticar (obtener token)
+        await authenticate(formData.email, formData.password);
+
+        navigate('/');
+        return;
+      } catch (err) {
+        console.warn('Backend register failed, falling back to local:', err.message || err);
+      }
+
+      // Fallback local: verificar si el email ya existe
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       const existingUser = users.find(user => 
         user.email === formData.email || user.rut === formData.rut
@@ -235,7 +257,7 @@ const Register = () => {
         return;
       }
 
-      // Crear nuevo usuario
+      // Crear nuevo usuario localmente
       const newUser = {
         ...formData,
         id: Date.now(),
@@ -247,7 +269,7 @@ const Register = () => {
       users.push(newUser);
       localStorage.setItem('users', JSON.stringify(users));
 
-      // Iniciar sesión automáticamente
+      // Iniciar sesión automáticamente (local)
       login({ 
         id: newUser.id,
         nombre: formData.nombre,
