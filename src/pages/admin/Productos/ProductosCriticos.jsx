@@ -3,26 +3,36 @@ import { Link } from 'react-router-dom';
 import { formatPrice } from '../../../utils/formatters';
 import { getStockStatus, getProductosCriticos } from '../../../utils/stockUtils';
 import BackButton from '../../../components/common/BackButton';
+import { useAuth } from '../../../context/AuthContext';
 
 const ProductosCriticos = () => {
+  const { api } = useAuth();
   const [productos, setProductos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filtro, setFiltro] = useState('todos'); // todos, agotados, criticos
 
   useEffect(() => {
-    // Cargar productos del JSON
-    fetch('/src/assets/data/productos.json')
-      .then(res => res.json())
-      .then(data => {
+    // Cargar productos directamente de la BD
+    const fetchProductos = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get('/api/v1/productos');
+        const data = Array.isArray(res) ? res : (res?.data || []);
         const productosCriticos = getProductosCriticos(data);
         setProductos(productosCriticos);
+        setError(null);
+      } catch (err) {
+        console.error('Error cargando productos de la BD:', err);
+        setError(err);
+        setProductos([]);
+      } finally {
         setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Error cargando productos:', error);
-        setIsLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchProductos();
+  }, [api]);
 
   const productosFiltrados = productos.filter(producto => {
     if (filtro === 'todos') return true;
@@ -32,18 +42,34 @@ const ProductosCriticos = () => {
     return true;
   });
 
-  const handleRestock = (productoId, cantidad) => {
-    setProductos(prevProductos => 
-      prevProductos.map(prod => {
-        if (prod.id === productoId) {
-          return {
-            ...prod,
-            stock: prod.stock + cantidad
-          };
-        }
-        return prod;
-      })
-    );
+  const handleRestock = async (productoId, cantidad) => {
+    // Actualizar el producto en la BD
+    const productoActualizar = productos.find(p => p.id === productoId);
+    if (!productoActualizar) return;
+
+    try {
+      const nuevoStock = productoActualizar.stock + cantidad;
+      await api.put(`/api/v1/productos/${productoId}`, {
+        ...productoActualizar,
+        stock: nuevoStock
+      });
+
+      // Actualizar estado local
+      setProductos(prevProductos => 
+        prevProductos.map(prod => {
+          if (prod.id === productoId) {
+            return {
+              ...prod,
+              stock: nuevoStock
+            };
+          }
+          return prod;
+        })
+      );
+    } catch (err) {
+      console.error('Error actualizando stock:', err);
+      alert('Error al actualizar el stock');
+    }
   };
 
   if (isLoading) {

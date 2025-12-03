@@ -1,24 +1,66 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useOrders } from '../../../hooks/useOrders';
 
 const BoletaDetail = () => {
-  const { user } = useAuth();
+  const { user, api } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getOrdersByUser, getOrderById } = useOrders();
+  const [boleta, setBoleta] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Datos de ejemplo - reemplazar con datos reales
-  const boleta = {
-    id: id,
-    numero: 'B001-2024',
-    fecha: '2024-01-15',
-    cliente: 'Juan Pérez',
-    total: 150.00,
-    items: [
-      { producto: 'Producto 1', cantidad: 2, precio: 50.00 },
-      { producto: 'Producto 2', cantidad: 1, precio: 50.00 }
-    ]
+  useEffect(() => {
+    let mounted = true;
+
+    const load = async () => {
+      setLoading(true);
+      // Try backend first
+      if (api) {
+        try {
+          const res = await api.get(`/api/v1/ordenes/${id}`);
+          const data = res?.data ?? res;
+          if (mounted && data) {
+            setBoleta(data);
+            setLoading(false);
+            return;
+          }
+        } catch (err) {
+          console.warn('BoletaDetail: backend fetch failed, falling back to local', err?.message || err);
+        }
+      }
+
+      // Fallback: ensure orders loaded then get by id
+      try {
+        await getOrdersByUser(user?.id);
+        const found = getOrderById(id);
+        if (mounted && found) setBoleta(found);
+      } catch (e) {
+        console.warn('BoletaDetail fallback failed', e?.message || e);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+
+    return () => { mounted = false; };
+  }, [api, id, getOrdersByUser, getOrderById, user]);
+
+  const downloadJSON = () => {
+    if (!boleta) return;
+    const blob = new Blob([JSON.stringify(boleta, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `boleta_admin_${boleta.id || Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
+
+  if (loading) return <div className="p-8 text-center text-white">Cargando boleta...</div>;
+  if (!boleta) return <div className="p-8 text-center text-gray-400">No se encontró la boleta.</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black">

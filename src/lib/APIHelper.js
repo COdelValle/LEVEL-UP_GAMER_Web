@@ -1,4 +1,4 @@
-export default function createAPI(baseURL = 'http://localhost:8080') {
+export default function createAPI(baseURL = '/api') {
   let token = null;
   let apiKey = null;
 

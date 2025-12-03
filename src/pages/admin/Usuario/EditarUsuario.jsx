@@ -3,42 +3,76 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const EditarUsuario = () => {
-  const { user } = useAuth();
+  const { api, user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    role: 'user',
-    estado: 'activo',
     nombre: '',
     apellido: '',
-    telefono: ''
+    email: '',
+    rol: 'user',
+    activo: true,
+    telefono: '',
+    rut: ''
   });
 
-  const [loading, setLoading] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    newPassword: '',
+    confirmPassword: ''
+  });
 
-  // Simular carga de datos del usuario
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  // Cargar datos del usuario
   useEffect(() => {
-    const usuarioEjemplo = {
-      id: id,
-      username: 'juanperez',
-      email: 'juan@example.com',
-      role: 'user',
-      estado: 'activo',
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      telefono: '+1234567890'
+    let mounted = true;
+
+    const cargarUsuario = async () => {
+      try {
+        const res = await api.get(`/api/v1/usuarios/${id}`);
+        if (mounted && res) {
+          setFormData({
+            nombre: res.nombre || '',
+            apellido: res.apellido || '',
+            email: res.email || '',
+            rol: res.rol || 'user',
+            activo: res.activo !== false,
+            telefono: res.telefono || '',
+            rut: res.rut || ''
+          });
+        }
+      } catch (err) {
+        console.error('Error al cargar usuario:', err);
+        if (mounted) setError('No se pudo cargar el usuario');
+      } finally {
+        if (mounted) setLoading(false);
+      }
     };
-    
-    setFormData(usuarioEjemplo);
-  }, [id]);
+
+    cargarUsuario();
+
+    return () => { mounted = false; };
+  }, [id, api]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
+    
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData({
+      ...passwordData,
       [name]: value
     });
   };
@@ -46,15 +80,45 @@ const EditarUsuario = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
     try {
-      // Lógica para actualizar usuario
-      console.log('Actualizando usuario:', formData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      navigate('/admin/usuarios');
-    } catch (error) {
-      console.error('Error al actualizar usuario:', error);
+      // Actualizar datos del usuario
+      const payload = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        rol: formData.rol,
+        activo: formData.activo,
+        telefono: formData.telefono,
+        rut: formData.rut
+      };
+
+      // Si se proporciona nueva contraseña, incluirla
+      if (passwordData.newPassword) {
+        if (passwordData.newPassword !== passwordData.confirmPassword) {
+          setError('Las contraseñas no coinciden');
+          setLoading(false);
+          return;
+        }
+        if (passwordData.newPassword.length < 6) {
+          setError('La contraseña debe tener al menos 6 caracteres');
+          setLoading(false);
+          return;
+        }
+        payload.password = passwordData.newPassword;
+      }
+
+      const updated = await api.put(`/api/v1/usuarios/${id}`, payload);
+
+      if (updated) {
+        alert('✅ Usuario actualizado exitosamente');
+        navigate('/admin/usuarios');
+      }
+    } catch (err) {
+      console.error('Error al actualizar usuario:', err);
+      setError(err?.body?.message || 'Error al actualizar el usuario');
+      alert('❌ ' + (err?.body?.message || err?.message || 'Error al actualizar el usuario'));
     } finally {
       setLoading(false);
     }
@@ -79,7 +143,16 @@ const EditarUsuario = () => {
         </div>
 
         <div className="card-gaming p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
+
+          {loading ? (
+            <div className="text-center text-white">Cargando...</div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-gray-300 mb-2">Nombre</label>
@@ -141,43 +214,56 @@ const EditarUsuario = () => {
               </div>
 
               <div>
+                <label className="block text-gray-300 mb-2">RUT</label>
+                <input
+                  type="text"
+                  name="rut"
+                  value={formData.rut}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
+                />
+              </div>
+
+              <div>
                 <label className="block text-gray-300 mb-2">Rol</label>
                 <select
-                  name="role"
-                  value={formData.role}
+                  name="rol"
+                  value={formData.rol}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
                 >
                   <option value="user">Usuario</option>
                   <option value="admin">Administrador</option>
-                  <option value="moderator">Moderador</option>
+                  <option value="seller">Vendedor</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-gray-300 mb-2">Estado</label>
                 <select
-                  name="estado"
-                  value={formData.estado}
-                  onChange={handleChange}
+                  name="activo"
+                  value={formData.activo ? 'activo' : 'inactivo'}
+                  onChange={(e) => setFormData({ ...formData, activo: e.target.value === 'activo' })}
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
                 >
                   <option value="activo">Activo</option>
                   <option value="inactivo">Inactivo</option>
-                  <option value="suspendido">Suspendido</option>
                 </select>
               </div>
             </div>
 
             {/* Sección de Seguridad */}
             <div className="border-t border-gray-700 pt-6">
-              <h3 className="text-lg font-bold text-azul-claro mb-4">Seguridad</h3>
+              <h3 className="text-lg font-bold text-azul-claro mb-4">Cambiar Contraseña</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-gray-300 mb-2">Nueva Contraseña</label>
                   <input
                     type="password"
+                    name="newPassword"
                     placeholder="Dejar en blanco para no cambiar"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordChange}
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
                   />
                 </div>
@@ -185,7 +271,10 @@ const EditarUsuario = () => {
                   <label className="block text-gray-300 mb-2">Confirmar Contraseña</label>
                   <input
                     type="password"
+                    name="confirmPassword"
                     placeholder="Confirmar nueva contraseña"
+                    value={passwordData.confirmPassword}
+                    onChange={handlePasswordChange}
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
                   />
                 </div>
@@ -208,7 +297,8 @@ const EditarUsuario = () => {
                 {loading ? 'Guardando...' : 'Guardar Cambios'}
               </button>
             </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </div>

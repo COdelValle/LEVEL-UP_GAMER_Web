@@ -3,20 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const NuevoUsuario = () => {
-  const { user } = useAuth();
+  const { api, user } = useAuth();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    username: '',
+    nombre: '',
+    apellido: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'user',
-    estado: 'activo',
-    nombre: '',
-    apellido: '',
+    rol: 'user',
+    activo: true,
     telefono: '',
-    direccion: ''
+    rut: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,33 +40,19 @@ const NuevoUsuario = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.username.trim()) {
-      newErrors.username = 'El username es requerido';
-    }
+    if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es requerido';
+    if (!formData.apellido.trim()) newErrors.apellido = 'El apellido es requerido';
+    if (!formData.email.trim()) newErrors.email = 'El email es requerido';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email inválido';
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El email no es válido';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-    }
+    if (!formData.password) newErrors.password = 'La contraseña es requerida';
+    else if (formData.password.length < 6) newErrors.password = 'Mínimo 6 caracteres';
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Las contraseñas no coinciden';
     }
 
-    if (!formData.nombre.trim()) {
-      newErrors.nombre = 'El nombre es requerido';
-    }
-
-    if (!formData.apellido.trim()) {
-      newErrors.apellido = 'El apellido es requerido';
-    }
+    if (!formData.rut.trim()) newErrors.rut = 'El RUT es requerido';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -83,19 +68,28 @@ const NuevoUsuario = () => {
     setLoading(true);
     
     try {
-      // Lógica para crear usuario
-      console.log('Creando usuario:', {
-        ...formData,
-        // No enviar confirmPassword al backend
-        confirmPassword: undefined
-      });
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      navigate('/admin/usuarios');
+      // Crear usuario en el backend
+      const payload = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        password: formData.password,
+        rol: formData.rol,
+        activo: formData.activo,
+        telefono: formData.telefono,
+        rut: formData.rut
+      };
+
+      const created = await api.post('/api/v1/usuarios', payload);
+
+      if (created) {
+        alert('✅ Usuario creado exitosamente');
+        navigate('/admin/usuarios');
+      }
     } catch (error) {
       console.error('Error al crear usuario:', error);
-      setErrors({ submit: 'Error al crear el usuario. Intente nuevamente.' });
+      setErrors({ submit: error?.body?.message || 'Error al crear el usuario. Intente nuevamente.' });
+      alert('❌ ' + (error?.body?.message || 'Error al crear el usuario'));
     } finally {
       setLoading(false);
     }
@@ -246,13 +240,14 @@ const NuevoUsuario = () => {
                 <div>
                   <label className="block text-gray-300 mb-2">Rol</label>
                   <select
-                    name="role"
-                    value={formData.role}
+                    name="rol"
+                    value={formData.rol}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-azul-claro"
                   >
                     <option value="user">Usuario</option>
                     <option value="admin">Administrador</option>
+                    <option value="seller">Vendedor</option>
                     <option value="moderator">Moderador</option>
                   </select>
                 </div>

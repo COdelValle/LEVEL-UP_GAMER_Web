@@ -5,6 +5,8 @@ import PageTransition from './components/common/PageTransition';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedAdminRoute from './components/common/ProtectedAdminRoute';
+import ProtectedSellerRoute from './components/common/ProtectedSellerRoute';
+import SellerLayout from './components/seller/SellerLayout';
 
 // Lazy load components
 // Páginas públicas
@@ -46,6 +48,11 @@ const VerUsuarios = lazy(() => import('./pages/admin/Usuario/VerUsuarios.jsx'))
 const NuevoUsuario = lazy(() => import('./pages/admin/Usuario/NuevoUsuario.jsx'))
 const EditarUsuario = lazy(() => import('./pages/admin/Usuario/EditarUsuario.jsx'))
 const HistorialCompras = lazy(() => import('./pages/admin/Usuario/HistorialCompras'))
+
+// Seller pages
+const SellerDashboard = lazy(() => import('./pages/seller/SellerDashboard'))
+const SellerProducts = lazy(() => import('./pages/seller/SellerProducts'))
+const SellerOrders = lazy(() => import('./pages/seller/SellerOrders'))
 
 // Componentes básicos para rutas que no existen aún
 const BasicAdminPage = lazy(() => import('./components/admin/BasicAdminPage'));
@@ -92,6 +99,29 @@ const AppRoutes = () => {
                 <PageTransition><AdminHome /></PageTransition>
               </AdminLayout>
             </ProtectedAdminRoute>
+          } />
+
+          {/* ========== RUTAS DE VENDEDOR (SELLER) ========== */}
+          <Route path="/seller" element={
+            <ProtectedSellerRoute>
+              <SellerLayout>
+                <PageTransition><SellerDashboard /></PageTransition>
+              </SellerLayout>
+            </ProtectedSellerRoute>
+          } />
+          <Route path="/seller/productos" element={
+            <ProtectedSellerRoute>
+              <SellerLayout>
+                <PageTransition><SellerProducts /></PageTransition>
+              </SellerLayout>
+            </ProtectedSellerRoute>
+          } />
+          <Route path="/seller/pedidos" element={
+            <ProtectedSellerRoute>
+              <SellerLayout>
+                <PageTransition><SellerOrders /></PageTransition>
+              </SellerLayout>
+            </ProtectedSellerRoute>
           } />
           
           {/* Productos */}

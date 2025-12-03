@@ -1,5 +1,6 @@
 import Hero from '../../components/home/Hero';
 import FeaturedProducts from '../../components/home/FeaturedProducts';
+import NewProducts from '../../components/home/NewProducts';
 import Ofertas from '../../components/home/Ofertas';
 import OffersLowStock from '../../components/home/OffersLowStock';
 
@@ -11,8 +12,8 @@ const Home = () => {
       <div className="relative z-10">
         <Hero />
         <FeaturedProducts />
-        <Ofertas />
-  <OffersLowStock />
+        <NewProducts />
+        <OffersLowStock />
       </div>
     </div>
   );

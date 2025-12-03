@@ -1,21 +1,30 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import BackButton from '../../../components/common/BackButton';
-import { blogPosts } from '../../../assets/data/blogData.js';
+import { useBlog } from '../../../hooks/useBlog';
 
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { posts: blogPosts, loading, error } = useBlog();
   
   // Convertir id a número y buscar el post
   const postId = parseInt(id);
-  const post = blogPosts.find(p => p.id === postId);
+  const post = blogPosts?.find(p => p.id === postId) || null;
   
   const [likes, setLikes] = useState(post?.likes || 0);
   const [hasLiked, setHasLiked] = useState(false);
   const [views, setViews] = useState(post?.views || 0);
   const [readingProgress, setReadingProgress] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Si el post no se encuentra después de cargar
+  useEffect(() => {
+    if (!loading && !post) {
+      console.warn(`Blog post con ID ${postId} no encontrado`);
+      // Opcionalmente: navigate(-1); para volver atrás
+    }
+  }, [loading, post, postId, navigate]);
 
   // Scroll al principio cuando cambia el ID del post
   useEffect(() => {
@@ -40,6 +49,35 @@ const BlogDetail = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [id]);
+
+  // Mostrar loading mientras se cargan los blogs
+  if (loading) {
+    return (
+      <div className="min-h-screen relative pt-24 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
+          <p className="text-gray-300 text-xl">Cargando blog...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Mostrar error si falla la carga
+  if (error || !post) {
+    return (
+      <div className="min-h-screen relative pt-24 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 text-xl mb-4">Blog no encontrado</p>
+          <button 
+            onClick={() => navigate(-1)}
+            className="text-green-400 hover:text-green-300 underline"
+          >
+            Volver atrás
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // Encontrar el post actual y los posts relacionados
   const currentIndex = blogPosts.findIndex(p => p.id === postId);

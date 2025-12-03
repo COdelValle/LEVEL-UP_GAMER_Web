@@ -1,246 +1,204 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import ProductFilter from '../../../components/products/ProductFilter';
 import ProductGrid from '../../../components/products/ProductGrid';
-import productsData from '../../../assets/data/productos.json';
+import { useProducts } from '../../../hooks/useProducts';
+
+// Funciones helper FUERA del componente para evitar re-renders
+const normalizeCategory = (category) => {
+  if (!category) return 'otros';
+  const cat = category.toLowerCase().trim();
+  
+  const categoryMap = {
+    'pc-gamers': 'pc-gaming',
+    'pc gaming': 'pc-gaming',
+    'pc gamer': 'pc-gaming',
+    'laptops': 'pc-gaming',
+    'laptop': 'pc-gaming',
+    'mouse': 'perifericos',
+    'mousepad': 'perifericos',
+    'teclado': 'perifericos',
+    'audifonos': 'perifericos',
+    'audifono': 'perifericos',
+    'auricular': 'perifericos',
+    'sillas': 'sillas-gaming',
+    'juegos-de-mesa': 'juegos-mesa',
+    'juegos-mesa': 'juegos-mesa',
+    'streaming': 'audio',
+    'creativo': 'accesorios',
+    'ropa': 'accesorios',
+    'consolas': 'consolas',
+    'consola': 'consolas'
+  };
+  
+  return categoryMap[cat] || cat;
+};
+
+const detectConsoleSub = (product) => {
+  const name = (product.nombre || '').toLowerCase();
+  if (name.includes('ps') || name.includes('playstation') || name.includes('ps5') || name.includes('ps4')) return 'playstation';
+  if (name.includes('xbox')) return 'xbox';
+  if (name.includes('nintendo') || name.includes('switch')) return 'nintendo';
+  return 'otros';
+};
+
+const detectPcSub = (product) => {
+  const name = (product.nombre || '').toLowerCase();
+  if (name.includes('laptop') || name.includes('notebook') || name.includes('zephyrus')) return 'laptops';
+  return 'desktop';
+};
+
+const detectPeripheralsSub = (product) => {
+  const name = (product.nombre || '').toLowerCase();
+  const origCat = (product.categoria || '').toLowerCase();
+  if (origCat.includes('mouse') || name.includes('mouse') || name.includes('g502') || name.includes('ratón')) return 'mouse';
+  if (origCat.includes('teclado') || name.includes('teclado') || name.includes('keyboard')) return 'teclados';
+  if (origCat.includes('audifono') || origCat.includes('auricular') || name.includes('audífono') || name.includes('auricular') || name.includes('headset')) return 'audifonos';
+  if (origCat.includes('mousepad') || name.includes('mousepad') || name.includes('mouse pad')) return 'mousepad';
+  return 'otros';
+};
 
 const Products = () => {
+  const { products: productsData, loading, error } = useProducts();
   const [filters, setFilters] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Función para normalizar categorías - SOLO LAS PRINCIPALES
-  const normalizeCategory = (category) => {
-    const categoryMap = {
-      'pc-gamers': 'pc-gaming',
-      'laptops': 'pc-gaming',
-      'mouse': 'perifericos',
-      'mousepad': 'perifericos',
-      'sillas': 'sillas-gaming',
-      'juegos-de-mesa': 'juegos-mesa',
-      'juegos-mesa': 'juegos-mesa',
-      'streaming': 'audio',
-      'creativo': 'accesorios',
-      'ropa': 'accesorios'
-    };
-    
-    return categoryMap[category] || category;
-  };
-
-  // Limpiar y normalizar los datos
+  // Todos los hooks ANTES de cualquier condicional
   const normalizedProducts = useMemo(() => {
-    // Eliminar duplicados por ID
+    if (!productsData || !Array.isArray(productsData)) return [];
     const uniqueProducts = productsData.filter((product, index, self) =>
       index === self.findIndex(p => p.id === product.id)
     );
-
-    // Normalizar categorías
     return uniqueProducts.map(product => ({
       ...product,
       categoria: normalizeCategory(product.categoria)
     }));
-  }, []);
+  }, [productsData]);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-  };
-
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    
-    if (value.trim() === '') {
-      const { search: _, ...restFilters } = filters;
-      setFilters(restFilters);
-    } else {
-      setFilters({ ...filters, search: value });
-    }
-  };
-
-  const handleCategoryClick = (category) => {
-    if (filters.category === category) {
-      const { category: removed, ...newFilters } = filters;
-      setFilters(newFilters);
-    } else {
-      setFilters({ ...filters, category });
-    }
-  };
-
-  const clearFilters = () => {
-    setFilters({});
-    setSearchQuery('');
-  };
-
-  // Filtrar y ordenar productos
-  const filteredProducts = normalizedProducts.filter(product => {
-    if (filters.search && 
-        !product.nombre.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !product.descripcion.toLowerCase().includes(filters.search.toLowerCase())) {
-      return false;
-    }
-
-    if (filters.category) {
-      if (filters.subcategory) {
-        const cat = filters.category;
-        const sub = filters.subcategory;
-        const keywordsMap = subcategoryKeywords[cat] || {};
-        const keywords = keywordsMap[sub] || [];
-        const name = (product.nombre || '').toLowerCase();
-        const category = (product.categoria || '').toLowerCase();
-
-        // Si no hay keywords definidas (otros), comprobamos solo la categoría
-        if (keywords.length === 0) {
-          if (category !== cat) return false;
-        } else {
-          // Comprobar si alguno de los keywords aparece en el nombre o categoría
-          const matched = keywords.some(k => name.includes(k) || category.includes(k));
-          if (!matched) return false;
-        }
-      } else {
-        if (product.categoria !== filters.category) return false;
-      }
-    }
-
-    if (filters.priceRange) {
-      const [min, max] = filters.priceRange.split('-').map(Number);
-      if (product.precio < min || product.precio > max) {
+  const filteredProducts = useMemo(() => {
+    return normalizedProducts.filter(product => {
+      if (filters.search && 
+          !product.nombre?.toLowerCase().includes(filters.search.toLowerCase()) &&
+          !product.descripcion?.toLowerCase().includes(filters.search.toLowerCase())) {
         return false;
       }
-    }
 
-    if (filters.inStock && product.stock === 0) {
-      return false;
-    }
+      if (filters.category) {
+        if (filters.subcategory) {
+          const cat = filters.category;
+          const sub = filters.subcategory;
+          const name = (product.nombre || '').toLowerCase();
+          
+          if (cat === 'consolas' && detectConsoleSub(product) !== sub) return false;
+          if (cat === 'pc-gaming' && detectPcSub(product) !== sub) return false;
+          if (cat === 'perifericos' && detectPeripheralsSub(product) !== sub) return false;
+        } else {
+          if (product.categoria !== filters.category) return false;
+        }
+      }
 
-    if (filters.featured && !product.destacado) {
-      return false;
-    }
+      if (filters.priceRange) {
+        const [min, max] = filters.priceRange.split('-').map(Number);
+        if (product.precio < min || product.precio > max) return false;
+      }
 
-    return true;
-  }).sort((a, b) => {
-    switch (filters.sortBy) {
-      case 'price-asc':
-        return a.precio - b.precio;
-      case 'price-desc':
-        return b.precio - a.precio;
-      case 'name-asc':
-        return a.nombre.localeCompare(b.nombre);
-      case 'name-desc':
-        return b.nombre.localeCompare(a.nombre);
-      case 'newest':
-        return (b.nuevo ? 1 : 0) - (a.nuevo ? 1 : 0);
-      default:
-        return (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0);
-    }
-  });
+      if (filters.inStock && product.stock === 0) return false;
+      if (filters.featured && !product.destacado) return false;
 
-  // SOLO 3 CATEGORÍAS PRINCIPALES
-  const getMainCategories = () => {
-    const mainCategories = {
+      return true;
+    }).sort((a, b) => {
+      switch (filters.sortBy) {
+        case 'price-asc':
+          return a.precio - b.precio;
+        case 'price-desc':
+          return b.precio - a.precio;
+        case 'name-asc':
+          return a.nombre?.localeCompare(b.nombre) || 0;
+        case 'name-desc':
+          return b.nombre?.localeCompare(a.nombre) || 0;
+        case 'newest':
+          return (b.nuevo ? 1 : 0) - (a.nuevo ? 1 : 0);
+        default:
+          return (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0);
+      }
+    });
+  }, [normalizedProducts, filters]);
+
+  const mainCategories = useMemo(() => {
+    const categoryMap = {
       'consolas': { icon: '🎮', label: 'Consolas' },
       'pc-gaming': { icon: '💻', label: 'PC Gaming' },
       'perifericos': { icon: '⌨️', label: 'Periféricos' }
     };
-
-    return Object.entries(mainCategories).map(([value, data]) => ({
+    return Object.entries(categoryMap).map(([value, data]) => ({
       value,
       ...data,
       count: normalizedProducts.filter(p => p.categoria === value).length
     }));
-  };
+  }, [normalizedProducts]);
 
-  // Mapa de palabras clave para subcategorías (se usa para filtrar por nombre cuando no hay campo específico)
-  const subcategoryKeywords = {
-    'consolas': {
-      playstation: ['playstation', 'ps5', 'ps4'],
-      xbox: ['xbox', 'xbox series', 'xbox series x', 'xbox series s'],
-      nintendo: ['nintendo', 'switch'],
-      otros: []
-    },
-    'pc-gaming': {
-      desktop: ['pc', 'pc gamer', 'rog', 'tower'],
-      laptops: ['laptop', 'notebook', 'zephyrus', 'rog', 'predator'],
-      otros: []
-    },
-    'perifericos': {
-      teclados: ['teclado', 'keyboard', 'blackwidow'],
-      mouse: ['mouse', 'g502', 'ratón'],
-      audifonos: ['audífono', 'auricular', 'headset', 'headphones'],
-      mousepad: ['mousepad', 'qcK', 'mouse pad'],
-      otros: []
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters);
+  }, []);
+
+  const handleSearch = useCallback((e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (value.trim() === '') {
+      const { search: _, ...restFilters } = filters;
+      setFilters(restFilters);
+    } else {
+      setFilters(prev => ({ ...prev, search: value }));
     }
-  };
+  }, [filters]);
 
-  // Detectores dinámicos por producto para subcategorías
-  const detectConsoleSub = (product) => {
-    const name = (product.nombre || '').toLowerCase();
-    if (name.includes('ps') || name.includes('playstation') || name.includes('ps5') || name.includes('ps4')) return 'playstation';
-    if (name.includes('xbox')) return 'xbox';
-    if (name.includes('nintendo') || name.includes('switch')) return 'nintendo';
-    return 'otros';
-  };
-
-  const detectPcSub = (product) => {
-    const name = (product.nombre || '').toLowerCase();
-    if (name.includes('laptop') || name.includes('notebook') || name.includes('zephyrus') || name.includes('laptop')) return 'laptops';
-    return 'desktop';
-  };
-
-  const detectPeripheralsSub = (product) => {
-    const name = (product.nombre || '').toLowerCase();
-    const origCat = (product.categoria || '').toLowerCase();
-    if (origCat.includes('mouse') || name.includes('mouse') || name.includes('g502') || name.includes('ratón')) return 'mouse';
-    if (origCat.includes('teclado') || name.includes('teclado') || name.includes('keyboard')) return 'teclados';
-    if (origCat.includes('audifono') || origCat.includes('auricular') || name.includes('audífono') || name.includes('auricular') || name.includes('headset')) return 'audifonos';
-    if (origCat.includes('mousepad') || name.includes('mousepad') || name.includes('mouse pad') || name.includes('qcK'.toLowerCase())) return 'mousepad';
-    return 'otros';
-  };
-
-  const productMatchesSubcategory = (product, mainCat, subKey) => {
-    if (!subKey) return true;
-    if (mainCat === 'consolas') return detectConsoleSub(product) === subKey;
-    if (mainCat === 'pc-gaming') return detectPcSub(product) === subKey;
-    if (mainCat === 'perifericos') return detectPeripheralsSub(product) === subKey;
-    return false;
-  };
-
-  const computeSubcategories = (mainCat) => {
-    const counts = {};
-    normalizedProducts.forEach(p => {
-      const cat = (p.categoria || '').toLowerCase();
-      if (cat !== mainCat) return;
-      let key = 'otros';
-      if (mainCat === 'consolas') key = detectConsoleSub(p);
-      else if (mainCat === 'pc-gaming') key = detectPcSub(p);
-      else if (mainCat === 'perifericos') key = detectPeripheralsSub(p);
-      counts[key] = (counts[key] || 0) + 1;
+  const handleCategoryClick = useCallback((category) => {
+    setFilters(prev => {
+      if (prev.category === category) {
+        const { category: removed, subcategory, ...newFilters } = prev;
+        return newFilters;
+      }
+      return { ...prev, category, subcategory: undefined };
     });
-    // Build array with labels
-    const labelMap = {
-      playstation: 'PlayStation',
-      xbox: 'Xbox',
-      nintendo: 'Nintendo',
-      desktop: 'Desktop',
-      laptops: 'Laptops',
-      teclados: 'Teclados',
-      mouse: 'Mouse',
-      audifonos: 'Audífonos',
-      mousepad: 'Mousepad',
-      otros: 'Otros'
-    };
-    return Object.keys(counts).map(k => ({ key: k, label: labelMap[k] || k, count: counts[k] }));
-  };
-  const handleCategorySelect = (category, subcategory) => {
-    // Toggle behavior: si ya está seleccionado, quitar
-    if (filters.category === category && filters.subcategory === subcategory) {
-      const { category: removed, subcategory: removedSub, ...rest } = filters;
-      setFilters(rest);
-      return;
-    }
+  }, []);
 
-    setFilters({ ...filters, category, subcategory });
-  };
+  const handleCategorySelect = useCallback((category, subcategory) => {
+    setFilters(prev => {
+      if (prev.category === category && prev.subcategory === subcategory) {
+        const { category: _, subcategory: __, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, category, subcategory };
+    });
+  }, []);
 
-  const mainCategories = getMainCategories();
+  const clearFilters = useCallback(() => {
+    setFilters({});
+    setSearchQuery('');
+  }, []);
+
+  // Ahora DESPUÉS de todos los hooks, mostrar el contenido condicional
+  if (loading) {
+    return (
+      <div className="min-h-screen relative pt-24 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-400 mx-auto mb-4"></div>
+          <p className="text-gray-300 text-xl">Cargando productos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && (!productsData || productsData.length === 0)) {
+    return (
+      <div className="min-h-screen relative pt-24 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 text-xl mb-4">Error cargando productos de la BD</p>
+          <p className="text-gray-400">{error?.message || 'Por favor intenta más tarde'}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">

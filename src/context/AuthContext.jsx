@@ -84,6 +84,44 @@ export const AuthProvider = ({ children }) => {
     api.setToken(null);
   };
 
+  // Update profile locally and via API if available
+  const updateProfile = async (profileData) => {
+    try {
+      // If backend API exposes update endpoint, call it
+      if (api && typeof api.updateProfile === 'function') {
+        await api.updateProfile(profileData);
+      }
+
+      // Merge and persist locally
+      setUser(prev => {
+        const merged = { ...(prev || {}), ...profileData };
+        try { localStorage.setItem('user', JSON.stringify(merged)); } catch (e) { /* ignore */ }
+        return merged;
+      });
+
+      return true;
+    } catch (err) {
+      console.error('✗ Error en updateProfile:', err);
+      throw err;
+    }
+  };
+
+  // Update password via API if available; otherwise simulate success
+  const updatePassword = async (currentPassword, newPassword) => {
+    try {
+      if (api && typeof api.updatePassword === 'function') {
+        await api.updatePassword(currentPassword, newPassword);
+      } else {
+        // No backend endpoint available locally; just resolve
+        console.info('ℹ updatePassword: no backend endpoint, simulated success');
+      }
+      return true;
+    } catch (err) {
+      console.error('✗ Error en updatePassword:', err);
+      throw err;
+    }
+  };
+
   // Nueva función que llama al backend para autenticar
   const authenticate = async (email, password) => {
     setLoading(true);
@@ -136,7 +174,9 @@ export const AuthProvider = ({ children }) => {
     loading,
     isAuthenticated: !!user,
     api, // exponer la instancia API para llamadas desde componentes
-    authenticate
+    authenticate,
+    updateProfile,
+    updatePassword
   };
 
   return (

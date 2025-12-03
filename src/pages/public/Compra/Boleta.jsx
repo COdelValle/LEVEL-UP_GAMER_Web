@@ -2,19 +2,49 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { formatPrice } from '../../../utils/formatters';
 
+const safeParseOrder = (raw) => {
+  try {
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
+  }
+};
+
 const Boleta = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const order = location.state?.order || JSON.parse(localStorage.getItem('lastOrder') || 'null');
+  let order = location.state?.order;
+
+  if (!order) {
+    order = safeParseOrder(localStorage.getItem('lastOrder'));
+  }
 
   useEffect(() => {
     if (!order) {
-      // No order data — redirect to home or cart
+      // No order data — redirect to home
       navigate('/');
     }
   }, [order, navigate]);
 
   if (!order) return null;
+
+  // Ensure items array exists
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  // Compute total if not present
+  const computedTotal = items.reduce((s, it) => s + ((it.precio || 0) * (it.quantity || 1)), 0);
+  const total = typeof order.total === 'number' ? order.total : computedTotal;
+
+  const downloadJSON = () => {
+    const blob = new Blob([JSON.stringify(order, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `boleta_${order.id || Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen py-12 pt-24 bg-gradient-to-b from-azul-oscuro to-black">
@@ -105,26 +135,33 @@ const Boleta = () => {
                 </tr>
               </thead>
               <tbody>
-                {order.items.map((it) => (
-                  <tr key={it.id} className="border-b border-gray-700">
-                    <td className="py-3 w-20">
-                      <img src={(it.imagen && (it.imagen.startsWith('http') || it.imagen.startsWith('/'))) ? it.imagen : `/assets/img/${it.imagen}`} alt={it.nombre} className="w-16 h-12 object-cover rounded" />
-                    </td>
-                    <td className="py-3">{it.nombre}</td>
-                    <td className="py-3">{formatPrice(it.precio)}</td>
-                    <td className="py-3">{it.quantity}</td>
-                    <td className="py-3">{formatPrice(it.precio * it.quantity)}</td>
+                {items.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-6 text-center text-gray-400">No hay artículos en esta boleta.</td>
                   </tr>
-                ))}
+                ) : (
+                  items.map((it) => (
+                    <tr key={it.id} className="border-b border-gray-700">
+                      <td className="py-3 w-20">
+                        <img src={(it.imagen && (it.imagen.startsWith('http') || it.imagen.startsWith('/'))) ? it.imagen : `/assets/img/${it.imagen}`} alt={it.nombre} className="w-16 h-12 object-cover rounded" />
+                      </td>
+                      <td className="py-3">{it.nombre}</td>
+                      <td className="py-3">{formatPrice(it.precio || 0)}</td>
+                      <td className="py-3">{it.quantity || 1}</td>
+                      <td className="py-3">{formatPrice((it.precio || 0) * (it.quantity || 1))}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
 
           <div className="bg-gray-900/50 p-6 rounded-lg text-center">
-            <div className="text-xl text-gray-300 mb-2">Total pagado: <span className="text-2xl font-bold text-white"> {formatPrice(order.total)}</span></div>
+            <div className="text-xl text-gray-300 mb-2">Total pagado: <span className="text-2xl font-bold text-white"> {formatPrice(total)}</span></div>
             <div className="mt-4">
               <button onClick={() => navigate('/')} className="btn-primary px-6 py-3 mr-3">Volver al inicio</button>
-              <button onClick={() => window.print()} className="px-6 py-3 bg-gray-700 text-white rounded-lg">Imprimir / Descargar</button>
+              <button onClick={() => window.print()} className="px-6 py-3 bg-gray-700 text-white rounded-lg mr-3">Imprimir / Descargar</button>
+              <button onClick={downloadJSON} className="px-6 py-3 bg-gray-700 text-white rounded-lg">Descargar JSON</button>
             </div>
           </div>
         </div>

@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/AuthContext';
+import { useProducts } from '../../../hooks/useProducts';
 import { formatPrice } from '../../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import PayPalButton from '../../../components/payment/PayPalButton';
 import BackButton from '../../../components/common/BackButton';
 import { useLocation } from 'react-router-dom';
-import { addOrder } from '../../../utils/ordersStorage';
+import { useOrders } from '../../../hooks/useOrders';
 
 const Payment = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
-  const { user } = useAuth();
+  const { user, api } = useAuth();
+  const { updateProduct, getProductById } = useProducts();
+  const { createOrder } = useOrders();
   const navigate = useNavigate();
   const location = useLocation();
   const shippingInfo = location.state?.shippingInfo || {};
@@ -43,13 +46,82 @@ const Payment = () => {
     setShowValidation(true);
   };
 
+  // Attempt multiple backend API patterns to decrement product stock.
+  const decrementStockOnBackend = async (item) => {
+    if (!api) throw new Error('No API available');
+    const id = item.id;
+    const qty = item.quantity || 1;
+
+    // Try to fetch current product to compute new stock
+    let currentStock = null;
+    try {
+      const prodResp = await api.get(`/api/v1/productos/${id}`);
+      // backend may return object directly or { data: obj }
+      const prodObj = prodResp?.data ?? prodResp;
+      currentStock = parseInt(prodObj?.stock ?? prodObj?.cantidad ?? 0, 10) || 0;
+    } catch (e) {
+      // not fatal - we'll use local value
+      const local = getProductById(id) || {};
+      currentStock = parseInt(local.stock ?? local.cantidad ?? item.stock ?? 0, 10) || 0;
+    }
+
+    const newStock = Math.max(0, currentStock - qty);
+
+    const attempts = [
+      // common: PATCH partial update
+      async () => await api.request('patch', `/api/v1/productos/${id}`, { stock: newStock }),
+      // fallback: PUT with stock
+      async () => await api.put(`/api/v1/productos/${id}`, { stock: newStock }),
+      // some APIs implement a decrement endpoint
+      async () => await api.post(`/api/v1/productos/${id}/decrement`, { quantity: qty }),
+      // less common: PATCH stock subresource
+      async () => await api.request('patch', `/api/v1/productos/${id}/stock`, { delta: -qty })
+    ];
+
+    for (const attempt of attempts) {
+      try {
+        const res = await attempt();
+        // try to update local state too
+        try { await updateProduct(id, { ...(getProductById(id) || {}), stock: newStock }); } catch (_) {}
+        return res;
+      } catch (err) {
+        // continue to next attempt
+      }
+    }
+
+    // none succeeded
+    throw new Error('Backend stock update failed');
+  };
+
   const finalizeTransfer = (result) => {
     // result: 'validado' | 'rechazado'
     setIsProcessing(true);
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsProcessing(false);
 
       const estadoFinal = result === 'validado' ? 'completado' : 'rechazado';
+
+      // Decrement stock for each purchased item (attempt backend update first)
+      try {
+        for (const item of cartItems) {
+          try {
+            // try backend-first decrement
+            try {
+              await decrementStockOnBackend(item);
+            } catch (backendErr) {
+              // fallback to local update
+              const prod = getProductById(item.id) || {};
+              const currentStock = parseInt(prod.stock ?? prod.cantidad ?? item.stock ?? 0, 10) || 0;
+              const newStock = Math.max(0, currentStock - (item.quantity || 1));
+              await updateProduct(item.id, { ...(prod || {}), stock: newStock });
+            }
+          } catch (err) {
+            console.error('Error actualizando stock para item', item.id, err);
+          }
+        }
+      } catch (err) {
+        console.error('Error reduciendo stocks:', err);
+      }
 
       const order = {
         id: `ORDER${Date.now()}`,
@@ -67,11 +139,11 @@ const Payment = () => {
       };
 
       try {
-        addOrder(order);
+        await createOrder(order);
       } catch (err) {
-        console.error('Could not add order to storage', err);
+        console.error('Could not add order via useOrders.createOrder', err);
+        try { localStorage.setItem('lastOrder', JSON.stringify(order)); } catch(_) {}
       }
-      localStorage.setItem('lastOrder', JSON.stringify(order));
 
       // Clear cart regardless so the UI reflects order was processed/simulated
       clearCart();
@@ -265,8 +337,28 @@ const Payment = () => {
                   
                   <PayPalButton
                     amount={convertToUSD(getCartTotal())}
-                    onSuccess={(details) => {
+                    onSuccess={async (details) => {
                       // Build completed order
+                      // Decrement stock for each purchased item (best-effort)
+                      try {
+                        for (const item of cartItems) {
+                          try {
+                            try {
+                              await decrementStockOnBackend(item);
+                            } catch (backendErr) {
+                              const prod = getProductById(item.id) || {};
+                              const currentStock = parseInt(prod.stock ?? prod.cantidad ?? item.stock ?? 0, 10) || 0;
+                              const newStock = Math.max(0, currentStock - (item.quantity || 1));
+                              await updateProduct(item.id, { ...(prod || {}), stock: newStock });
+                            }
+                          } catch (err) {
+                            console.error('Error actualizando stock para item', item.id, err);
+                          }
+                        }
+                      } catch (err) {
+                        console.error('Error reduciendo stocks:', err);
+                      }
+
                       const order = {
                         id: `ORDER${Date.now()}`,
                         fecha: new Date().toISOString(),
@@ -281,13 +373,13 @@ const Payment = () => {
                         user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
                       };
 
-                      // Persist order to shared orders storage and save lastOrder for immediate display
+                      // Persist order using useOrders.createOrder (falls back to localStorage)
                       try {
-                        addOrder(order);
+                        await createOrder(order);
                       } catch (err) {
-                        console.error('Could not add order to storage', err);
+                        console.error('Could not add order via useOrders.createOrder', err);
+                        try { localStorage.setItem('lastOrder', JSON.stringify(order)); } catch(_) {}
                       }
-                      localStorage.setItem('lastOrder', JSON.stringify(order));
 
                       clearCart();
                       navigate('/boleta', { state: { order } });

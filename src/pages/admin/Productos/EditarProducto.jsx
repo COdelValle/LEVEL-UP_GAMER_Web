@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const EditarProducto = () => {
-  const { user } = useAuth();
+  const { api, user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   
@@ -13,29 +13,43 @@ const EditarProducto = () => {
     precio: '',
     categoria: '',
     stock: '',
-    stockCritico: '',
     imagen: '',
     destacado: false
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simular carga de datos del producto
+  // Cargar datos del producto
   useEffect(() => {
-    const productoEjemplo = {
-      id: id,
-      nombre: 'Producto Ejemplo',
-      descripcion: 'Descripción del producto ejemplo',
-      precio: '99.99',
-      categoria: 'Electrónicos',
-      stock: '50',
-      stockCritico: '10',
-      imagen: '',
-      destacado: true
+    let mounted = true;
+
+    const cargarProducto = async () => {
+      try {
+        const res = await api.get(`/api/v1/productos/${id}`);
+        if (mounted && res) {
+          setFormData({
+            nombre: res.nombre || '',
+            descripcion: res.descripcion || '',
+            precio: res.precio || '',
+            categoria: res.categoria || '',
+            stock: res.stock || '',
+            imagen: res.imagen || '',
+            destacado: res.destacado || false
+          });
+        }
+      } catch (err) {
+        console.error('Error al cargar producto:', err);
+        if (mounted) setError('No se pudo cargar el producto');
+      } finally {
+        if (mounted) setLoading(false);
+      }
     };
-    
-    setFormData(productoEjemplo);
-  }, [id]);
+
+    cargarProducto();
+
+    return () => { mounted = false; };
+  }, [id, api]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,15 +62,30 @@ const EditarProducto = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
     
     try {
-      // Lógica para actualizar producto
-      console.log('Actualizando producto:', formData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      navigate('/admin/productos');
+      // Actualizar en el backend
+      const payload = {
+        nombre: formData.nombre,
+        descripcion: formData.descripcion,
+        precio: parseFloat(formData.precio),
+        categoria: formData.categoria,
+        stock: parseInt(formData.stock),
+        imagen: formData.imagen,
+        destacado: formData.destacado
+      };
+
+      const updated = await api.put(`/api/v1/productos/${id}`, payload);
+
+      if (updated) {
+        alert('✅ Producto actualizado exitosamente');
+        navigate('/admin/productos');
+      }
     } catch (error) {
       console.error('Error al actualizar producto:', error);
+      setError(error?.body?.message || 'Error al actualizar el producto');
+      alert('❌ ' + (error?.body?.message || error?.message || 'Error al actualizar el producto'));
     } finally {
       setLoading(false);
     }
@@ -81,6 +110,12 @@ const EditarProducto = () => {
         </div>
 
         <div className="card-gaming p-6">
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>

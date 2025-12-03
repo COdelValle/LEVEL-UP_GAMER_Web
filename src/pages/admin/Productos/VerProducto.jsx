@@ -3,59 +3,58 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const VerProducto = () => {
-  const { user } = useAuth();
+  const { api, user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   
   const [producto, setProducto] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simular carga de datos
+  // Cargar producto del backend
   useEffect(() => {
+    let mounted = true;
+
     const cargarProducto = async () => {
       setLoading(true);
       try {
-        // Simular API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const productoEjemplo = {
-          id: id,
-          nombre: 'Producto Ejemplo',
-          descripcion: 'Esta es una descripción detallada del producto. Incluye todas las características y especificaciones técnicas.',
-          precio: 99.99,
-          categoria: 'Electrónicos',
-          stock: 15,
-          stockCritico: 5,
-          imagen: 'https://via.placeholder.com/400x300',
-          destacado: true,
-          nuevo: true,
-          fechaCreacion: '2024-01-15',
-          fechaActualizacion: '2024-01-20'
-        };
-        
-        setProducto(productoEjemplo);
-      } catch (error) {
-        console.error('Error al cargar producto:', error);
+        const res = await api.get(`/api/v1/productos/${id}`);
+        if (mounted && res) {
+          setProducto(res);
+        }
+      } catch (err) {
+        console.error('Error al cargar producto:', err);
+        if (mounted) setError('No se pudo cargar el producto');
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     cargarProducto();
-  }, [id]);
+
+    return () => { mounted = false; };
+  }, [id, api]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black flex items-center justify-center">
-        <div className="text-white text-xl">Cargando producto...</div>
+        <div className="text-white text-xl">⏳ Cargando producto...</div>
       </div>
     );
   }
 
-  if (!producto) {
+  if (error || !producto) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black flex items-center justify-center">
-        <div className="text-white text-xl">Producto no encontrado</div>
+        <div className="text-center">
+          <div className="text-white text-xl mb-4">{error || '❌ Producto no encontrado'}</div>
+          <button
+            onClick={() => navigate('/admin/productos')}
+            className="btn-primary"
+          >
+            ← Volver a Productos
+          </button>
+        </div>
       </div>
     );
   }

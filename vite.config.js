@@ -11,7 +11,14 @@ export default defineConfig({
   root: '.',
   server: {
     port: 5175,
-    host: true // Permite acceso desde la red
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
   },
   build: {
     outDir: 'dist',

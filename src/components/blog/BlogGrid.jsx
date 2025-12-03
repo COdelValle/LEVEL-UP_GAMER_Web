@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { blogPosts } from '../../assets/data/blogData.js';
 
-const BlogGrid = ({ activeCategory, searchTerm, sortBy }) => {
+const BlogGrid = ({ activeCategory, searchTerm, sortBy, blogPosts = [] }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
 

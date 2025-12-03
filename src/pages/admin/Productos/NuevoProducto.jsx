@@ -1,49 +1,63 @@
 // /src/pages/admin/Productos/NuevoProducto.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import BackButton from '../../../components/common/BackButton';
 
 const NuevoProducto = () => {
+  const { api } = useAuth();
   const [formData, setFormData] = useState({
     nombre: '',
     precio: '',
     categoria: '',
     descripcion: '',
     stock: '',
-    imagen: ''
+    imagen: '',
+    nuevo: true,
+    destacado: false
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
-    // Simular guardado
-    setTimeout(() => {
-      // Guardar en localStorage
-      const products = JSON.parse(localStorage.getItem('products') || '[]');
-      const newProduct = {
-        ...formData,
-        id: Date.now(),
-        precio: parseInt(formData.precio),
+    try {
+      const payload = {
+        nombre: formData.nombre,
+        precio: parseFloat(formData.precio),
+        categoria: formData.categoria,
+        descripcion: formData.descripcion,
         stock: parseInt(formData.stock),
+        imagen: formData.imagen,
+        nuevo: formData.nuevo,
+        destacado: formData.destacado,
         fechaCreacion: new Date().toISOString()
       };
-      products.push(newProduct);
-      localStorage.setItem('products', JSON.stringify(products));
 
+      console.log('📤 Enviando producto:', payload);
+      const created = await api.post('/api/v1/productos', payload);
+      console.log('✅ Producto creado:', created);
+
+      navigate('/admin/productos');
+    } catch (err) {
+      console.error('❌ Error completo:', err);
+      const errorMsg = err?.body?.message || err?.message || 'Error al crear el producto';
+      setError(errorMsg);
+    } finally {
       setLoading(false);
-      alert('✅ Producto creado exitosamente');
-      navigate('/admin'); // Redirección correcta
-    }, 2000);
+    }
   };
 
   return (
@@ -56,8 +70,14 @@ const NuevoProducto = () => {
               <h1 className="text-3xl font-bold gradient-text">Nuevo Producto</h1>
               <p className="text-gray-300">Agrega un nuevo producto al catálogo</p>
             </div>
-            <BackButton to="/admin" text="Volver al Panel" />
+            <BackButton to="/admin/productos" text="Volver a Productos" />
           </div>
+
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 text-red-300 p-4 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
@@ -140,6 +160,31 @@ const NuevoProducto = () => {
               />
             </div>
 
+            {/* Opciones adicionales */}
+            <div className="grid md:grid-cols-2 gap-6 bg-gray-800/30 p-4 rounded-lg">
+              <label className="flex items-center gap-3 text-white cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="nuevo"
+                  checked={formData.nuevo}
+                  onChange={handleChange}
+                  className="w-5 h-5 rounded border-azul-electrico accent-green-500"
+                />
+                <span>✨ Marcar como Nuevo</span>
+              </label>
+
+              <label className="flex items-center gap-3 text-white cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="destacado"
+                  checked={formData.destacado}
+                  onChange={handleChange}
+                  className="w-5 h-5 rounded border-azul-electrico accent-yellow-500"
+                />
+                <span>⭐ Destacado en inicio</span>
+              </label>
+            </div>
+
             <div className="flex space-x-4 pt-4">
               <button
                 type="submit"
@@ -151,7 +196,7 @@ const NuevoProducto = () => {
               
               <button
                 type="button"
-                onClick={() => navigate('/admin')}
+                onClick={() => navigate('/admin/productos')}
                 className="px-6 bg-gray-600 hover:bg-gray-500 py-3 rounded-lg text-white transition duration-300"
               >
                 Cancelar

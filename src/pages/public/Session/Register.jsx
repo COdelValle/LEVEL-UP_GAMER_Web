@@ -220,25 +220,55 @@ const Register = () => {
 
     try {
       // Intentar registrar en el backend primero
-      try {
-        const newUserPayload = {
-          nombre: formData.nombre,
-          rut: formData.rut,
-          email: formData.email,
-          password: formData.password,
-          passwordConfirm: formData.confirmPassword
-        };
+      const newUserPayload = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        rut: formData.rut.replace(/[^0-9kK]/g, ''), // Limpiar RUT
+        email: formData.email,
+        password: formData.password,
+        telefono: formData.telefono.replace(/\D/g, ''), // Limpiar teléfono,
+        activo: true,
+        rol: 'user'
+      };
 
-        // Endpoint: /api/v1/auth/register
-        const res = await api.post('/api/v1/auth/register', newUserPayload);
+      console.log('📤 Enviando registro a BD:', newUserPayload);
+
+      // Endpoint: /api/v1/auth/register
+      try {
+        const registerRes = await api.post('/api/v1/auth/register', newUserPayload);
+        console.log('✅ Registro exitoso en BD:', registerRes);
 
         // Si el registro fue exitoso, intentar autenticar (obtener token)
-        await authenticate(formData.email, formData.password);
+        try {
+          const authRes = await authenticate(formData.email, formData.password);
+          console.log('✅ Autenticación exitosa:', authRes);
+          navigate('/');
+          return;
+        } catch (authErr) {
+          console.warn('⚠ Autenticación después del registro falló:', authErr);
+          // Mostrar error pero permitir que intente manualmente
+          setErrors({ general: 'Registro exitoso pero la autenticación falló. Intenta hacer login.' });
+          setTimeout(() => navigate('/login'), 2000);
+          return;
+        }
+      } catch (registerErr) {
+        console.error('❌ Error en registro de BD:', registerErr);
+        
+        // Si es un error de email duplicado
+        if (registerErr?.body?.message?.includes('email')) {
+          setErrors({ email: 'Este email ya está registrado' });
+          setLoading(false);
+          return;
+        }
+        
+        // Si es un error de RUT duplicado
+        if (registerErr?.body?.message?.includes('rut') || registerErr?.body?.message?.includes('RUT')) {
+          setErrors({ rut: 'Este RUT ya está registrado' });
+          setLoading(false);
+          return;
+        }
 
-        navigate('/');
-        return;
-      } catch (err) {
-        console.warn('Backend register failed, falling back to local:', err.message || err);
+        console.warn('Fallando al fallback local...');
       }
 
       // Fallback local: verificar si el email ya existe
@@ -269,6 +299,8 @@ const Register = () => {
       users.push(newUser);
       localStorage.setItem('users', JSON.stringify(users));
 
+      console.log('✅ Registro local exitoso (fallback)');
+
       // Iniciar sesión automáticamente (local)
       login({ 
         id: newUser.id,
@@ -284,8 +316,8 @@ const Register = () => {
       navigate('/');
       
     } catch (error) {
-      console.error('Error en el registro:', error);
-      setErrors({ general: 'Error al crear la cuenta. Intenta nuevamente.' });
+      console.error('❌ Error en el registro:', error);
+      setErrors({ general: error?.message || 'Error al crear la cuenta. Intenta nuevamente.' });
     } finally {
       setLoading(false);
     }

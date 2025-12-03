@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BlogGrid from '../../../components/blog/BlogGrid';
-import { blogPosts } from '../../../assets/data/blogData.js';
+import blogPostsData from '../../../assets/data/blogs.json';
 
 // Categorías hardcodeadas (o puedes crear un categories.json)
 const categories = [
@@ -14,28 +14,19 @@ const categories = [
 
 
 const Blogs = () => {
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('todas');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('newest');
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Simular una pequeña carga para la UX, aunque los datos son locales
+    setTimeout(() => {
+      setBlogPosts(blogPostsData);
       setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    }, 300);
   }, []);
-
-  // Estadísticas extendidas del blog
-  // Cambia estas líneas:
-  const totalPosts = blogPosts.length;
-  const totalLikes = blogPosts.reduce((sum, post) => sum + post.likes, 0);
-  const totalViews = blogPosts.reduce((sum, post) => sum + (post.views || 0), 0);
-  const totalReadTime = blogPosts.reduce((sum, post) => {
-    const minutes = parseInt(post.readTime);
-    return sum + (isNaN(minutes) ? 5 : minutes);
-  }, 0);
-  const featuredPosts = blogPosts.filter(post => post.featured).length;
 
   if (isLoading) {
     return (
@@ -50,6 +41,17 @@ const Blogs = () => {
       </div>
     );
   }
+
+  // Estadísticas extendidas del blog
+  // Ahora cargadas desde el JSON local a través de useBlog
+  const totalPosts = blogPosts?.length || 0;
+  const totalLikes = blogPosts?.reduce((sum, post) => sum + (post.likes || 0), 0) || 0;
+  const totalViews = blogPosts?.reduce((sum, post) => sum + (post.views || 0), 0) || 0;
+  const totalReadTime = blogPosts?.reduce((sum, post) => {
+    const minutes = parseInt(post.readTime);
+    return sum + (isNaN(minutes) ? 5 : minutes);
+  }, 0) || 0;
+  const featuredPosts = blogPosts?.filter(post => post.featured)?.length || 0;
 
   return (
     <div className="min-h-screen relative">
@@ -146,7 +148,7 @@ const Blogs = () => {
                 ⭐ Artículos Destacados
               </h2>
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                {blogPosts.filter(post => post.featured).slice(0, 2).map(post =>  (
+                {blogPosts?.filter(post => post.featured)?.slice(0, 2)?.map(post =>  (
                   <Link 
                     key={post.id}
                     to={`/blog/${post.id}`}
@@ -186,6 +188,7 @@ const Blogs = () => {
           {/* Grid de Blogs con Paginación */}
           <BlogGrid 
             activeCategory={activeCategory}
+            blogPosts={blogPosts}
             searchTerm={searchTerm}
             sortBy={sortBy}
           />
