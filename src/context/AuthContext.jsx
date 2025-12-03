@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import createAPI from '../lib/APIHelper';
 
 const AuthContext = createContext();
 
@@ -11,8 +10,6 @@ export const useAuth = () => {
   return context;
 };
 
-const api = createAPI(import.meta.env.VITE_API_URL || 'http://localhost:8080');
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,59 +17,33 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const storedSession = localStorage.getItem('adminSession');
-    const storedToken = localStorage.getItem('token');
-
-    console.log('🔍 AuthContext init - localStorage:', { storedUser: !!storedUser, storedToken: !!storedToken, storedSession: !!storedSession });
-
-    if (storedToken) {
-      api.setToken(storedToken);
-      console.log('✓ Token restaurado desde localStorage');
-    }
-
+    
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      console.log('✓ User restaurado:', parsedUser);
+      setUser(JSON.parse(storedUser));
     } else if (storedSession) {
       const session = JSON.parse(storedSession);
       if (session.isAuthenticated && new Date().getTime() < session.expiresAt) {
         setUser({ username: session.username, role: 'admin' });
-        console.log('✓ Admin session restaurada');
       }
-    } else {
-      console.log('ℹ No hay sesión guardada');
     }
-
+    
     setLoading(false);
   }, []);
 
-  // Mantener la función `login` para flujos locales existentes
   const login = (userData) => {
-    // Normalizar 'rol' a 'role' si es necesario
-    const normalizedUser = {
-      ...userData,
-      role: userData.role || userData.rol
-    };
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
     
-    setUser(normalizedUser);
-    localStorage.setItem('user', JSON.stringify(normalizedUser));
-
     // Si es admin, crear una sesión con expiración
-    if (normalizedUser.role === 'admin' || normalizedUser.role === 'ADMIN') {
+    if (userData.role === 'admin') {
       const expirationTime = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 días
       const adminSession = {
         isAuthenticated: true,
-        username: normalizedUser.username || normalizedUser.nombre,
-        role: normalizedUser.role,
+        username: userData.username,
+        role: userData.role,
         expiresAt: expirationTime
       };
       localStorage.setItem('adminSession', JSON.stringify(adminSession));
-    }
-
-    // Si nos pasan token en userData, usarlo
-    if (normalizedUser?.token) {
-      api.setToken(normalizedUser.token);
-      localStorage.setItem('token', normalizedUser.token);
     }
   };
 

@@ -41,8 +41,8 @@ const CardCarrusel = ({ products, size = 'compact' }) => {
         breakpoints={breakpoints}
         className={`${wrapperHeight} py-8`}
       >
-        {products.map((product, idx) => (
-          <SwiperSlide key={`${product?.id ?? 'noid'}-${idx}`} className="h-full">
+        {products.map((product) => (
+          <SwiperSlide key={product.id} className="h-full">
             <div className="flex items-center justify-center h-full">
               <div className={`w-full ${isLarge ? 'h-[560px]' : 'h-[420px]'} flex items-stretch mx-auto`} style={cardStyle}>
                 <ProductCard product={product} className="w-full p-4" compact={!isLarge} showAdd={true} variant={isLarge ? 'catalog' : ''} />
