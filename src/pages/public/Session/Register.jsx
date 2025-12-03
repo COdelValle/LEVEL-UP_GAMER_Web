@@ -15,7 +15,7 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, api, authenticate } = useAuth();
   const navigate = useNavigate();
 
   // Función para validar RUT chileno
@@ -287,7 +287,7 @@ const Register = () => {
         return;
       }
 
-      // Crear nuevo usuario
+      // Crear nuevo usuario localmente
       const newUser = {
         ...formData,
         id: Date.now(),
