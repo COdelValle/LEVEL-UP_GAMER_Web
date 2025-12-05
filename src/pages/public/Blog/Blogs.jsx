@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BlogGrid from '../../../components/blog/BlogGrid';
-import { blogPosts } from '../../../assets/data/blogData.js';
+import { useBlogs } from '../../../hooks/useBlogs';
 
 // Categorías hardcodeadas (o puedes crear un categories.json)
 const categories = [
@@ -26,16 +26,17 @@ const Blogs = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Estadísticas extendidas del blog
-  // Cambia estas líneas:
-  const totalPosts = blogPosts.length;
-  const totalLikes = blogPosts.reduce((sum, post) => sum + post.likes, 0);
-  const totalViews = blogPosts.reduce((sum, post) => sum + (post.views || 0), 0);
-  const totalReadTime = blogPosts.reduce((sum, post) => {
+  const { posts: blogPosts, loading: blogsLoading } = useBlogs();
+
+  // Estadísticas extendidas del blog (usar posts cargados o 0)
+  const totalPosts = (blogPosts || []).length;
+  const totalLikes = (blogPosts || []).reduce((sum, post) => sum + (post.likes || 0), 0);
+  const totalViews = (blogPosts || []).reduce((sum, post) => sum + (post.views || 0), 0);
+  const totalReadTime = (blogPosts || []).reduce((sum, post) => {
     const minutes = parseInt(post.readTime);
     return sum + (isNaN(minutes) ? 5 : minutes);
   }, 0);
-  const featuredPosts = blogPosts.filter(post => post.featured).length;
+  const featuredPosts = (blogPosts || []).filter(post => post.featured).length;
 
   if (isLoading) {
     return (

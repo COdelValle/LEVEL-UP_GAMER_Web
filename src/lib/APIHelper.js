@@ -1,4 +1,4 @@
-export default function createAPI(baseURL = 'http://localhost:8080') {
+export default function createAPI(baseURL = (import.meta.env.VITE_API_URL || '')) {
   let token = null;
   let apiKey = null;
 
@@ -6,7 +6,14 @@ export default function createAPI(baseURL = 'http://localhost:8080') {
   function setApiKey(k) { apiKey = k; }
 
   async function request(method, path, data = null, opts = {}) {
-    const url = new URL(baseURL + path);
+    // Construir URL de forma segura. Si no hay baseURL, usar path relativo (para proxy de Vite)
+    const buildUrl = () => {
+      if (!baseURL) return path;
+      const b = String(baseURL).replace(/\/$/, '');
+      const p = String(path).startsWith('/') ? path : '/' + path;
+      return b + p;
+    };
+    const urlString = buildUrl();
     if (opts.params) {
       Object.keys(opts.params).forEach(k => url.searchParams.append(k, opts.params[k]));
     }
@@ -16,14 +23,22 @@ export default function createAPI(baseURL = 'http://localhost:8080') {
     else if (apiKey) headers['X-API-Key'] = apiKey;
     if (data && !(data instanceof FormData)) headers['Content-Type'] = 'application/json';
 
-    const res = await fetch(url.toString(), {
+    const res = await fetch(urlString, {
       method: method.toUpperCase(),
       headers,
       body: data && !(data instanceof FormData) ? JSON.stringify(data) : data
     });
 
     const text = await res.text();
-    const content = text ? JSON.parse(text) : null;
+    let content = null;
+    if (text) {
+      try {
+        content = JSON.parse(text);
+      } catch (e) {
+        // si no es JSON válido, devolver texto plano
+        content = text;
+      }
+    }
 
     if (!res.ok) {
       const err = new Error(content?.message || `HTTP ${res.status}`);

@@ -1,15 +1,16 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import BackButton from '../../../components/common/BackButton';
-import { blogPosts } from '../../../assets/data/blogData.js';
+import { useBlogs } from '../../../hooks/useBlogs';
 
 const BlogDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // Convertir id a número y buscar el post
+  // Convertir id a número y buscar el post (usando hook que carga desde backend si está disponible)
   const postId = parseInt(id);
-  const post = blogPosts.find(p => p.id === postId);
+  const { posts: blogPosts } = useBlogs();
+  const post = (blogPosts || []).find(p => p.id === postId);
   
   const [likes, setLikes] = useState(post?.likes || 0);
   const [hasLiked, setHasLiked] = useState(false);
@@ -42,10 +43,10 @@ const BlogDetail = () => {
   }, [id]);
 
   // Encontrar el post actual y los posts relacionados
-  const currentIndex = blogPosts.findIndex(p => p.id === postId);
-  const nextPost = blogPosts[currentIndex + 1];
-  const prevPost = blogPosts[currentIndex - 1];
-  const relatedPosts = blogPosts
+  const currentIndex = (blogPosts || []).findIndex(p => p.id === postId);
+  const nextPost = (blogPosts || [])[currentIndex + 1];
+  const prevPost = (blogPosts || [])[currentIndex - 1];
+  const relatedPosts = (blogPosts || [])
     .filter(p => p.id !== postId && p.category === post?.category)
     .slice(0, 3);
 

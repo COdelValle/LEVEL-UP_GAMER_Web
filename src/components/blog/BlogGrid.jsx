@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { blogPosts } from '../../assets/data/blogData.js';
+import { useBlogs } from '../../hooks/useBlogs';
 
 const BlogGrid = ({ activeCategory, searchTerm, sortBy }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
 
+  const { posts: blogPosts } = useBlogs();
+
   // Filtrar posts por categoría y término de búsqueda
-  const filteredPosts = blogPosts.filter(post => {
+  const filteredPosts = (blogPosts || []).filter(post => {
     const matchesCategory = activeCategory === 'todas' || post.category === activeCategory;
     const matchesSearch = !searchTerm || 
                          post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 

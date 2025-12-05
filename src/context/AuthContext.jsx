@@ -11,7 +11,7 @@ export const useAuth = () => {
   return context;
 };
 
-const api = createAPI(import.meta.env.VITE_API_URL || 'http://localhost:8080');
+const api = createAPI(import.meta.env.VITE_API_URL || '');
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

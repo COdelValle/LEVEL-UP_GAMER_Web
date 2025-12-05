@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import productosData from '../assets/data/productos.json';
+import createAPI from '../lib/APIHelper';
 
 export const useProducts = () => {
   const [products, setProducts] = useState(productosData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const api = createAPI(import.meta.env.VITE_API_URL || '');
 
   const addProduct = (product) => {
     const newProduct = {
@@ -56,6 +59,27 @@ export const useProducts = () => {
       product.categoria.toLowerCase().includes(lowerQuery)
     );
   };
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const data = await api.get('/api/v1/productos');
+        if (mounted && Array.isArray(data)) setProducts(data);
+      } catch (err) {
+        // fallback a datos locales si el backend no está disponible
+        console.warn('useProducts: error al obtener productos desde backend, usando datos locales', err);
+        if (mounted) setError(err);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    fetchProducts();
+
+    return () => { mounted = false; };
+  }, []);
 
   return {
     products,
