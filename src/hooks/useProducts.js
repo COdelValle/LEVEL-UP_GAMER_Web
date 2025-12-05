@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
 import productosData from '../assets/data/productos.json';
 import createAPI from '../lib/APIHelper';
+import { useAuth } from '../context/AuthContext';
 
 export const useProducts = () => {
   const [products, setProducts] = useState(productosData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const api = createAPI(import.meta.env.VITE_API_URL || '');
+  // Preferir la instancia `api` del AuthContext (tendrá token si el usuario está autenticado)
+  let api;
+  try {
+    const auth = useAuth();
+    api = auth?.api || createAPI(import.meta.env.VITE_API_URL || '');
+  } catch (e) {
+    // Si no estamos dentro de un AuthProvider (p. ej. en tests), crear instancia propia
+    api = createAPI(import.meta.env.VITE_API_URL || '');
+  }
 
   const addProduct = async (product) => {
     // intentar crear en backend, si falla usar fallback local
@@ -30,6 +39,7 @@ export const useProducts = () => {
       }
     } catch (err) {
       console.warn('useProducts.addProduct: fallo backend, usando fallback local', err);
+      try { console.error('useProducts.addProduct: status=', err.status, 'body=', err.body); } catch(_){}
     }
 
     // Fallback local si algo falla
