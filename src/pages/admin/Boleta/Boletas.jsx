@@ -47,10 +47,12 @@ const Boletas = () => {
     }
   };
 
-  const filteredBoletas = boletas.filter(boleta =>
-    boleta.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    boleta.cliente.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const loweredSearch = (searchTerm || '').toString().toLowerCase();
+  const filteredBoletas = boletas.filter(boleta => {
+    const numeroStr = (boleta.numero ?? '').toString().toLowerCase();
+    const clienteStr = (boleta.cliente ?? '').toString().toLowerCase();
+    return numeroStr.includes(loweredSearch) || clienteStr.includes(loweredSearch);
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-azul-oscuro to-black">

@@ -9,7 +9,30 @@ export const useProducts = () => {
 
   const api = createAPI(import.meta.env.VITE_API_URL || '');
 
-  const addProduct = (product) => {
+  const addProduct = async (product) => {
+    // intentar crear en backend, si falla usar fallback local
+    try {
+      const payload = {
+        nombre: product.nombre,
+        precio: Number(product.precio),
+        categoria: product.categoria,
+        descripcion: product.descripcion,
+        stock: Number(product.stock),
+        imagen: product.imagen,
+        destacado: !!product.destacado,
+        nuevo: !!product.nuevo
+      };
+      const created = await api.post('/api/v1/productos', payload);
+      // si backend devuelve el recurso, actualizar estado
+      if (created) {
+        setProducts(prev => [...prev, created]);
+        return created;
+      }
+    } catch (err) {
+      console.warn('useProducts.addProduct: fallo backend, usando fallback local', err);
+    }
+
+    // Fallback local si algo falla
     const newProduct = {
       ...product,
       id: Date.now(),
@@ -19,18 +42,48 @@ export const useProducts = () => {
     return newProduct;
   };
 
-  const updateProduct = (id, updatedProduct) => {
+  const updateProduct = async (id, updatedProduct) => {
+    try {
+      const payload = {
+        nombre: updatedProduct.nombre,
+        precio: Number(updatedProduct.precio),
+        categoria: updatedProduct.categoria,
+        descripcion: updatedProduct.descripcion,
+        stock: Number(updatedProduct.stock),
+        imagen: updatedProduct.imagen,
+        destacado: !!updatedProduct.destacado,
+        nuevo: !!updatedProduct.nuevo
+      };
+      const res = await api.put(`/api/v1/productos/${id}`, payload);
+      if (res) {
+        setProducts(prev => prev.map(product => product.id === id ? res : product));
+        return res;
+      }
+    } catch (err) {
+      console.warn('useProducts.updateProduct: fallo backend, aplicando update local', err);
+    }
+
+    // Fallback local
     setProducts(prev => 
       prev.map(product => 
-        product.id === id 
+        String(product.id) === String(id) 
           ? { ...product, ...updatedProduct, fechaActualizacion: new Date().toISOString() }
           : product
       )
     );
+    return getProductById(id);
   };
 
-  const deleteProduct = (id) => {
-    setProducts(prev => prev.filter(product => product.id !== id));
+  const deleteProduct = async (id) => {
+    try {
+      await api.delete(`/api/v1/productos/${id}`);
+      setProducts(prev => prev.filter(product => String(product.id) !== String(id)));
+      return true;
+    } catch (err) {
+      console.warn('useProducts.deleteProduct: fallo backend, aplicando delete local', err);
+      setProducts(prev => prev.filter(product => String(product.id) !== String(id)));
+      return false;
+    }
   };
 
   const getProductById = (id) => {

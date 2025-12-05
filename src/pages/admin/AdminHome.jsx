@@ -5,7 +5,7 @@ import { formatPrice } from '../../utils/formatters';
 
 const AdminHome = () => {
   const { user } = useAuth();
-  const { products } = useProducts();
+  const { products, deleteProduct } = useProducts();
   const navigate = useNavigate();
 
   // Verificar si es admin
@@ -64,8 +64,16 @@ const AdminHome = () => {
 
   const handleDeleteProduct = (productId) => {
     if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      // Lógica para eliminar producto
-      console.log('Eliminando producto:', productId);
+      // Lógica para eliminar producto usando el hook (que llama a backend)
+      (async () => {
+        try {
+          await deleteProduct(productId);
+          alert('Producto eliminado');
+        } catch (err) {
+          console.error('Error eliminando producto:', err);
+          alert('Error eliminando producto. Revisa la consola.');
+        }
+      })();
     }
   };
 

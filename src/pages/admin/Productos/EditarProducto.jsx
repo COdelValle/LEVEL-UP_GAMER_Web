@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useProducts } from '../../../hooks/useProducts';
 
 const EditarProducto = () => {
   const { user } = useAuth();
@@ -20,22 +21,24 @@ const EditarProducto = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Simular carga de datos del producto
+  const { products, getProductById, updateProduct } = useProducts();
+
+  // Cargar datos reales del producto (desde state cargado por el hook)
   useEffect(() => {
-    const productoEjemplo = {
-      id: id,
-      nombre: 'Producto Ejemplo',
-      descripcion: 'Descripción del producto ejemplo',
-      precio: '99.99',
-      categoria: 'Electrónicos',
-      stock: '50',
-      stockCritico: '10',
-      imagen: '',
-      destacado: true
-    };
-    
-    setFormData(productoEjemplo);
-  }, [id]);
+    const p = getProductById(id);
+    if (p) {
+      setFormData({
+        nombre: p.nombre || '',
+        descripcion: p.descripcion || '',
+        precio: p.precio || '',
+        categoria: p.categoria || '',
+        stock: p.stock || '',
+        stockCritico: p.stockCritico || '',
+        imagen: p.imagen || '',
+        destacado: !!p.destacado
+      });
+    }
+  }, [id, products]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -50,10 +53,8 @@ const EditarProducto = () => {
     setLoading(true);
     
     try {
-      // Lógica para actualizar producto
-      console.log('Actualizando producto:', formData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Lógica para actualizar producto usando el hook (que llama al backend)
+      await updateProduct(id, formData);
       navigate('/admin/productos');
     } catch (error) {
       console.error('Error al actualizar producto:', error);

@@ -7,16 +7,29 @@ export default function createAPI(baseURL = (import.meta.env.VITE_API_URL || '')
 
   async function request(method, path, data = null, opts = {}) {
     // Construir URL de forma segura. Si no hay baseURL, usar path relativo (para proxy de Vite)
-    const buildUrl = () => {
-      if (!baseURL) return path;
-      const b = String(baseURL).replace(/\/$/, '');
+    // Construir objeto URL para poder manipular searchParams
+    let url;
+    try {
+      if (baseURL) {
+        // baseURL puede ser relativo o absoluto
+        url = new URL(path, baseURL);
+      } else {
+        // usar origin del navegador para URLs relativas (dev proxy)
+        url = new URL(path, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+      }
+    } catch (e) {
+      // Fallback simple concatenado si URL no pudo construirse
+      const b = String(baseURL || '').replace(/\/$/, '');
       const p = String(path).startsWith('/') ? path : '/' + path;
-      return b + p;
-    };
-    const urlString = buildUrl();
+      const urlStringFallback = b + p;
+      url = new URL(urlStringFallback, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+    }
+
     if (opts.params) {
       Object.keys(opts.params).forEach(k => url.searchParams.append(k, opts.params[k]));
     }
+
+    const urlString = url.toString();
 
     const headers = Object.assign({}, opts.headers || {});
     if (token) headers['Authorization'] = `Bearer ${token}`;

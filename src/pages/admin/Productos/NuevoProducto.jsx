@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../../../components/common/BackButton';
+import { useAuth } from '../../../context/AuthContext';
+import { useProducts } from '../../../hooks/useProducts';
 
 const NuevoProducto = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ const NuevoProducto = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { api } = useAuth();
+  const { addProduct } = useProducts();
 
   const handleChange = (e) => {
     setFormData({
@@ -25,25 +29,16 @@ const NuevoProducto = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    // Simular guardado
-    setTimeout(() => {
-      // Guardar en localStorage
-      const products = JSON.parse(localStorage.getItem('products') || '[]');
-      const newProduct = {
-        ...formData,
-        id: Date.now(),
-        precio: parseInt(formData.precio),
-        stock: parseInt(formData.stock),
-        fechaCreacion: new Date().toISOString()
-      };
-      products.push(newProduct);
-      localStorage.setItem('products', JSON.stringify(products));
-
+    try {
+      const created = await addProduct(formData);
       setLoading(false);
       alert('✅ Producto creado exitosamente');
-      navigate('/admin'); // Redirección correcta
-    }, 2000);
+      navigate('/admin/productos');
+    } catch (err) {
+      console.error('Error creando producto:', err);
+      setLoading(false);
+      alert('Error al crear producto. Revisa la consola.');
+    }
   };
 
   return (

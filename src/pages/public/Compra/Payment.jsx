@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCart } from '../../../context/CartContext';
 import { useAuth } from '../../../context/AuthContext';
+import { useOrders } from '../../../hooks/useOrders';
 import { formatPrice } from '../../../utils/formatters';
 import { useNavigate } from 'react-router-dom';
 import PayPalButton from '../../../components/payment/PayPalButton';
@@ -11,6 +12,7 @@ import { addOrder } from '../../../utils/ordersStorage';
 const Payment = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
+  const { createOrder } = useOrders();
   const navigate = useNavigate();
   const location = useLocation();
   const shippingInfo = location.state?.shippingInfo || {};
@@ -46,12 +48,12 @@ const Payment = () => {
   const finalizeTransfer = (result) => {
     // result: 'validado' | 'rechazado'
     setIsProcessing(true);
-    setTimeout(() => {
+    setTimeout(async () => {
       setIsProcessing(false);
 
       const estadoFinal = result === 'validado' ? 'completado' : 'rechazado';
 
-      const order = {
+      const orderPayload = {
         id: `ORDER${Date.now()}`,
         fecha: new Date().toISOString(),
         items: cartItems,
@@ -61,22 +63,27 @@ const Payment = () => {
         shipping: shippingInfo,
         transferProof,
         transferFileName,
-        // attach user info for filtering in Profile
         userId: user?.id,
         user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
       };
 
       try {
-        addOrder(order);
+        const created = await createOrder(orderPayload);
+        localStorage.setItem('lastOrder', JSON.stringify(created));
+        clearCart();
+        navigate('/boleta', { state: { order: created } });
       } catch (err) {
-        console.error('Could not add order to storage', err);
+        // Si createOrder falla por alguna razón inesperada, hacemos fallback local
+        console.error('Error al crear orden en backend, usando fallback local', err);
+        try {
+          addOrder(orderPayload);
+        } catch (e) {
+          console.error('Could not add order to storage', e);
+        }
+        localStorage.setItem('lastOrder', JSON.stringify(orderPayload));
+        clearCart();
+        navigate('/boleta', { state: { order: orderPayload } });
       }
-      localStorage.setItem('lastOrder', JSON.stringify(order));
-
-      // Clear cart regardless so the UI reflects order was processed/simulated
-      clearCart();
-      // Navigate to simulated receipt showing estado (completado/rechazado)
-      navigate('/boleta', { state: { order } });
     }, 1200);
   };
 
@@ -265,9 +272,9 @@ const Payment = () => {
                   
                   <PayPalButton
                     amount={convertToUSD(getCartTotal())}
-                    onSuccess={(details) => {
+                    onSuccess={async (details) => {
                       // Build completed order
-                      const order = {
+                      const orderPayload = {
                         id: `ORDER${Date.now()}`,
                         fecha: new Date().toISOString(),
                         items: cartItems,
@@ -276,21 +283,26 @@ const Payment = () => {
                         metodoPago: 'paypal',
                         shipping: shippingInfo,
                         paypalDetails: details,
-                        // attach user info for filtering in Profile
                         userId: user?.id,
                         user: user ? { id: user.id, username: user.username, email: user.email, nombre: user.nombre } : undefined
                       };
 
-                      // Persist order to shared orders storage and save lastOrder for immediate display
                       try {
-                        addOrder(order);
+                        const created = await createOrder(orderPayload);
+                        localStorage.setItem('lastOrder', JSON.stringify(created));
+                        clearCart();
+                        navigate('/boleta', { state: { order: created } });
                       } catch (err) {
-                        console.error('Could not add order to storage', err);
+                        console.error('Error al crear orden en backend, usando fallback local', err);
+                        try {
+                          addOrder(orderPayload);
+                        } catch (e) {
+                          console.error('Could not add order to storage', e);
+                        }
+                        localStorage.setItem('lastOrder', JSON.stringify(orderPayload));
+                        clearCart();
+                        navigate('/boleta', { state: { order: orderPayload } });
                       }
-                      localStorage.setItem('lastOrder', JSON.stringify(order));
-
-                      clearCart();
-                      navigate('/boleta', { state: { order } });
                     }}
                     onError={() => {
                       alert('Hubo un error al procesar el pago. Por favor, intenta nuevamente.');

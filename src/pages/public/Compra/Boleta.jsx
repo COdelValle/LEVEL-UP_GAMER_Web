@@ -105,15 +105,15 @@ const Boleta = () => {
                 </tr>
               </thead>
               <tbody>
-                {order.items.map((it) => (
-                  <tr key={it.id} className="border-b border-gray-700">
+                {order.items.map((it, idx) => (
+                  <tr key={it.id ?? it.productoId ?? `${it.nombre ?? 'item'}-${idx}`} className="border-b border-gray-700">
                     <td className="py-3 w-20">
                       <img src={(it.imagen && (it.imagen.startsWith('http') || it.imagen.startsWith('/'))) ? it.imagen : `/assets/img/${it.imagen}`} alt={it.nombre} className="w-16 h-12 object-cover rounded" />
                     </td>
                     <td className="py-3">{it.nombre}</td>
                     <td className="py-3">{formatPrice(it.precio)}</td>
-                    <td className="py-3">{it.quantity}</td>
-                    <td className="py-3">{formatPrice(it.precio * it.quantity)}</td>
+                    <td className="py-3">{it.quantity ?? it.cantidad ?? 1}</td>
+                    <td className="py-3">{formatPrice((it.precio ?? 0) * (it.quantity ?? it.cantidad ?? 1))}</td>
                   </tr>
                 ))}
               </tbody>
