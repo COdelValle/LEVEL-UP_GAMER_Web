@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 
 const EditarUsuario = () => {
-  const { user } = useAuth();
+  const { user, api } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   
@@ -19,21 +19,32 @@ const EditarUsuario = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // Simular carga de datos del usuario
+  // Cargar datos reales desde backend
   useEffect(() => {
-    const usuarioEjemplo = {
-      id: id,
-      username: 'juanperez',
-      email: 'juan@example.com',
-      role: 'user',
-      estado: 'activo',
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      telefono: '+1234567890'
+    let mounted = true;
+    const load = async () => {
+      try {
+        if (!api) return;
+        const data = await api.get(`/api/v1/usuarios/${id}`);
+        if (!mounted) return;
+        if (data) {
+          setFormData({
+            username: data.username || data.usuario || data.email || '',
+            email: data.email || '',
+            role: (data.rol || data.role || 'user').toString().toLowerCase(),
+            estado: data.estado || 'activo',
+            nombre: data.nombre || '',
+            apellido: data.apellido || '',
+            telefono: data.telefono || ''
+          });
+        }
+      } catch (err) {
+        console.warn('EditarUsuario: no se pudo cargar usuario desde backend, usando valores por defecto', err);
+      }
     };
-    
-    setFormData(usuarioEjemplo);
-  }, [id]);
+    load();
+    return () => { mounted = false; };
+  }, [id, api]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,13 +59,24 @@ const EditarUsuario = () => {
     setLoading(true);
     
     try {
-      // Lógica para actualizar usuario
-      console.log('Actualizando usuario:', formData);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Preparar payload según UpdateUsuarioRequest del backend
+      const payload = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono,
+        rol: (formData.role || 'user').toString().toUpperCase()
+      };
+
+      // Si hay cambios de contraseña, agregarlos (campo opcional no incluido en este formulario por ahora)
+
+      // Enviar al backend usando la instancia `api` (debe incluir token)
+      if (!api) throw new Error('No hay instancia API disponible (no autenticado)');
+      await api.put(`/api/v1/usuarios/${id}`, payload);
       navigate('/admin/usuarios');
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
+      alert('Error al actualizar usuario: ' + (error?.message || 'Error desconocido'));
     } finally {
       setLoading(false);
     }

@@ -12,7 +12,7 @@ import { addOrder } from '../../../utils/ordersStorage';
 const Payment = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
-  const { createOrder } = useOrders();
+  const { createOrder, updateOrderStatus } = useOrders();
   const navigate = useNavigate();
   const location = useLocation();
   const shippingInfo = location.state?.shippingInfo || {};
@@ -69,6 +69,15 @@ const Payment = () => {
 
       try {
         const created = await createOrder(orderPayload);
+        // Si la validación fue positiva para transferencia, forzar actualización de estado en backend
+        if (result === 'validado' && created && created.id) {
+          try {
+            // Backend espera estados en mayúsculas (EstadoOrden enum)
+            await updateOrderStatus(created.id, 'COMPLETADO', 'Pago por transferencia validado');
+          } catch (e) {
+            console.warn('No se pudo actualizar el estado de la orden a COMPLETADO en backend', e);
+          }
+        }
         localStorage.setItem('lastOrder', JSON.stringify(created));
         clearCart();
         navigate('/boleta', { state: { order: created } });

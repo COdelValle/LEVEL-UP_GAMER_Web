@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { getOrders, updateOrder } from '../../../utils/ordersStorage';
+import { useOrders } from '../../../hooks/useOrders';
 
 const Boletas = () => {
   const { user } = useAuth();
@@ -36,14 +37,24 @@ const Boletas = () => {
     setBoletas(mapped);
   };
 
-  const handleReject = (orderId) => {
+  const { updateOrderStatus } = useOrders();
+
+  const handleReject = async (orderId) => {
     if (!window.confirm('¿Confirmas que quieres rechazar este pago?')) return;
-    const updated = updateOrder(orderId, { estado: 'rechazado' });
-    if (updated) {
+    try {
+      // Intentar actualizar en backend al estado CANCELADO
+      await updateOrderStatus(orderId, 'CANCELADO', 'Pago rechazado por admin');
       reload();
       alert('Pago marcado como rechazado.');
-    } else {
-      alert('No se pudo actualizar la boleta.');
+    } catch (err) {
+      console.warn('No se pudo actualizar en backend, aplicando fallback local', err);
+      const updated = updateOrder(orderId, { estado: 'rechazado' });
+      if (updated) {
+        reload();
+        alert('Pago marcado como rechazado (fallback local).');
+      } else {
+        alert('No se pudo actualizar la boleta.');
+      }
     }
   };
 
@@ -117,7 +128,7 @@ const Boletas = () => {
                           📄 PDF
                         </button>
                         <button
-                          onClick={() => handleReject(boleta.numero)}
+                          onClick={() => handleReject(boleta.id)}
                           className="text-red-400 hover:text-red-300"
                         >
                           ❌ Rechazar

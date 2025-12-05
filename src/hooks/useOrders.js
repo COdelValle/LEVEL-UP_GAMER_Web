@@ -183,6 +183,43 @@ export const useOrders = () => {
     orders,
     loading,
     getOrdersByUser,
-    createOrder
+    createOrder,
+    updateOrderStatus
   };
 };
+
+async function updateOrderStatus(id, estado, observaciones = '') {
+  // helper used outside React components if needed; uses same api construction
+  const api = createAPI(import.meta.env.VITE_API_URL || '');
+  try {
+    const payload = { estado, observaciones };
+    // Restaurar token desde localStorage si existe para que la instancia use credenciales
+    try {
+      const savedToken = localStorage.getItem('token');
+      if (savedToken) api.setToken(savedToken);
+    } catch (e) {
+      // ignore
+    }
+    const updated = await api.put(`/api/v1/ordenes/${id}`, payload);
+    // persist to local storage as mirror
+    try {
+      const { updateOrder } = await import('../utils/ordersStorage');
+      const toStore = updated || { id, estado, observaciones };
+      updateOrder(id, toStore);
+    } catch (e) {
+      console.warn('useOrders.updateOrderStatus: no se pudo persistir en storage', e);
+    }
+    return updated;
+  } catch (err) {
+    console.warn('useOrders.updateOrderStatus: error al actualizar orden en backend, aplicando fallback local', err);
+    try {
+      const { updateOrder } = await import('../utils/ordersStorage');
+      const fallback = { id, estado, observaciones, updatedAt: Date.now() };
+      updateOrder(id, fallback);
+      return fallback;
+    } catch (e) {
+      console.error('useOrders.updateOrderStatus: fallo al aplicar fallback local', e);
+      throw err;
+    }
+  }
+}
