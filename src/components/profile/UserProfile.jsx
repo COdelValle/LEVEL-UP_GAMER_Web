@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { chileRegions, getComunasByRegion } from '../../assets/data/chileRegions';
 
 const UserProfile = ({ user }) => {
   const { updateProfile } = useAuth();
@@ -8,8 +9,37 @@ const UserProfile = ({ user }) => {
     nombre: user?.nombre || user?.username || '',
     email: user?.email || '',
     telefono: user?.telefono || '',
-    direccion: user?.direccion || ''
+    direccion: user?.direccion || '',
+    region: user?.region || '',
+    ciudad: user?.ciudad || '',
+    comuna: user?.comuna || ''
   });
+
+  const [comunas, setComunas] = useState([]);
+
+  useEffect(() => {
+    if (formData.region) {
+      setComunas(getComunasByRegion(formData.region));
+      if (formData.comuna && !getComunasByRegion(formData.region).includes(formData.comuna)) {
+        setFormData(prev => ({ ...prev, comuna: '' }));
+      }
+    } else {
+      setComunas([]);
+    }
+  }, [formData.region]);
+
+  // Sync form when `user` prop changes (e.g., after updateProfile)
+  useEffect(() => {
+    setFormData({
+      nombre: user?.nombre || user?.username || '',
+      email: user?.email || '',
+      telefono: user?.telefono || '',
+      direccion: user?.direccion || '',
+      region: user?.region || '',
+      ciudad: user?.ciudad || '',
+      comuna: user?.comuna || ''
+    });
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,6 +117,45 @@ const UserProfile = ({ user }) => {
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
               />
             </div>
+            <div>
+              <label className="block text-gray-300 mb-2">Región</label>
+              <select
+                name="region"
+                value={formData.region}
+                onChange={handleChange}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
+              >
+                <option value="">Selecciona una región</option>
+                {chileRegions.map(r => (
+                  <option key={r.id} value={r.id}>{r.nombre}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-300 mb-2">Ciudad</label>
+              <input
+                type="text"
+                name="ciudad"
+                value={formData.ciudad}
+                onChange={handleChange}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-300 mb-2">Comuna</label>
+              <select
+                name="comuna"
+                value={formData.comuna}
+                onChange={handleChange}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
+                disabled={!formData.region}
+              >
+                <option value="">Selecciona una comuna</option>
+                {comunas.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </div>
           </div>
           <button
             type="submit"
@@ -115,6 +184,14 @@ const UserProfile = ({ user }) => {
             <div>
               <label className="text-gray-400 text-sm">Dirección</label>
               <p className="text-white text-lg">{user?.direccion || 'No especificada'}</p>
+            </div>
+            <div>
+              <label className="text-gray-400 text-sm">Región</label>
+              <p className="text-white text-lg">{(user?.region && chileRegions.find(r => r.id === user.region)?.nombre) || 'No especificada'}</p>
+            </div>
+            <div>
+              <label className="text-gray-400 text-sm">Comuna</label>
+              <p className="text-white text-lg">{user?.comuna || 'No especificada'}</p>
             </div>
           </div>
           <div className="md:col-span-2">

@@ -1,6 +1,7 @@
 // /src/pages/Checkout.jsx
 import { useState, useEffect } from 'react';
 import { useCart } from '../../../context/CartContext';
+import { useAuth } from '../../../context/AuthContext';
 import { formatPrice } from '../../../utils/formatters';
 import { Link, useNavigate } from 'react-router-dom';
 import { chileRegions, getComunasByRegion } from '../../../assets/data/chileRegions';
@@ -8,6 +9,7 @@ import BackButton from '../../../components/common/BackButton';
 
 const Checkout = () => {
   const { cartItems, getCartTotal } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [shippingInfo, setShippingInfo] = useState({
     nombre: '',
@@ -21,6 +23,22 @@ const Checkout = () => {
 
   const [errors, setErrors] = useState({});
   const [comunas, setComunas] = useState([]);
+
+  // Cargar datos del usuario logueado al iniciar
+  useEffect(() => {
+    if (user) {
+      setShippingInfo(prev => ({
+        ...prev,
+        nombre: user.nombre || '',
+        email: user.email || '',
+        telefono: user.telefono || '',
+        direccion: user.direccion || '',
+        region: user.region || '',
+        ciudad: user.ciudad || '',
+        comuna: user.comuna || ''
+      }));
+    }
+  }, [user]);
 
   // Actualizar comunas cuando cambia la región
   useEffect(() => {

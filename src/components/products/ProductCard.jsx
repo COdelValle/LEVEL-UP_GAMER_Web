@@ -28,7 +28,7 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
 
-          <div className="absolute top-2 left-2 flex gap-1">
+          <div className="absolute top-2 left-2 flex gap-1 flex-wrap">
             {product.destacado && (
               <span className="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full font-bold">⭐ Destacado</span>
             )}
@@ -37,7 +37,10 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
             )}
           </div>
 
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 flex gap-1">
+            {product.stock > 0 && product.stock <= 5 && (
+              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">⚠️ Crítico</span>
+            )}
             <span className={`px-2 py-1 rounded-full text-xs font-bold ${
               product.stock > 10 ? 'bg-green-500 text-white' : product.stock > 0 ? 'bg-yellow-500 text-black' : 'bg-red-500 text-white'
             }`}>
@@ -133,9 +136,14 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
                 <span className="text-2xl font-bold gradient-text">{formatPrice(product.precio)}</span>
               )}
             </div>
-            <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
-              {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
-            </span>
+            <div className="flex flex-col items-end gap-1">
+              {product.stock > 0 && product.stock <= 5 && (
+                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded font-bold">⚠️ Crítico</span>
+              )}
+              <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+              </span>
+            </div>
           </div>
 
           <p className="text-gray-300 text-sm mb-4 line-clamp-2">
@@ -159,9 +167,14 @@ const ProductCard = ({ product, className = "", compact = false, showAdd = true,
                 <span className="text-2xl font-bold gradient-text">{formatPrice(product.precio)}</span>
               )}
             </div>
-            <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
-              {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
-            </span>
+            <div className="flex flex-col items-end gap-1">
+              {product.stock > 0 && product.stock <= 5 && (
+                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded font-bold">⚠️ Crítico</span>
+              )}
+              <span className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+              </span>
+            </div>
           </div>
         </>
       )}
